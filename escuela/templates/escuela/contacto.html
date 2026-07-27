@@ -3,52 +3,51 @@
 {% block title %}Contacto - Instituto San Martín{% endblock %}
 
 {% block content %}
-<div style="max-width: 1000px; margin: 3rem auto; padding: 0 5%;">
-    <h2 style="font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem;">Contacto e Informes</h2>
-    <p style="color: var(--text-muted); margin-bottom: 2rem;">Escribinos para solicitar información sobre admisiones, aranceles o agendar una visita a la institución.</p>
+<div style="max-width: 800px; margin: 3rem auto; padding: 0 5%;">
+    <h2 style="font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem;">Contacto y Consultas</h2>
+    <p style="color: var(--text-muted); margin-bottom: 2rem;">Envianos tu mensaje y la secretaría del instituto te responderá a la brevedad.</p>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-        <!-- Formulario -->
-        <div style="background: white; padding: 2rem; border-radius: 10px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
-            <form style="display: flex; flex-direction: column; gap: 1rem;">
-                <div>
-                    <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.3rem;">Nombre completo</label>
-                    <input type="text" placeholder="Ej: Maria Gonzalez" style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px;">
-                </div>
-                <div>
-                    <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.3rem;">Correo electrónico</label>
-                    <input type="email" placeholder="ejemplo@email.com" style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px;">
-                </div>
-                <div>
-                    <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.3rem;">Nivel de interés</label>
-                    <select style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; background: white;">
-                        <option>Nivel Primario</option>
-                        <option>Nivel Secundario</option>
-                        <option>Consultas Generales</option>
-                    </select>
-                </div>
-                <div>
-                    <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.3rem;">Mensaje</label>
-                    <textarea rows="4" placeholder="¿En qué podemos ayudarte?" style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px;"></textarea>
-                </div>
-                <button type="button" style="background: var(--accent); color: white; padding: 0.8rem; border: none; border-radius: 6px; font-weight: 700; cursor: pointer;">Enviar Consulta</button>
-            </form>
-        </div>
-
-        <!-- Información de Vías Oficiales -->
-        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-            <div style="background: white; padding: 1.5rem; border-radius: 10px; border: 1px solid #e2e8f0;">
-                <h3 style="color: var(--primary); font-size: 1.1rem; margin-bottom: 0.5rem;">Secretaría General</h3>
-                <p style="color: var(--text-muted); font-size: 0.95rem;"><strong>Dirección:</strong> Av. Italia 1234</p>
-                <p style="color: var(--text-muted); font-size: 0.95rem;"><strong>Teléfono:</strong> (0379) 444-5566</p>
-                <p style="color: var(--text-muted); font-size: 0.95rem;"><strong>Atención:</strong> Lunes a Viernes de 08:00 a 18:00 hs</p>
+    {% if messages %}
+        {% for message in messages %}
+            <div style="background-color: #d1fae5; color: #065f46; padding: 1rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #10b981;">
+                {{ message }}
             </div>
-            <div style="background: white; padding: 1.5rem; border-radius: 10px; border: 1px solid #e2e8f0;">
-                <h3 style="color: var(--primary); font-size: 1.1rem; margin-bottom: 0.5rem;">Correo Electrónico</h3>
-                <p style="color: var(--text-muted); font-size: 0.95rem;"><strong>Informes:</strong> info@institutosanmartin.edu.ar</p>
-                <p style="color: var(--text-muted); font-size: 0.95rem;"><strong>Admisiones:</strong> admisiones@institutosanmartin.edu.ar</p>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST" style="background: white; padding: 2.5rem; border-radius: 10px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 1.2rem;">
+        {% csrf_token %}
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;">
+            <div>
+                <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.4rem; color: var(--text-dark);">Nombre y Apellido *</label>
+                <input type="text" name="nombre" required style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem;">
+            </div>
+            <div>
+                <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.4rem; color: var(--text-dark);">Email de contacto *</label>
+                <input type="email" name="email" required style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem;">
             </div>
         </div>
-    </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;">
+            <div>
+                <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.4rem; color: var(--text-dark);">Teléfono / WhatsApp</label>
+                <input type="text" name="telefono" style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem;">
+            </div>
+            <div>
+                <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.4rem; color: var(--text-dark);">Asunto *</label>
+                <input type="text" name="asunto" required placeholder="Ej: Inscripciones, Cuotas..." style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem;">
+            </div>
+        </div>
+
+        <div>
+            <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.4rem; color: var(--text-dark);">Mensaje *</label>
+            <textarea name="mensaje" rows="5" required style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; resize: vertical;"></textarea>
+        </div>
+
+        <button type="submit" style="background-color: var(--primary); color: white; border: none; padding: 0.9rem; border-radius: 6px; font-weight: 700; font-size: 1rem; cursor: pointer; margin-top: 0.5rem; transition: background 0.2s;">
+            Enviar Consulta
+        </button>
+    </form>
 </div>
 {% endblock %}

@@ -22,3 +22,15 @@ class Requisito(models.Model):
 
     def __str__(self):
         return f"{self.get_nivel_display()} - {self.descripcion}"
+
+class Consulta(models.Model):
+    nombre = models.CharField(max_length=100)
+    email = models.EmailField()
+    telefono = models.CharField(max_length=50, blank=True, null=True)
+    asunto = models.CharField(max_length=150)
+    mensaje = models.TextField()
+    fecha_envio = models.DateTimeField(auto_now_add=True)
+    leido = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.asunto} - {self.nombre}"
