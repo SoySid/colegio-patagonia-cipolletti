@@ -4,7 +4,11 @@
 
 {% block content %}
 <section class="contacto-wrapper">
-    <h2 class="section-title">CONTACTO Y TRABAJO DOCENTE</h2>
+    <div class="contacto-intro">
+        <p class="contacto-kicker">Canal de comunicación</p>
+        <h2>Contacto y trabajo docente</h2>
+        <p>Podés escribirnos para consultas generales, postulaciones docentes o para solicitar información sobre la escuela.</p>
+    </div>
 
     {% if messages %}
         {% for message in messages %}
@@ -15,14 +19,12 @@
     {% endif %}
 
     <div class="contacto-grid">
-        <!-- COLUMNA IZQUIERDA: FORMULARIO -->
         <div class="contacto-card">
             <div class="form-tabs">
                 <button type="button" class="tab-btn active" id="btn-consulta">Consulta General</button>
                 <button type="button" class="tab-btn" id="btn-docente">Sumate como Docente</button>
             </div>
 
-            <!-- FORMULARIO CONSULTA GENERAL -->
             <form method="POST" id="form-consulta" class="form-contacto">
                 {% csrf_token %}
                 <input type="hidden" name="tipo_form" value="consulta">
@@ -57,7 +59,6 @@
                 <button type="submit" class="btn-submit">ENVIAR CONSULTA</button>
             </form>
 
-            <!-- FORMULARIO SUMATE COMO DOCENTE (OCULTO POR DEFECTO) -->
             <form method="POST" id="form-docente" class="form-contacto form-oculto" enctype="multipart/form-data">
                 {% csrf_token %}
                 <input type="hidden" name="tipo_form" value="docente">
@@ -98,45 +99,50 @@
             </form>
         </div>
 
-        <!-- COLUMNA DERECHA: TARJETA INFO INSTITUCIONAL -->
-        <div class="info-card">
-            <h3>Información de Contacto</h3>
-            <p class="info-subtitle">Comunicate directamente con la secretaría o visítanos en nuestro establecimiento.</p>
+        <div class="contacto-side">
+            <div class="info-card">
+                <h3>Información de contacto</h3>
+                <p class="info-subtitle">Comunicate directamente con la secretaría o visítanos en nuestro establecimiento.</p>
 
-            <div class="info-items">
-                <div class="info-item">
-                    <div class="info-icon">📍</div>
-                    <div class="info-text">
-                        <strong>Dirección</strong>
-                        <span>Saavedra 750 (tira 1 B° 12 Sept.)</span>
-                        <small>Cipolletti, Argentina, 8324</small>
+                <div class="info-items">
+                    <div class="info-item">
+                        <div class="info-icon">📞</div>
+                        <div class="info-text">
+                            <strong>Teléfono Directo</strong>
+                            <span>0299 15-570-2824</span>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-icon">✉️</div>
+                        <div class="info-text">
+                            <strong>Correo Electrónico</strong>
+                            <span>patagoniaescuelaprimaria@gmail.com</span>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-icon">⏰</div>
+                        <div class="info-text">
+                            <strong>Horario de Atención</strong>
+                            <span>Lunes a Viernes</span>
+                            <small>07:00 a 19:00 hs</small>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="info-item">
-                    <div class="info-icon">📞</div>
-                    <div class="info-text">
-                        <strong>Teléfono Directo</strong>
-                        <span>0299 15-570-2824</span>
-                    </div>
+            <div class="location-card">
+                <h3>Ubicación</h3>
+                <p class="info-subtitle">Nos encontrás en el barrio 12 de Septiembre.</p>
+
+                <div class="location-address">
+                    <strong>Saavedra 750 (tira 1 B° 12 Sept.)</strong>
+                    <span>Cipolletti, Río Negro</span>
+                    <small>8324, Argentina</small>
                 </div>
 
-                <div class="info-item">
-                    <div class="info-icon">✉️</div>
-                    <div class="info-text">
-                        <strong>Correo Electrónico</strong>
-                        <span>patagoniaescuelaprimaria@gmail.com</span>
-                    </div>
-                </div>
-
-                <div class="info-item">
-                    <div class="info-icon">⏰</div>
-                    <div class="info-text">
-                        <strong>Horario de Atención</strong>
-                        <span>Lunes a Viernes</span>
-                        <small>07:00 a 19:00 hs</small>
-                    </div>
-                </div>
+                <a href="https://maps.google.com/?q=Saavedra+750+Cipolletti" target="_blank" rel="noopener noreferrer" class="btn-map">Ver en Google Maps</a>
             </div>
         </div>
     </div>
