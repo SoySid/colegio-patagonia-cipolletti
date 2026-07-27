@@ -4,12 +4,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Instituto Educativo Privado{% endblock %}</title>
+    <title>{% block title %}{{ escuela_info.nombre|default:"Instituto San Martín" }}{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'escuela/css/estilos.css' %}">
 </head>
 <body>
     <header>
-        <div class="brand">{{ escuela_info.nombre|default:"Instituto San Martín" }}</div>
+        <div class="brand">
+            {% if escuela_info.logo %}
+                <img src="{{ escuela_info.logo.url }}" alt="Logo {{ escuela_info.nombre }}" class="brand-logo">
+            {% endif %}
+            <div class="brand-text">
+                <span class="brand-title">{{ escuela_info.nombre|default:"Instituto San Martín" }}</span>
+                {% if escuela_info.frase %}
+                    <small class="brand-phrase">{{ escuela_info.frase }}</small>
+                {% endif %}
+            </div>
+        </div>
         <nav>
             <a href="/">Inicio</a>
             <a href="/requisitos/">Requisitos</a>
@@ -28,26 +38,31 @@
         <div class="footer-grid">
             <div class="footer-col">
                 <h4>{{ escuela_info.nombre|default:"Instituto San Martín" }}</h4>
-                <p style="font-size: 0.9rem; line-height: 1.6;">Educación de excelencia para Nivel Primario y Secundario. Formando a los líderes del mañana.</p>
+                {% if escuela_info.frase %}
+                    <p class="footer-phrase">"{{ escuela_info.frase }}"</p>
+                {% else %}
+                    <p class="footer-text">Educación de excelencia para Nivel Primario y Secundario. Formando a los líderes del mañana.</p>
+                {% endif %}
+                
                 {% if escuela_info.horario %}
-                    <p style="font-size: 0.85rem; margin-top: 0.5rem; color: #94a3b8;">🕒 {{ escuela_info.horario }}</p>
+                    <p class="footer-schedule">🕒 {{ escuela_info.horario }}</p>
                 {% endif %}
             </div>
             
             <div class="footer-col">
                 <h4>Niveles</h4>
-                <p style="font-size: 0.9rem; line-height: 1.6;">• Nivel Primario<br>• Nivel Secundario Orientado<br>• Talleres y Extracurriculares</p>
+                <p class="footer-text">• Nivel Primario<br>• Nivel Secundario Orientado<br>• Talleres y Extracurriculares</p>
             </div>
             
             <div class="footer-col">
                 <h4>Contacto</h4>
-                <p style="font-size: 0.9rem; line-height: 1.6;">
+                <p class="footer-text">
                     {% if escuela_info.direccion %}📍 {{ escuela_info.direccion }}<br>{% endif %}
                     {% if escuela_info.telefono %}📞 Tel: {{ escuela_info.telefono }}<br>{% endif %}
                     {% if escuela_info.email %}✉️ {{ escuela_info.email }}{% endif %}
                 </p>
 
-                <div style="margin-top: 0.8rem;">
+                <div class="footer-social-container">
                     {% if escuela_info.whatsapp %}
                         <a href="https://wa.me/{{ escuela_info.whatsapp }}" target="_blank" class="btn-whatsapp-footer">
                             💬 WhatsApp Institucional

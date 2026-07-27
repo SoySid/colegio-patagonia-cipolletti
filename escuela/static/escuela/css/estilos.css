@@ -251,3 +251,59 @@ footer {
     color: white;
     transform: translateX(3px);
 }
+
+/* Estilos para Brand (Logo y Frase) en Header */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-logo {
+    height: 45px !important;
+    width: auto !important;
+    max-width: 150px;
+    object-fit: contain;
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand-title {
+    font-weight: bold;
+    font-size: 1.2rem;
+    line-height: 1.1;
+}
+
+.brand-phrase {
+    font-size: 0.8rem;
+    opacity: 0.85;
+    font-style: italic;
+    font-weight: normal;
+    margin-top: 2px;
+}
+
+/* Estilos de apoyo para Footer */
+.footer-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.footer-phrase {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    font-style: italic;
+    color: #cbd5e1;
+}
+
+.footer-schedule {
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    color: #94a3b8;
+}
+
+.footer-social-container {
+    margin-top: 0.8rem;
+}

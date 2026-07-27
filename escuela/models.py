@@ -37,6 +37,8 @@ class Consulta(models.Model):
 
 class DatosEscuela(models.Model):
     nombre = models.CharField(max_length=150, default="Instituto San Martín")
+    frase = models.CharField(max_length=255, blank=True, null=True, help_text="Frase institucional o lema de la escuela")
+    logo = models.ImageField(upload_to='escuela/logos/', blank=True, null=True, help_text="Logo de la escuela")
     direccion = models.CharField(max_length=255, blank=True, null=True)
     telefono = models.CharField(max_length=50, blank=True, null=True)
     whatsapp = models.CharField(max_length=50, blank=True, null=True, help_text="Número sin + ni espacios para el link de WhatsApp")
