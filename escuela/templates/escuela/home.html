@@ -111,32 +111,22 @@
         <h2 class="section-title">Últimas Novedades</h2>
         
         <div class="grid-cards">
-            <div class="card-news">
-                <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=600" alt="Inscripciones">
-                <div class="card-news-body">
-                    <div class="card-news-tag">Admisiones</div>
-                    <h3>Apertura de Inscripciones Ciclo Lectivo 2026</h3>
-                    <p>Se encuentra abierta la recepción de legajos para alumnos ingresantes a Nivel Primario y Secundario.</p>
+            {% for noticia in noticias %}
+                <div class="card-news">
+                    {% if noticia.imagen_url %}
+                        <img src="{{ noticia.imagen_url }}" alt="{{ noticia.titulo }}">
+                    {% else %}
+                        <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=600" alt="Noticia">
+                    {% endif %}
+                    <div class="card-news-body">
+                        <div class="card-news-tag">{{ noticia.categoria }}</div>
+                        <h3>{{ noticia.titulo }}</h3>
+                        <p>{{ noticia.descripcion }}</p>
+                    </div>
                 </div>
-            </div>
-
-            <div class="card-news">
-                <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=600" alt="Aulas">
-                <div class="card-news-body">
-                    <div class="card-news-tag">Tecnología</div>
-                    <h3>Equipamiento de Aulas Digitales</h3>
-                    <p>Incorporamos proyectores interactivos y computadoras de última generación para las materias técnicas.</p>
-                </div>
-            </div>
-
-            <div class="card-news">
-                <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=600" alt="Deportes">
-                <div class="card-news-body">
-                    <div class="card-news-tag">Institucional</div>
-                    <h3>Torneo Interescolar de Deportes</h3>
-                    <p>Nuestros alumnos representarán al instituto en las disciplinas de vóley, básquet y fútbol.</p>
-                </div>
-            </div>
+            {% empty %}
+                <p style="color: var(--text-muted);">No hay noticias publicadas por el momento.</p>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}
