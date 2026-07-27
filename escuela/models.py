@@ -35,6 +35,32 @@ class Consulta(models.Model):
     def __str__(self):
         return f"{self.asunto} - {self.nombre}"
 
+class PostulacionDocente(models.Model):
+    NIVELES = [
+        ('MATERNAL', 'Nivel Maternal'),
+        ('INICIAL', 'Nivel Inicial'),
+        ('PRIMARIO', 'Nivel Primario'),
+        ('SECUNDARIO', 'Nivel Secundario'),
+        ('VARIOS', 'Varios / General'),
+    ]
+
+    nombre = models.CharField(max_length=100)
+    email = models.EmailField()
+    telefono = models.CharField(max_length=50)
+    nivel_interes = models.CharField(max_length=20, choices=NIVELES, default='PRIMARIO')
+    area_materia = models.CharField(max_length=100, help_text="Ej: Matemática, Maestra de Grado, Inglés, etc.")
+    cv = models.FileField(upload_to='cvs/', help_text="Adjuntar archivo PDF o Word")
+    mensaje = models.TextField(blank=True, null=True)
+    fecha_envio = models.DateTimeField(auto_now_add=True)
+    revisado = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = "Postulación Docente"
+        verbose_name_plural = "Postulaciones Docentes"
+
+    def __str__(self):
+        return f"{self.nombre} - {self.area_materia} ({self.get_nivel_interes_display()})"
+
 class DatosEscuela(models.Model):
     nombre = models.CharField(max_length=150, default="Instituto San Martín")
     frase = models.CharField(max_length=255, blank=True, null=True, help_text="Frase institucional o lema de la escuela")

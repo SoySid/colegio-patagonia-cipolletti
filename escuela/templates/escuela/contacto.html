@@ -1,53 +1,116 @@
 {% extends 'escuela/base.html' %}
-
-{% block title %}Contacto - Instituto San Martín{% endblock %}
+{% block title %}Contacto - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
 
 {% block content %}
-<div style="max-width: 800px; margin: 3rem auto; padding: 0 5%;">
-    <h2 style="font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem;">Contacto y Consultas</h2>
-    <p style="color: var(--text-muted); margin-bottom: 2rem;">Envianos tu mensaje y la secretaría del instituto te responderá a la brevedad.</p>
+<section class="contacto-container">
+    <h2>Contacto y Trabajo Docente</h2>
 
     {% if messages %}
         {% for message in messages %}
-            <div style="background-color: #d1fae5; color: #065f46; padding: 1rem; border-radius: 8px; margin-bottom: 2rem; border-left: 4px solid #10b981;">
-                {{ message }}
-            </div>
+            <div class="alert-success">{{ message }}</div>
         {% endfor %}
     {% endif %}
 
-    <form method="POST" style="background: white; padding: 2.5rem; border-radius: 10px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; gap: 1.2rem;">
-        {% csrf_token %}
+    <div class="contacto-grid">
+        <div class="contacto-forms">
+            <!-- Pestañas de selección -->
+            <div class="form-tabs">
+                <button type="button" class="tab-btn active" onclick="switchTab('consulta', event)">Consulta General</button>
+                <button type="button" class="tab-btn" onclick="switchTab('docente', event)">Sumate como Docente</button>
+            </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;">
-            <div>
-                <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.4rem; color: var(--text-dark);">Nombre y Apellido *</label>
-                <input type="text" name="nombre" required style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem;">
-            </div>
-            <div>
-                <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.4rem; color: var(--text-dark);">Email de contacto *</label>
-                <input type="email" name="email" required style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem;">
-            </div>
+            <!-- Formulario Consulta General -->
+            <form id="form-consulta" method="POST" class="contacto-form active">
+                {% csrf_token %}
+                <input type="hidden" name="tipo_formulario" value="consulta">
+                
+                <div class="form-group">
+                    <label>Nombre Completo *</label>
+                    <input type="text" name="nombre" required>
+                </div>
+                <div class="form-group">
+                    <label>Correo Electrónico *</label>
+                    <input type="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <input type="text" name="telefono">
+                </div>
+                <div class="form-group">
+                    <label>Asunto *</label>
+                    <input type="text" name="asunto" required>
+                </div>
+                <div class="form-group">
+                    <label>Mensaje *</label>
+                    <textarea name="mensaje" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Enviar Consulta</button>
+            </form>
+
+            <!-- Formulario Postulación Docente -->
+            <form id="form-docente" method="POST" enctype="multipart/form-data" class="contacto-form form-oculto">
+                {% csrf_token %}
+                <input type="hidden" name="tipo_formulario" value="docente">
+
+                <div class="form-group">
+                    <label>Nombre Completo *</label>
+                    <input type="text" name="nombre" required>
+                </div>
+                <div class="form-group">
+                    <label>Correo Electrónico *</label>
+                    <input type="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Teléfono de Contacto *</label>
+                    <input type="text" name="telefono" required>
+                </div>
+                <div class="form-group">
+                    <label>Nivel de Interés *</label>
+                    <select name="nivel_interes" required>
+                        <option value="MATERNAL">Nivel Maternal</option>
+                        <option value="INICIAL">Nivel Inicial</option>
+                        <option value="PRIMARIO" selected>Nivel Primario</option>
+                        <option value="SECUNDARIO">Nivel Secundario</option>
+                        <option value="VARIOS">Varios / General</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Especialidad / Materia / Cargo *</label>
+                    <input type="text" name="area_materia" placeholder="Ej: Maestra de Grado, Inglés, Educación Física" required>
+                </div>
+                <div class="form-group">
+                    <label>Adjuntar CV (PDF o Word) *</label>
+                    <input type="file" name="cv" accept=".pdf,.doc,.docx" required>
+                </div>
+                <div class="form-group">
+                    <label>Comentario / Presentación Breve</label>
+                    <textarea name="mensaje" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Enviar Postulación</button>
+            </form>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;">
-            <div>
-                <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.4rem; color: var(--text-dark);">Teléfono / WhatsApp</label>
-                <input type="text" name="telefono" style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem;">
-            </div>
-            <div>
-                <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.4rem; color: var(--text-dark);">Asunto *</label>
-                <input type="text" name="asunto" required placeholder="Ej: Inscripciones, Cuotas..." style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem;">
-            </div>
+        <div class="contacto-info">
+            <h3>Información de Contacto</h3>
+            {% if escuela_info.direccion %}<p>📍 <strong>Dirección:</strong> {{ escuela_info.direccion }}</p>{% endif %}
+            {% if escuela_info.telefono %}<p>📞 <strong>Teléfono:</strong> {{ escuela_info.telefono }}</p>{% endif %}
+            {% if escuela_info.email %}<p>✉️ <strong>Email:</strong> {{ escuela_info.email }}</p>{% endif %}
+            {% if escuela_info.horario %}<p>🕒 <strong>Horario:</strong> {{ escuela_info.horario }}</p>{% endif %}
         </div>
+    </div>
+</section>
 
-        <div>
-            <label style="display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.4rem; color: var(--text-dark);">Mensaje *</label>
-            <textarea name="mensaje" rows="5" required style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.95rem; resize: vertical;"></textarea>
-        </div>
-
-        <button type="submit" style="background-color: var(--primary); color: white; border: none; padding: 0.9rem; border-radius: 6px; font-weight: 700; font-size: 1rem; cursor: pointer; margin-top: 0.5rem; transition: background 0.2s;">
-            Enviar Consulta
-        </button>
-    </form>
-</div>
+<script>
+function switchTab(tabName, evt) {
+    document.querySelectorAll('.contacto-form').forEach(form => form.classList.add('form-oculto'));
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    
+    if (tabName === 'consulta') {
+        document.getElementById('form-consulta').classList.remove('form-oculto');
+    } else {
+        document.getElementById('form-docente').classList.remove('form-oculto');
+    }
+    evt.target.classList.add('active');
+}
+</script>
 {% endblock %}
