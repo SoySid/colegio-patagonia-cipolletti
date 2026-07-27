@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{{ escuela_info.nombre|default:"Instituto San Martín" }}{% endblock %}</title>
+    <title>{% block title %}{% if escuela_info %}{{ escuela_info.nombre }}{% else %}Colegio Patagonia{% endif %}{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'escuela/css/estilos.css' %}">
 </head>
 <body>
@@ -14,7 +14,7 @@
                 <img src="{{ escuela_info.logo.url }}" alt="Logo {{ escuela_info.nombre }}" class="brand-logo">
             {% endif %}
             <div class="brand-text">
-                <span class="brand-title">{{ escuela_info.nombre|default:"Instituto San Martín" }}</span>
+                <span class="brand-title">{{ escuela_info.nombre|default:"Colegio Patagonia" }}</span>
                 {% if escuela_info.frase %}
                     <small class="brand-phrase">{{ escuela_info.frase }}</small>
                 {% endif %}
@@ -37,11 +37,9 @@
     <footer>
         <div class="footer-grid">
             <div class="footer-col">
-                <h4>{{ escuela_info.nombre|default:"Instituto San Martín" }}</h4>
+                <h4>{{ escuela_info.nombre|default:"Colegio Patagonia" }}</h4>
                 {% if escuela_info.frase %}
                     <p class="footer-phrase">"{{ escuela_info.frase }}"</p>
-                {% else %}
-                    <p class="footer-text">Educación de excelencia para Nivel Primario y Secundario. Formando a los líderes del mañana.</p>
                 {% endif %}
                 
                 {% if escuela_info.horario %}
@@ -50,8 +48,8 @@
             </div>
             
             <div class="footer-col">
-                <h4>Niveles</h4>
-                <p class="footer-text">• Nivel Primario<br>• Nivel Secundario Orientado<br>• Talleres y Extracurriculares</p>
+                <h4>Niveles Educativos</h4>
+                <p class="footer-text">• Nivel Maternal<br>• Nivel Inicial<br>• Nivel Primario<br>• Próximamente Nivel Secundario</p>
             </div>
             
             <div class="footer-col">
@@ -85,7 +83,7 @@
         </div>
         
         <div class="footer-bottom">
-            &copy; 2026 {{ escuela_info.nombre|default:"Instituto San Martín" }}. Todos los derechos reservados.
+            &copy; 2026 {{ escuela_info.nombre|default:"Colegio Patagonia" }}. Todos los derechos reservados.
         </div>
     </footer>
 </body>

@@ -307,3 +307,109 @@ footer {
 .footer-social-container {
     margin-top: 0.8rem;
 }
+
+/* Estilos para el Hero Principal */
+.hero {
+    background-color: #1e3a8a;
+    color: #ffffff;
+    padding: 3rem 1.5rem;
+    text-align: center;
+}
+
+.hero-content h1 {
+    font-size: 2.2rem;
+    margin-bottom: 0.8rem;
+    font-weight: 700;
+}
+
+.hero-content p {
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto 1.5rem auto;
+    opacity: 0.9;
+}
+
+.btn-primary {
+    display: inline-block;
+    background-color: #d97706;
+    color: #ffffff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #b45309;
+}
+
+/* Estilos para Tarjetas de Novedades */
+.novedades-container {
+    max-width: 1100px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.novedades-container h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: #0f172a;
+    border-left: 4px solid #d97706;
+    padding-left: 0.5rem;
+}
+
+.noticias-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.noticia-card {
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+}
+
+.noticia-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.noticia-body {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.noticia-body .categoria {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #2563eb;
+    margin-bottom: 0.3rem;
+}
+
+.noticia-body h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: #1e293b;
+}
+
+.noticia-body p {
+    font-size: 0.9rem;
+    color: #475569;
+    flex-grow: 1;
+    margin-bottom: 0.8rem;
+}
+
+.noticia-body small {
+    color: #94a3b8;
+    font-size: 0.8rem;
+}

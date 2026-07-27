@@ -1,36 +1,38 @@
 {% extends 'escuela/base.html' %}
+{% load static %}
 
-{% block title %}Inicio - Instituto San Martín{% endblock %}
+{% block title %}Inicio - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
 
 {% block content %}
-    <!-- Banner Principal -->
-    <section class="hero">
-        <h1>Excelencia Académica y Formación Humana</h1>
-        <p>Propuesta pedagógica para Nivel Primario y Secundario con orientación tecnológica e inglés.</p>
-        <a href="/requisitos/" class="btn-cta">Ver Requisitos de Inscripción</a>
-    </section>
+<section class="hero">
+    <div class="hero-content">
+        <h1>Educación Integral y de Excelencia</h1>
+        <p>Propuesta pedagógica comprometida con una formación humana de calidad desde Nivel Maternal hasta Primario.</p>
+        <a href="/requisitos/" class="btn-primary">Ver Requisitos de Inscripción</a>
+    </div>
+</section>
 
-    <!-- Novedades de la Escuela -->
-    <div class="container">
-        <h2 class="section-title">Últimas Novedades</h2>
-        
-        <div class="grid-cards">
+<section class="novedades-container">
+    <h2>Últimas Novedades</h2>
+    
+    {% if noticias %}
+        <div class="noticias-grid">
             {% for noticia in noticias %}
-                <div class="card-news">
+                <div class="noticia-card">
                     {% if noticia.imagen_url %}
                         <img src="{{ noticia.imagen_url }}" alt="{{ noticia.titulo }}">
-                    {% else %}
-                        <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=600" alt="Noticia">
                     {% endif %}
-                    <div class="card-news-body">
-                        <div class="card-news-tag">{{ noticia.categoria }}</div>
+                    <div class="noticia-body">
+                        <span class="categoria">{{ noticia.categoria }}</span>
                         <h3>{{ noticia.titulo }}</h3>
-                        <p>{{ noticia.descripcion }}</p>
+                        <p>{{ noticia.descripcion|truncatewords:20 }}</p>
+                        <small>{{ noticia.fecha_creacion|date:"d/m/Y" }}</small>
                     </div>
                 </div>
-            {% empty %}
-                <p style="color: var(--text-muted);">No hay noticias publicadas por el momento.</p>
             {% endfor %}
         </div>
-    </div>
+    {% else %}
+        <p>No hay novedades publicadas por el momento.</p>
+    {% endif %}
+</section>
 {% endblock %}
