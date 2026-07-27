@@ -268,41 +268,44 @@ nav a.btn-portal:hover {
 /* ==========================================
    5. CONTACTO & POSTULACIÓN DOCENTE
    ========================================== */
-.contacto-container {
-    max-width: 1000px;
-    margin: 2.5rem auto;
+.contacto-wrapper {
+    max-width: 1100px;
+    margin: 3rem auto;
     padding: 0 1rem;
-}
-
-.contacto-container h2 {
-    font-size: 1.8rem;
-    color: var(--primary);
-    border-left: 6px solid var(--brand-green);
-    padding-left: 0.8rem;
-    text-transform: uppercase;
-    font-weight: 800;
 }
 
 .contacto-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1.8fr 1.2fr;
     gap: 2rem;
     margin-top: 1.8rem;
+    align-items: start;
+}
+
+.contacto-card, .info-card {
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
 .form-tabs {
     display: flex;
     gap: 10px;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.8rem;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 0.8rem;
 }
 
 .tab-btn {
-    padding: 0.7rem 1.4rem;
+    padding: 0.65rem 1.2rem;
     border: 1px solid #cbd5e1;
     background: #f8fafc;
     border-radius: 20px;
     cursor: pointer;
     font-weight: 700;
+    font-size: 0.9rem;
     color: var(--text-muted);
     transition: all 0.2s ease;
 }
@@ -311,62 +314,138 @@ nav a.btn-portal:hover {
     background: var(--brand-green);
     color: #ffffff;
     border-color: var(--brand-green);
+    box-shadow: 0 2px 8px rgba(31, 122, 63, 0.25);
 }
 
 .form-oculto {
-    display: none;
+    display: none !important;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
 }
 
 .form-group {
-    margin-bottom: 1.1rem;
+    margin-bottom: 1.2rem;
     display: flex;
     flex-direction: column;
 }
 
 .form-group label {
     font-weight: 700;
-    margin-bottom: 0.3rem;
-    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+    font-size: 0.88rem;
     color: var(--text-dark);
 }
 
 .form-group input, .form-group select, .form-group textarea {
-    padding: 0.7rem;
+    padding: 0.75rem;
     border: 1px solid #cbd5e1;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 0.95rem;
+    background-color: #fafafa;
+    transition: all 0.2s ease;
 }
 
 .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
     outline: none;
     border-color: var(--brand-green);
+    background-color: #ffffff;
     box-shadow: 0 0 0 3px rgba(31, 122, 63, 0.15);
 }
 
 .btn-submit {
     background-color: var(--brand-green);
     color: white;
-    padding: 0.85rem 1.5rem;
+    padding: 0.9rem 1.5rem;
     border: none;
     border-radius: 20px;
     cursor: pointer;
     font-weight: 800;
     text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
     width: 100%;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .btn-submit:hover {
     background-color: var(--brand-green-dark);
+    transform: translateY(-2px);
 }
 
-.alert-success {
-    background-color: #d1fae5;
-    color: #065f46;
-    padding: 1rem;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    font-weight: 600;
+/* TARJETA DERECHA DE INFO */
+.info-card h3 {
+    color: var(--primary);
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-bottom: 0.4rem;
+}
+
+.info-subtitle {
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    margin-bottom: 1.8rem;
+    line-height: 1.4;
+}
+
+.info-items {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+}
+
+.info-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.info-icon {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.info-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-text strong {
+    color: var(--text-dark);
+    font-size: 0.9rem;
+    margin-bottom: 0.1rem;
+}
+
+.info-text span {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.info-text small {
+    color: #94a3b8;
+    font-size: 0.8rem;
+}
+
+@media (max-width: 850px) {
+    .contacto-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* ==========================================
