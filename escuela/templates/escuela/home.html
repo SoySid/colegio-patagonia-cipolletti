@@ -24,7 +24,9 @@
                     <div class="noticia-body">
                         <span class="categoria">{{ noticia.categoria }}</span>
                         <h3>{{ noticia.titulo }}</h3>
-                        <p>{{ noticia.descripcion|truncatewords:20 }}</p>
+                        <div class="noticia-descripcion">
+                            {{ noticia.descripcion|linebreaks }}
+                        </div>
                         <small>{{ noticia.fecha_creacion|date:"d/m/Y" }}</small>
                     </div>
                 </div>

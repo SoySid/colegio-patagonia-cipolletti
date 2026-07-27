@@ -223,6 +223,7 @@ nav a.btn-portal:hover {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    justify-content: space-between;
 }
 
 .categoria, .card-news-tag {
@@ -567,4 +568,23 @@ footer {
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     font-size: 0.85rem;
     color: #94a3b8;
+}
+
+.noticia-descripcion {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+    margin-bottom: 0.8rem;
+    flex-grow: 1;
+    max-height: 180px; /* Limita el alto máximo si es larguísimo */
+    overflow-y: auto;  /* Permite un scroll interno sutil si se pasa */
+}
+
+.noticia-descripcion p {
+    margin-bottom: 0.4rem;
+}
+
+.noticia-descripcion ul, .noticia-descripcion ol {
+    padding-left: 1.2rem;
+    margin-bottom: 0.4rem;
 }
