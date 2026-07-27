@@ -1,0 +1,46 @@
+{% extends 'escuela/base.html' %}
+
+{% block title %}Requisitos de Inscripción - Instituto San Martín{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 3rem auto; padding: 0 5%;">
+    <h2 style="font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem;">Requisitos de Inscripción 2026</h2>
+    <p style="color: var(--text-muted); margin-bottom: 2.5rem;">Documentación obligatoria para la reserva de vacante y confección del legajo del alumno.</p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem;">
+        
+        <!-- Nivel Primario -->
+        <div style="background: white; padding: 2rem; border-radius: 10px; border: 1px solid #e2e8f0; border-top: 4px solid var(--primary);">
+            <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.3rem;">Nivel Primario</h3>
+            <ul style="color: var(--text-muted); line-height: 2; padding-left: 1.2rem; font-size: 0.95rem;">
+                <li>Fotocopia de DNI del alumno (frente y dorse).</li>
+                <li>Fotocopia de DNI de los padres / tutores.</li>
+                <li>Partida de nacimiento actualizada.</li>
+                <li>Certificado de salud escolar y bucodental.</li>
+                <li>Carnet de vacunación completo (fotocopia).</li>
+                <li>Boletín de calificaciones del año anterior.</li>
+            </ul>
+        </div>
+
+        <!-- Nivel Secundario -->
+        <div style="background: white; padding: 2rem; border-radius: 10px; border: 1px solid #e2e8f0; border-top: 4px solid var(--accent);">
+            <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.3rem;">Nivel Secundario</h3>
+            <ul style="color: var(--text-muted); line-height: 2; padding-left: 1.2rem; font-size: 0.95rem;">
+                <li>Fotocopia de DNI del alumno y tutores.</li>
+                <li>Certificado de 7mo grado aprobado (o Pase del colegio origen).</li>
+                <li>Ficha médica de aptitud física para Educación Física.</li>
+                <li>Certificado de conducta del colegio anterior.</li>
+                <li>2 fotos carnet 4x4 (actualizadas).</li>
+                <li>Constancia de CUIL del alumno.</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- Botón de consulta rápida -->
+    <div style="margin-top: 3rem; background: #e0f2fe; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #0284c7; text-align: center;">
+        <p style="color: #0369a1; font-weight: 600; margin-bottom: 0.5rem;">¿Tenés dudas con la documentación?</p>
+        <a href="/contacto/" style="color: var(--primary); font-weight: 700; text-decoration: underline;">Comunicate con Secretaría para recibir asistencia personalizada</a>
+    </div>
+</div>
+{% endblock %}

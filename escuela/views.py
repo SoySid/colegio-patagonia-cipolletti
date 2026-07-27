@@ -8,3 +8,6 @@ def contacto(request):
 
 def portal_login(request):
     return render(request, 'escuela/portal.html')
+
+def requisitos(request):
+    return render(request, 'escuela/requisitos.html')
