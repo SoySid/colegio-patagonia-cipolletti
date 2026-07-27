@@ -37,14 +37,16 @@
                         <img src="{{ noticia.imagen.url }}" alt="{{ noticia.titulo }}">
                     {% endif %}
                     <div class="noticia-body">
-                        <div>
+                        <div class="noticia-content">
                             <span class="categoria">{{ noticia.categoria }}</span>
                             <h3>{{ noticia.titulo }}</h3>
-                            <div class="noticia-descripcion">
-                                {{ noticia.descripcion|linebreaks }}
+                            <div class="noticia-descripcion-container">
+                                <div class="noticia-descripcion">
+                                    {{ noticia.descripcion|striptags|linebreaksbr }}
+                                </div>
                             </div>
                         </div>
-                        <small>{{ noticia.fecha_creacion|date:"d/m/Y" }}</small>
+                        <small class="noticia-fecha">{{ noticia.fecha_creacion|date:"d/m/Y" }}</small>
                     </div>
                 </article>
             {% endfor %}

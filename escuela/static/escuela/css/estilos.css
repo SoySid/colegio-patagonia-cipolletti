@@ -333,26 +333,28 @@ nav a.btn-portal:hover {
    4. NOVEDADES & SLIDER DESLIZABLE
    ========================================== */
 .novedades-container {
-    max-width: 1100px;
+    max-width: 1120px;
     margin: 3rem auto;
-    padding: 0 1rem;
+    padding: 1.4rem 1rem 0;
+    border-top: 1px solid rgba(15, 23, 42, 0.08);
 }
 
 .novedades-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .novedades-header h2 {
-    font-size: 1.8rem;
+    font-size: 1.4rem;
     color: var(--primary);
-    border-left: 6px solid var(--brand-green);
-    padding-left: 0.8rem;
+    border-left: 4px solid var(--brand-green);
+    padding-left: 0.7rem;
     text-transform: uppercase;
     font-weight: 800;
     margin: 0;
+    letter-spacing: 0.02em;
 }
 
 .slider-controls {
@@ -385,10 +387,10 @@ nav a.btn-portal:hover {
 /* SLIDER HORIZONTAL CON SCROLL RECTIFICADO */
 .noticias-slider {
     display: flex;
-    gap: 1.5rem;
+    gap: 1rem;
     overflow-x: auto;
     scroll-behavior: smooth;
-    padding: 0.5rem 0.2rem 1.5rem 0.2rem;
+    padding: 0.3rem 0.1rem 1rem;
     scrollbar-width: thin;
     scrollbar-color: var(--brand-green) #e2e8f0;
 }
@@ -402,67 +404,79 @@ nav a.btn-portal:hover {
     border-radius: 10px;
 }
 
-/* TARJETA CON ALTURA Y ANCHO FIJOS */
+/* TARJETA MODERNA DE NOTICIAS */
 .noticia-card {
-    flex: 0 0 320px; /* Ancho fijo para cada tarjeta en el slider */
-    height: 460px;   /* Altura máxima pareja para todas */
+    flex: 0 0 300px;
+    min-height: 430px;
     background: #ffffff;
-    border-radius: 12px;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+    border: 1px solid rgba(15, 23, 42, 0.06);
     display: flex;
     flex-direction: column;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .noticia-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-    border-color: var(--brand-green);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.1);
 }
 
 .noticia-card img {
     width: 100%;
-    height: 160px;
+    height: 170px;
     object-fit: cover;
     flex-shrink: 0;
 }
 
 .noticia-body {
-    padding: 1.2rem;
+    padding: 1rem 1rem 1.1rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     flex-grow: 1;
-    overflow: hidden;
-}
-
-.categoria {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    font-weight: 800;
-    color: var(--brand-green);
-    margin-bottom: 0.3rem;
-    display: block;
+    gap: 0.7rem;
 }
 
 .noticia-body h3 {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: var(--text-dark);
-    margin-bottom: 0.5rem;
-    line-height: 1.3;
+    line-height: 1.35;
     font-weight: 700;
+    margin: 0;
 }
 
-/* CONTENEDOR DE TEXTO CON SCROLL INTERNO Y ALTURA DELIMITADA */
+.noticia-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.categoria {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: var(--brand-green);
+    letter-spacing: 0.08em;
+    margin-bottom: 0.15rem;
+}
+
+.noticia-descripcion-container {
+    display: flex;
+    flex-direction: column;
+}
+
 .noticia-descripcion {
-    font-size: 0.88rem;
-    color: var(--text-muted);
+    font-size: 0.92rem;
+    color: #475569;
     line-height: 1.5;
-    max-height: 170px;
+    overflow-wrap: anywhere;
+    white-space: normal;
+    max-height: 7.2rem;
     overflow-y: auto;
-    padding-right: 0.3rem;
+    padding-right: 0.25rem;
+    font-weight: 500;
 }
 
 .noticia-descripcion::-webkit-scrollbar {
@@ -470,17 +484,17 @@ nav a.btn-portal:hover {
 }
 
 .noticia-descripcion::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 4px;
+    background-color: rgba(15, 23, 42, 0.2);
+    border-radius: 999px;
 }
 
-.noticia-body small {
-    color: #94a3b8;
+.noticia-fecha {
     font-size: 0.8rem;
-    margin-top: 0.8rem;
-    display: block;
-    border-top: 1px solid #f1f5f9;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-top: 0.2rem;
     padding-top: 0.5rem;
+    border-top: 1px solid #eef2f7;
 }
 
 /* ==========================================
