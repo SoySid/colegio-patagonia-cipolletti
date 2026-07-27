@@ -39,5 +39,5 @@ def requisitos(request):
     })
 
 def faq(request):
-    preguntas = PreguntaFrecuente.objects.filter(activa=True)
-    return render(request, 'escuela/faq.html', {'preguntas': preguntas})
+    faqs = PreguntaFrecuente.objects.filter(activa=True)
+    return render(request, 'escuela/faq.html', {'faqs': faqs})
