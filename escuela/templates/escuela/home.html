@@ -4,36 +4,70 @@
 
 {% block content %}
 <section class="hero">
-    <div class="hero-content">
-        <h1>EDUCACIÓN INTEGRAL Y DE EXCELENCIA</h1>
-        <p>Propuesta pedagógica comprometida con una formación humana de calidad desde Nivel Maternal hasta Primario.</p>
-        <a href="/requisitos/" class="btn-primary">VER REQUISITOS DE INSCRIPCIÓN</a>
+    <div class="hero-container">
+        <div class="hero-content">
+            <span class="hero-tag">Inscripciones Abiertas 2026</span>
+            <h1>EDUCACIÓN INTEGRAL Y DE EXCELENCIA</h1>
+            <p>Propuesta pedagógica comprometida con una formación humana de calidad desde Nivel Maternal hasta Primario.</p>
+            <div class="hero-buttons">
+                <a href="/requisitos/" class="btn-hero-primary">VER REQUISITOS DE INSCRIPCIÓN</a>
+                <a href="/contacto/" class="btn-hero-secondary">CONTACTANOS</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=800&auto=format&fit=crop" alt="Colegio Patagonia - Educación">
+        </div>
     </div>
 </section>
 
 <section class="novedades-container">
-    <h2>Últimas Novedades</h2>
+    <div class="novedades-header">
+        <h2>Últimas Novedades</h2>
+        <div class="slider-controls">
+            <button id="slide-left" class="btn-slide" aria-label="Anterior">❮</button>
+            <button id="slide-right" class="btn-slide" aria-label="Siguiente">❯</button>
+        </div>
+    </div>
     
     {% if noticias %}
-        <div class="noticias-grid">
+        <div class="noticias-slider" id="news-slider">
             {% for noticia in noticias %}
-                <div class="noticia-card">
+                <article class="noticia-card">
                     {% if noticia.imagen %}
                         <img src="{{ noticia.imagen.url }}" alt="{{ noticia.titulo }}">
                     {% endif %}
                     <div class="noticia-body">
-                        <span class="categoria">{{ noticia.categoria }}</span>
-                        <h3>{{ noticia.titulo }}</h3>
-                        <div class="noticia-descripcion">
-                            {{ noticia.descripcion|linebreaks }}
+                        <div>
+                            <span class="categoria">{{ noticia.categoria }}</span>
+                            <h3>{{ noticia.titulo }}</h3>
+                            <div class="noticia-descripcion">
+                                {{ noticia.descripcion|linebreaks }}
+                            </div>
                         </div>
                         <small>{{ noticia.fecha_creacion|date:"d/m/Y" }}</small>
                     </div>
-                </div>
+                </article>
             {% endfor %}
         </div>
     {% else %}
         <p>No hay novedades publicadas por el momento.</p>
     {% endif %}
 </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const slider = document.getElementById('news-slider');
+        const btnLeft = document.getElementById('slide-left');
+        const btnRight = document.getElementById('slide-right');
+
+        if (slider && btnLeft && btnRight) {
+            btnLeft.addEventListener('click', () => {
+                slider.scrollBy({ left: -340, behavior: 'smooth' });
+            });
+            btnRight.addEventListener('click', () => {
+                slider.scrollBy({ left: 340, behavior: 'smooth' });
+            });
+        }
+    });
+</script>
 {% endblock %}

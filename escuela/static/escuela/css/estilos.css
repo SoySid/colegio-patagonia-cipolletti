@@ -130,48 +130,131 @@ nav a.btn-portal:hover {
 .hero {
     background: linear-gradient(135deg, var(--primary) 0%, var(--brand-green-dark) 100%);
     color: #ffffff;
-    padding: 4.5rem 1.5rem;
-    text-align: center;
+    padding: 3.5rem 1.5rem;
+}
+
+.hero-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 2.5rem;
+    align-items: center;
+}
+
+.hero-content {
+    text-align: left;
+}
+
+.hero-tag {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0.3rem 0.9rem;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .hero-content h1 {
-    font-size: 2.6rem;
+    font-size: 2.3rem;
     font-weight: 800;
-    margin-bottom: 0.8rem;
+    margin-bottom: 1rem;
     text-transform: uppercase;
     letter-spacing: -0.5px;
+    line-height: 1.2;
 }
 
 .hero-content p {
-    font-size: 1.2rem;
-    max-width: 680px;
-    margin: 0 auto 1.8rem auto;
+    font-size: 1.05rem;
+    margin-bottom: 2rem;
     color: #e2e8f0;
+    line-height: 1.55;
 }
 
-.btn-primary, .btn-cta {
+.hero-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn-hero-primary {
     display: inline-block;
-    background-color: var(--brand-green);
-    color: #ffffff;
-    padding: 0.85rem 2rem;
+    background-color: #ffffff;
+    color: var(--primary);
+    padding: 0.85rem 1.8rem;
     border-radius: 20px;
     text-decoration: none;
     font-weight: 800;
     text-transform: uppercase;
-    font-size: 0.95rem;
+    font-size: 0.88rem;
     letter-spacing: 0.5px;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
 }
 
-.btn-primary:hover, .btn-cta:hover {
-    background-color: #1a6334;
+.btn-hero-primary:hover {
+    background-color: #f8fafc;
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.btn-hero-secondary {
+    display: inline-block;
+    background-color: transparent;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+    padding: 0.8rem 1.6rem;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.88rem;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+}
+
+.btn-hero-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.hero-image {
+    display: flex;
+    justify-content: center;
+}
+
+.hero-image img {
+    width: 100%;
+    max-height: 320px;
+    object-fit: cover;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    border: 3px solid rgba(255, 255, 255, 0.15);
+}
+
+@media (max-width: 850px) {
+    .hero-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    .hero-content {
+        text-align: center;
+    }
+    .hero-buttons {
+        justify-content: center;
+    }
+    .hero-image img {
+        max-height: 250px;
+    }
 }
 
 /* ==========================================
-   4. NOVEDADES & TARJETAS
+   4. NOVEDADES & SLIDER DESLIZABLE
    ========================================== */
 .novedades-container {
     max-width: 1100px;
@@ -179,23 +262,74 @@ nav a.btn-portal:hover {
     padding: 0 1rem;
 }
 
-.novedades-container h2, .section-title {
+.novedades-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.novedades-header h2 {
     font-size: 1.8rem;
     color: var(--primary);
-    margin-bottom: 1.5rem;
     border-left: 6px solid var(--brand-green);
     padding-left: 0.8rem;
     text-transform: uppercase;
     font-weight: 800;
+    margin: 0;
 }
 
-.noticias-grid, .grid-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.8rem;
+.slider-controls {
+    display: flex;
+    gap: 0.5rem;
 }
 
-.noticia-card, .card-news {
+.btn-slide {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    color: var(--primary);
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.btn-slide:hover {
+    background: var(--brand-green);
+    color: #ffffff;
+    border-color: var(--brand-green);
+}
+
+/* SLIDER HORIZONTAL CON SCROLL RECTIFICADO */
+.noticias-slider {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 0.5rem 0.2rem 1.5rem 0.2rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--brand-green) #e2e8f0;
+}
+
+.noticias-slider::-webkit-scrollbar {
+    height: 6px;
+}
+
+.noticias-slider::-webkit-scrollbar-thumb {
+    background-color: var(--brand-green);
+    border-radius: 10px;
+}
+
+/* TARJETA CON ALTURA Y ANCHO FIJOS */
+.noticia-card {
+    flex: 0 0 320px; /* Ancho fijo para cada tarjeta en el slider */
+    height: 460px;   /* Altura máxima pareja para todas */
     background: #ffffff;
     border-radius: 12px;
     overflow: hidden;
@@ -206,63 +340,71 @@ nav a.btn-portal:hover {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.noticia-card:hover, .card-news:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.12);
+.noticia-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
     border-color: var(--brand-green);
 }
 
-.noticia-card img, .card-news img {
+.noticia-card img {
     width: 100%;
-    height: 190px;
+    height: 160px;
     object-fit: cover;
+    flex-shrink: 0;
 }
 
-.noticia-body, .card-news-body {
-    padding: 1.3rem;
+.noticia-body {
+    padding: 1.2rem;
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
     justify-content: space-between;
+    flex-grow: 1;
+    overflow: hidden;
 }
 
-.categoria, .card-news-tag {
+.categoria {
     font-size: 0.75rem;
     text-transform: uppercase;
     font-weight: 800;
     color: var(--brand-green);
-    margin-bottom: 0.4rem;
-    letter-spacing: 0.5px;
+    margin-bottom: 0.3rem;
+    display: block;
 }
 
-.noticia-body h3, .card-news h3 {
-    font-size: 1.2rem;
+.noticia-body h3 {
+    font-size: 1.1rem;
     color: var(--text-dark);
     margin-bottom: 0.5rem;
     line-height: 1.3;
     font-weight: 700;
 }
 
+/* CONTENEDOR DE TEXTO CON SCROLL INTERNO Y ALTURA DELIMITADA */
 .noticia-descripcion {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     color: var(--text-muted);
-    line-height: 1.45;
-    margin-bottom: 0.8rem;
-    flex-grow: 1;
+    line-height: 1.5;
+    max-height: 170px;
+    overflow-y: auto;
+    padding-right: 0.3rem;
 }
 
-.noticia-descripcion p {
-    margin-bottom: 0.4rem;
+.noticia-descripcion::-webkit-scrollbar {
+    width: 4px;
 }
 
-.noticia-descripcion ul, .noticia-descripcion ol {
-    padding-left: 1.2rem;
-    margin-bottom: 0.4rem;
+.noticia-descripcion::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
 }
 
 .noticia-body small {
     color: #94a3b8;
     font-size: 0.8rem;
+    margin-top: 0.8rem;
+    display: block;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 0.5rem;
 }
 
 /* ==========================================
