@@ -109,11 +109,36 @@
             border-top: 1px solid rgba(255,255,255,0.1);
             font-size: 0.85rem;
         }
+
+        .btn-whatsapp-footer {
+            display: inline-block;
+            background-color: #25d366;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-top: 0.8rem;
+        }
+
+        .social-link {
+            display: block;
+            color: #e2e8f0;
+            font-size: 0.85rem;
+            text-decoration: none;
+            margin-top: 0.4rem;
+            transition: color 0.2s;
+        }
+
+        .social-link:hover {
+            color: white;
+        }
     </style>
 </head>
 <body>
     <header>
-        <div class="brand">Instituto San Martín</div>
+        <div class="brand">{{ escuela_info.nombre|default:"Instituto San Martín" }}</div>
         <nav>
             <a href="/">Inicio</a>
             <a href="/requisitos/">Requisitos</a>
@@ -130,20 +155,50 @@
     <footer>
         <div class="footer-grid">
             <div class="footer-col">
-                <h4>Instituto San Martín</h4>
+                <h4>{{ escuela_info.nombre|default:"Instituto San Martín" }}</h4>
                 <p style="font-size: 0.9rem; line-height: 1.6;">Educación de excelencia para Nivel Primario y Secundario. Formando a los líderes del mañana.</p>
+                {% if escuela_info.horario %}
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem; color: #94a3b8;">🕒 {{ escuela_info.horario }}</p>
+                {% endif %}
             </div>
+            
             <div class="footer-col">
                 <h4>Niveles</h4>
                 <p style="font-size: 0.9rem; line-height: 1.6;">• Nivel Primario<br>• Nivel Secundario Orientado<br>• Talleres y Extracurriculares</p>
             </div>
+            
             <div class="footer-col">
                 <h4>Contacto</h4>
-                <p style="font-size: 0.9rem; line-height: 1.6;">Av. Italia 1234<br>Tel: (0379) 444-5566<br>info@institutosanmartin.edu.ar</p>
+                <p style="font-size: 0.9rem; line-height: 1.6;">
+                    {% if escuela_info.direccion %}📍 {{ escuela_info.direccion }}<br>{% endif %}
+                    {% if escuela_info.telefono %}📞 Tel: {{ escuela_info.telefono }}<br>{% endif %}
+                    {% if escuela_info.email %}✉️ {{ escuela_info.email }}{% endif %}
+                </p>
+
+                <div style="margin-top: 0.8rem;">
+                    {% if escuela_info.whatsapp %}
+                        <a href="https://wa.me/{{ escuela_info.whatsapp }}" target="_blank" class="btn-whatsapp-footer">
+                            💬 WhatsApp Institucional
+                        </a>
+                    {% endif %}
+
+                    {% if escuela_info.instagram_url %}
+                        <a href="{{ escuela_info.instagram_url }}" target="_blank" class="social-link">
+                            📷 Instagram
+                        </a>
+                    {% endif %}
+
+                    {% if escuela_info.facebook_url %}
+                        <a href="{{ escuela_info.facebook_url }}" target="_blank" class="social-link">
+                            📘 Facebook
+                        </a>
+                    {% endif %}
+                </div>
             </div>
         </div>
+        
         <div class="footer-bottom">
-            &copy; 2026 Instituto San Martín. Todos los derechos reservados.
+            &copy; 2026 {{ escuela_info.nombre|default:"Instituto San Martín" }}. Todos los derechos reservados.
         </div>
     </footer>
 </body>

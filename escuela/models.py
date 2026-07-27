@@ -34,3 +34,20 @@ class Consulta(models.Model):
 
     def __str__(self):
         return f"{self.asunto} - {self.nombre}"
+
+class DatosEscuela(models.Model):
+    nombre = models.CharField(max_length=150, default="Instituto San Martín")
+    direccion = models.CharField(max_length=255, blank=True, null=True)
+    telefono = models.CharField(max_length=50, blank=True, null=True)
+    whatsapp = models.CharField(max_length=50, blank=True, null=True, help_text="Número sin + ni espacios para el link de WhatsApp")
+    email = models.EmailField(blank=True, null=True)
+    horario = models.CharField(max_length=150, blank=True, null=True)
+    facebook_url = models.URLField(blank=True, null=True)
+    instagram_url = models.URLField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Datos de la Escuela"
+        verbose_name_plural = "Datos de la Escuela"
+
+    def __str__(self):
+        return self.nombre

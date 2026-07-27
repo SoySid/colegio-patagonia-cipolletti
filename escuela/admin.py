@@ -1,8 +1,9 @@
 from django.contrib import admin
-from .models import Noticia, Requisito, Consulta
+from .models import Noticia, Requisito, Consulta, DatosEscuela
 
 admin.site.register(Noticia)
 admin.site.register(Requisito)
+admin.site.register(DatosEscuela)
 
 @admin.register(Consulta)
 class ConsultaAdmin(admin.ModelAdmin):
