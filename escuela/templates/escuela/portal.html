@@ -1,6 +1,6 @@
 {% extends 'escuela/base.html' %}
 
-{% block title %}Portal Alumnos - Instituto San Martín{% endblock %}
+{% block title %}Portal Alumnos - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
 
 {% block content %}
 <div style="max-width: 450px; margin: 4rem auto; padding: 0 1rem;">

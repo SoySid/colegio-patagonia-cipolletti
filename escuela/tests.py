@@ -1,7 +1,9 @@
+from django.contrib import admin
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 
-from .admin import CarruselMultipleForm
+from .admin import CarruselMultipleForm, DatosEscuelaAdmin
+from .models import DatosEscuela
 
 
 class CarruselMultipleFormTests(TestCase):
@@ -16,3 +18,11 @@ class CarruselMultipleFormTests(TestCase):
 
         self.assertTrue(form.is_valid(), form.errors)
         self.assertEqual(len(form.cleaned_data["imagenes_multiples"]), 2)
+
+
+class DatosEscuelaAdminTests(TestCase):
+    def test_admin_exposes_logo_field(self):
+        admin_instance = DatosEscuelaAdmin(DatosEscuela, admin.site)
+        form_class = admin_instance.get_form(None)
+
+        self.assertIn("logo", form_class.base_fields)

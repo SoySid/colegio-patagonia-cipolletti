@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib import admin
+from django.utils.html import format_html
 from .models import (
     Noticia, 
     Requisito, 
@@ -39,7 +40,26 @@ class PostulacionDocenteAdmin(admin.ModelAdmin):
 
 @admin.register(DatosEscuela)
 class DatosEscuelaAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'email', 'telefono')
+    list_display = ('nombre', 'email', 'telefono', 'logo_preview')
+    search_fields = ('nombre', 'email', 'telefono')
+    fieldsets = (
+        ('Datos generales', {
+            'fields': ('nombre', 'frase', 'logo')
+        }),
+        ('Contacto', {
+            'fields': ('direccion', 'telefono', 'whatsapp', 'email', 'horario')
+        }),
+        ('Redes sociales', {
+            'fields': ('facebook_url', 'instagram_url')
+        }),
+    )
+
+    def logo_preview(self, obj):
+        if obj.logo:
+            return format_html('<img src="{}" style="max-height: 40px; max-width: 80px; object-fit: contain;" />', obj.logo.url)
+        return "—"
+
+    logo_preview.short_description = 'Logo'
 
 
 @admin.register(PreguntaFrecuente)
