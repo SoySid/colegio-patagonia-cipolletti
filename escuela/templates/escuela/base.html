@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Escuela Institucional{% endblock %}</title>
+    <title>{% block title %}Instituto Educativo Privado{% endblock %}</title>
     <style>
         :root {
-            --primary: #1e3a8a;
-            --primary-hover: #1d4ed8;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --text: #0f172a;
+            --primary: #0f2b5c;       /* Azul institucional profundo */
+            --secondary: #1e50a2;     /* Azul secundario */
+            --accent: #d97706;        /* Ámbar/Dorado para botones de acción */
+            --bg-light: #f8fafc;
+            --text-dark: #0f172a;
             --text-muted: #475569;
         }
 
@@ -22,84 +22,128 @@
         }
 
         body {
-            background-color: var(--bg);
-            color: var(--text);
+            background-color: var(--bg-light);
+            color: var(--text-dark);
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
 
+        /* Barra Superior Institucional */
         header {
             background-color: var(--primary);
             color: white;
-            padding: 1rem 2rem;
+            padding: 1rem 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
-        header h1 {
-            font-size: 1.25rem;
-            font-weight: 700;
+        .brand {
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+            text-transform: uppercase;
         }
 
         nav a {
-            color: white;
+            color: #e2e8f0;
             text-decoration: none;
-            margin-left: 1.5rem;
-            font-weight: 500;
-            transition: opacity 0.2s;
+            margin-left: 2rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.2s;
         }
 
         nav a:hover {
-            opacity: 0.8;
+            color: #ffffff;
+        }
+
+        nav a.btn-portal {
+            background-color: var(--accent);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            color: white;
+        }
+
+        nav a.btn-portal:hover {
+            background-color: #b45309;
         }
 
         main {
             flex: 1;
-            max-width: 900px;
             width: 100%;
-            margin: 2rem auto;
-            padding: 0 1rem;
         }
 
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e2e8f0;
-        }
-
+        /* Footer amplio */
         footer {
+            background-color: var(--primary);
+            color: #cbd5e1;
+            padding: 3rem 5% 1.5rem 5%;
+            margin-top: 4rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-col h4 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .footer-bottom {
             text-align: center;
-            padding: 1.5rem;
-            background: #e2e8f0;
-            color: var(--text-muted);
-            font-size: 0.875rem;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.85rem;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Escuela Técnica</h1>
+        <div class="brand">Instituto San Martín</div>
         <nav>
             <a href="/">Inicio</a>
             <a href="/contacto/">Contacto</a>
-            <a href="/portal/">Portal Alumnos</a>
+            <a href="/portal/" class="btn-portal">Portal Alumnos</a>
         </nav>
     </header>
 
     <main>
-        <div class="card">
-            {% block content %}
-            {% endblock %}
-        </div>
+        {% block content %}
+        {% endblock %}
     </main>
 
     <footer>
-        &copy; 2026 Escuela Institucional. Todos los derechos reservados.
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Instituto San Martín</h4>
+                <p style="font-size: 0.9rem; line-height: 1.6;">Educación de excelencia para Nivel Primario y Secundario. Formando a los líderes del mañana.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Niveles</h4>
+                <p style="font-size: 0.9rem; line-height: 1.6;">• Nivel Primario<br>• Nivel Secundario Orientado<br>• Talleres y Extracurriculares</p>
+            </div>
+            <div class="footer-col">
+                <h4>Contacto</h4>
+                <p style="font-size: 0.9rem; line-height: 1.6;">Av. Italia 1234<br>Tel: (0379) 444-5566<br>info@institutosanmartin.edu.ar</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Instituto San Martín. Todos los derechos reservados.
+        </div>
     </footer>
 </body>
 </html>

@@ -1,10 +1,188 @@
 {% extends 'escuela/base.html' %}
 
-{% block title %}Inicio - Escuela{% endblock %}
+{% block title %}Inicio - Instituto San Martín{% endblock %}
 
 {% block content %}
-    <h2>Página Institucional</h2>
-    <p style="margin-top: 1rem; color: var(--text-muted);">
-        Bienvenidos al portal oficial de nuestra institución educativa. Desde aquí podés acceder a toda la información sobre el ciclo lectivo, contacto directivo e ingreso al portal escolar.
-    </p>
+    <style>
+        /* Hero Banner */
+        .hero {
+            background: linear-gradient(rgba(15, 43, 92, 0.85), rgba(15, 43, 92, 0.85)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1200') center/cover;
+            color: white;
+            padding: 5rem 5%;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            max-width: 700px;
+            margin: 0 auto 2rem auto;
+            color: #e2e8f0;
+        }
+
+        .btn-cta {
+            background-color: var(--accent);
+            color: white;
+            padding: 0.9rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Sección de Accesos Rápidos (Estilo Portal) */
+        .shortcuts {
+            max-width: 1200px;
+            margin: -2.5rem auto 3rem auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            padding: 0 5%;
+            position: relative;
+            z-index: 10;
+        }
+
+        .shortcut-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            text-align: center;
+            border-top: 4px solid var(--secondary);
+        }
+
+        .shortcut-card h3 {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .shortcut-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Contenedor Principal de Novedades y Niveles */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 0.8rem;
+        }
+
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .card-news {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .card-news-body {
+            padding: 1.5rem;
+        }
+
+        .card-news-tag {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-news h3 {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            margin-bottom: 0.8rem;
+        }
+
+        .card-news p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+    </style>
+
+    <!-- Banner Principal -->
+    <section class="hero">
+        <h1>Excelencia Académica y Formación Humana</h1>
+        <p>Inscripciones Abiertas 2026. Conocé nuestra propuesta pedagógica con orientación tecnológica e inglés intensivo.</p>
+        <a href="/contacto/" class="btn-cta">Solicitar Entrevista de Admisión</a>
+    </section>
+
+    <!-- Accesos Rápidos -->
+    <div class="shortcuts">
+        <div class="shortcut-card">
+            <h3>Inscripciones 2026</h3>
+            <p>Requisitos y proceso de admisión</p>
+        </div>
+        <div class="shortcut-card">
+            <h3>Proyecto Educativo</h3>
+            <p>Conocé nuestros pilares y valores</p>
+        </div>
+        <div class="shortcut-card">
+            <h3>Nivel Primario</h3>
+            <p>Educación integral e inglés</p>
+        </div>
+        <div class="shortcut-card">
+            <h3>Nivel Secundario</h3>
+            <p>Orientación en Informática y Economía</p>
+        </div>
+    </div>
+
+    <!-- Novedades / Noticias de la Escuela -->
+    <div class="container">
+        <h2 class="section-title">Novedades Institucionales</h2>
+        
+        <div class="grid-cards">
+            <div class="card-news">
+                <div class="card-news-body">
+                    <div class="card-news-tag">Admisiones</div>
+                    <h3>Inicio del Proceso de Admisión Ciclo Lectivo 2026</h3>
+                    <p>Abrimos las inscripciones para salas de Nivel Primario y 1er año de Nivel Secundario. Agendá tu visita guiada.</p>
+                </div>
+            </div>
+
+            <div class="card-news">
+                <div class="card-news-body">
+                    <div class="card-news-tag">Tecnología</div>
+                    <h3>Nuevo Laboratorio de Robótica e Informática</h3>
+                    <p>Incorporamos equipamiento de última generación para las prácticas de programación y pensamiento computacional.</p>
+                </div>
+            </div>
+
+            <div class="card-news">
+                <div class="card-news-body">
+                    <div class="card-news-tag">Comunidad</div>
+                    <h3>Jornada Puertas Abiertas para Familias</h3>
+                    <p>Invitamos a todas las familias interesadas a conocer las instalaciones y dialogar con el equipo directivo.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
