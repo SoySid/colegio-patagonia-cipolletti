@@ -93,3 +93,18 @@ class PreguntaFrecuente(models.Model):
 
     def __str__(self):
         return self.pregunta
+
+class CarruselInicio(models.Model):
+    titulo = models.CharField(max_length=100, blank=True, null=True, verbose_name="Título (Opcional)")
+    subtitulo = models.CharField(max_length=200, blank=True, null=True, verbose_name="Subtítulo / Bajada (Opcional)")
+    imagen = models.ImageField(upload_to='carrusel/', blank=True, null=True, verbose_name="Imagen del Carrusel")
+    orden = models.PositiveIntegerField(default=0, help_text="Orden de aparición (0, 1, 2...)")
+    activa = models.BooleanField(default=True, verbose_name="¿Mostrar en la web?")
+
+    class Meta:
+        verbose_name = "Imagen del Carrusel"
+        verbose_name_plural = "Carrusel del Inicio"
+        ordering = ['orden']
+
+    def __str__(self):
+        return self.titulo or f"Imagen {self.id}"

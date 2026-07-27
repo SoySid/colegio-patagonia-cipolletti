@@ -1,11 +1,15 @@
 from django.shortcuts import render
 from django.db.models import Q
 from django.contrib import messages
-from .models import Noticia, Requisito, Consulta, PreguntaFrecuente
+from .models import Noticia, Requisito, Consulta, PreguntaFrecuente, CarruselInicio
 
 def home(request):
     noticias = Noticia.objects.all().order_by('-fecha_creacion')
-    return render(request, 'escuela/home.html', {'noticias': noticias})
+    carrusel = CarruselInicio.objects.filter(activa=True).order_by('orden')
+    return render(request, 'escuela/home.html', {
+        'noticias': noticias,
+        'carrusel': carrusel
+    })
 
 def contacto(request):
     if request.method == 'POST':

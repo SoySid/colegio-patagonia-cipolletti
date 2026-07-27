@@ -54,20 +54,49 @@
     {% endif %}
 </section>
 
+{% if carrusel %}
+<section class="carrusel-inicio">
+    <div class="carrusel-header">
+        <h2>Galería de la Escuela</h2>
+        <div class="slider-controls">
+            <button id="carrusel-left" class="btn-slide" aria-label="Anterior">❮</button>
+            <button id="carrusel-right" class="btn-slide" aria-label="Siguiente">❯</button>
+        </div>
+    </div>
+
+    <div class="carrusel-slider" id="carousel-slider">
+        {% for item in carrusel %}
+            <article class="carrusel-card carrusel-solo-imagen">
+                {% if item.imagen %}
+                    <img src="{{ item.imagen.url }}" alt="{{ item.titulo|default:'Imagen del carrusel' }}">
+                {% endif %}
+            </article>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const slider = document.getElementById('news-slider');
-        const btnLeft = document.getElementById('slide-left');
-        const btnRight = document.getElementById('slide-right');
+        const sliders = [
+            { sliderId: 'news-slider', leftId: 'slide-left', rightId: 'slide-right', step: 340 },
+            { sliderId: 'carousel-slider', leftId: 'carrusel-left', rightId: 'carrusel-right', step: 520 }
+        ];
 
-        if (slider && btnLeft && btnRight) {
-            btnLeft.addEventListener('click', () => {
-                slider.scrollBy({ left: -340, behavior: 'smooth' });
-            });
-            btnRight.addEventListener('click', () => {
-                slider.scrollBy({ left: 340, behavior: 'smooth' });
-            });
-        }
+        sliders.forEach(({ sliderId, leftId, rightId, step }) => {
+            const slider = document.getElementById(sliderId);
+            const btnLeft = document.getElementById(leftId);
+            const btnRight = document.getElementById(rightId);
+
+            if (slider && btnLeft && btnRight) {
+                btnLeft.addEventListener('click', () => {
+                    slider.scrollBy({ left: -step, behavior: 'smooth' });
+                });
+                btnRight.addEventListener('click', () => {
+                    slider.scrollBy({ left: step, behavior: 'smooth' });
+                });
+            }
+        });
     });
 </script>
 {% endblock %}
