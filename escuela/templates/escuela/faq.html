@@ -1,10 +1,20 @@
 {% extends 'escuela/base.html' %}
 
-{% block title %}Preguntas Frecuentes - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
+{% block title %}Dudas - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
 
 {% block content %}
 <section class="faq-wrapper">
-    <h2 class="section-title">PREGUNTAS FRECUENTES</h2>
+    <div class="faq-hero">
+        <div class="faq-hero-content">
+            <p class="faq-kicker">Información clara y cercana</p>
+            <h2>Dudas frecuentes</h2>
+            <p>Encontrá respuestas rápidas sobre inscripción, trámites, horarios y otras consultas del día a día.</p>
+        </div>
+        <div class="faq-hero-badge">
+            <span>¿Necesitás ayuda?</span>
+            <strong>Estamos para acompañarte</strong>
+        </div>
+    </div>
 
     {% if faqs %}
         <div class="faq-list">
@@ -21,12 +31,16 @@
             {% endfor %}
         </div>
     {% else %}
-        <p>No hay preguntas frecuentes registradas por el momento.</p>
+        <div class="faq-empty">
+            <p>No hay dudas registradas por el momento.</p>
+        </div>
     {% endif %}
 
     <div class="faq-cta">
-        <h3>¿Tenés más dudas o consultas?</h3>
-        <p>Estamos para ayudarte. Ponete en contacto con nuestro equipo de administración e informes.</p>
+        <div class="faq-cta-text">
+            <h3>¿Tenés otra duda?</h3>
+            <p>Escribinos y nuestro equipo te ayudará con la información que necesitás.</p>
+        </div>
         <a href="/contacto/" class="btn-primary">IR A CONTACTO</a>
     </div>
 </section>

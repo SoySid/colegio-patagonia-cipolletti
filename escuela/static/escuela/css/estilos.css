@@ -684,41 +684,106 @@ nav a.btn-portal:hover {
    6. PREGUNTAS FRECUENTES (FAQ)
    ========================================== */
 .faq-wrapper {
-    max-width: 900px;
-    margin: 3rem auto;
+    max-width: 980px;
+    margin: 3rem auto 4rem;
     padding: 0 1rem;
+}
+
+.faq-hero {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--brand-green-dark) 100%);
+    color: #ffffff;
+    border-radius: 24px;
+    padding: 2rem 2rem 2.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1.5rem;
+    box-shadow: 0 20px 45px rgba(3, 27, 78, 0.18);
+}
+
+.faq-kicker {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.16);
+    padding: 0.35rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+}
+
+.faq-hero h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0.6rem;
+    line-height: 1.1;
+}
+
+.faq-hero p {
+    color: #e2e8f0;
+    line-height: 1.6;
+    max-width: 620px;
+}
+
+.faq-hero-badge {
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 18px;
+    padding: 1rem 1.2rem;
+    min-width: 210px;
+    text-align: center;
+}
+
+.faq-hero-badge span {
+    display: block;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.9;
+    margin-bottom: 0.3rem;
+}
+
+.faq-hero-badge strong {
+    font-size: 1rem;
 }
 
 .faq-list {
     display: flex;
     flex-direction: column;
-    gap: 1.2rem;
-    margin-top: 2rem;
+    gap: 1rem;
+    margin-top: 1.5rem;
 }
 
 .faq-card {
     background: #ffffff;
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    border-radius: 18px;
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.faq-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.1);
 }
 
 .faq-card[open] {
     border-color: var(--brand-green);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 16px 35px rgba(31, 122, 63, 0.14);
 }
 
 .faq-head {
-    padding: 1.2rem 1.5rem;
-    font-size: 1.05rem;
+    padding: 1.15rem 1.25rem;
+    font-size: 1rem;
     font-weight: 700;
     color: var(--primary);
     cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 0.8rem;
     list-style: none;
     user-select: none;
 }
@@ -729,49 +794,107 @@ nav a.btn-portal:hover {
 }
 
 .faq-plus {
-    font-size: 1.4rem;
-    color: var(--brand-green);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--brand-green), var(--primary));
+    color: #ffffff;
+    font-size: 1.15rem;
     font-weight: 800;
     line-height: 1;
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, background 0.2s ease;
+    flex-shrink: 0;
 }
 
 .faq-card[open] .faq-plus {
     transform: rotate(45deg);
+    background: linear-gradient(135deg, var(--accent), #dc2626);
 }
 
 .faq-body {
-    padding: 0 1.5rem 1.2rem 1.5rem;
+    padding: 0 1.25rem 1.2rem;
     color: var(--text-muted);
-    line-height: 1.6;
+    line-height: 1.7;
     font-size: 0.95rem;
     border-top: 1px solid #f1f5f9;
-    margin-top: 0.2rem;
+    margin-top: 0.1rem;
     padding-top: 1rem;
 }
 
+.faq-empty {
+    margin-top: 1.5rem;
+    padding: 1.25rem 1.4rem;
+    border-radius: 16px;
+    background: #f8fafc;
+    color: var(--text-muted);
+    border: 1px dashed rgba(31, 122, 63, 0.3);
+}
+
 .faq-cta, .faq-cta-box {
-    margin-top: 3.5rem;
-    padding: 2.5rem 1.5rem;
-    background: #ffffff;
-    border: 2px dashed var(--brand-green);
-    border-radius: 12px;
-    text-align: center;
+    margin-top: 2rem;
+    padding: 1.5rem 1.6rem;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    border-radius: 20px;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
 }
 
 .faq-cta h3, .faq-cta-box h3 {
     color: var(--primary);
-    font-size: 1.35rem;
+    font-size: 1.2rem;
     font-weight: 800;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.35rem;
 }
 
 .faq-cta p, .faq-cta-box p {
     color: var(--text-muted);
     font-size: 0.95rem;
-    margin-bottom: 1.4rem;
+    margin-bottom: 0;
 }
 
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--brand-green) 0%, var(--primary) 100%);
+    color: #ffffff;
+    padding: 0.8rem 1.3rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 8px 20px rgba(31, 122, 63, 0.2);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(31, 122, 63, 0.28);
+}
+
+@media (max-width: 768px) {
+    .faq-hero {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .faq-hero-badge {
+        min-width: auto;
+        width: 100%;
+    }
+
+    .faq-cta {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
 /* ==========================================
    7. FOOTER
    ========================================== */
