@@ -51,3 +51,17 @@ class DatosEscuela(models.Model):
 
     def __str__(self):
         return self.nombre
+
+class PreguntaFrecuente(models.Model):
+    pregunta = models.CharField(max_length=255)
+    respuesta = models.TextField()
+    orden = models.IntegerField(default=0, help_text="Número para ordenar la pregunta (menor número aparece primero)")
+    activa = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "Pregunta Frecuente"
+        verbose_name_plural = "Preguntas Frecuentes"
+        ordering = ['orden']
+
+    def __str__(self):
+        return self.pregunta

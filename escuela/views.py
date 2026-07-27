@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.db.models import Q
 from django.contrib import messages
-from .models import Noticia, Requisito, Consulta
+from .models import Noticia, Requisito, Consulta, PreguntaFrecuente
 
 def home(request):
     noticias = Noticia.objects.all().order_by('-fecha_creacion')
@@ -37,3 +37,7 @@ def requisitos(request):
         'req_primario': req_primario,
         'req_secundario': req_secundario
     })
+
+def faq(request):
+    preguntas = PreguntaFrecuente.objects.filter(activa=True)
+    return render(request, 'escuela/faq.html', {'preguntas': preguntas})
