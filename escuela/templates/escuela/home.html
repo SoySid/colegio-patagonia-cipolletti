@@ -1,14 +1,13 @@
 {% extends 'escuela/base.html' %}
-{% load static %}
 
 {% block title %}Inicio - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
 
 {% block content %}
 <section class="hero">
     <div class="hero-content">
-        <h1>Educación Integral y de Excelencia</h1>
+        <h1>EDUCACIÓN INTEGRAL Y DE EXCELENCIA</h1>
         <p>Propuesta pedagógica comprometida con una formación humana de calidad desde Nivel Maternal hasta Primario.</p>
-        <a href="/requisitos/" class="btn-primary">Ver Requisitos de Inscripción</a>
+        <a href="/requisitos/" class="btn-primary">VER REQUISITOS DE INSCRIPCIÓN</a>
     </div>
 </section>
 
@@ -19,8 +18,8 @@
         <div class="noticias-grid">
             {% for noticia in noticias %}
                 <div class="noticia-card">
-                    {% if noticia.imagen_url %}
-                        <img src="{{ noticia.imagen_url }}" alt="{{ noticia.titulo }}">
+                    {% if noticia.imagen %}
+                        <img src="{{ noticia.imagen.url }}" alt="{{ noticia.titulo }}">
                     {% endif %}
                     <div class="noticia-body">
                         <span class="categoria">{{ noticia.categoria }}</span>

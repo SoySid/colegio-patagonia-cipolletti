@@ -4,8 +4,8 @@ class Noticia(models.Model):
     titulo = models.CharField(max_length=200)
     categoria = models.CharField(max_length=50)
     descripcion = models.TextField()
-    imagen_url = models.URLField(max_length=500, blank=True, null=True)
-    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    imagen = models.ImageField(upload_to='noticias/', blank=True, null=True, help_text="Subir archivo de imagen para la noticia")
+    fecha_creacion = models.DateTimeField(auto_now_add=True)  # <-- Corregido acá
 
     def __str__(self):
         return self.titulo
