@@ -20,6 +20,23 @@
     </div>
 </section>
 
+{% if bloques %}
+<section class="novedades-container">
+    <div class="novedades-header">
+        <h2>Por qué elegir nuestra escuela</h2>
+    </div>
+    <div class="benefits-grid">
+        {% for bloque in bloques %}
+            <article class="benefit-card">
+                {% if bloque.icono %}<div class="benefit-icon">{{ bloque.icono }}</div>{% endif %}
+                <h3>{{ bloque.titulo }}</h3>
+                {% if bloque.descripcion %}<p>{{ bloque.descripcion }}</p>{% endif %}
+            </article>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
 <section class="novedades-container">
     <div class="novedades-header">
         <h2>Últimas Novedades</h2>

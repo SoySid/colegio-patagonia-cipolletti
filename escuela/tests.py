@@ -2,8 +2,8 @@ from django.contrib import admin
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 
-from .admin import CarruselMultipleForm, DatosEscuelaAdmin
-from .models import DatosEscuela
+from .admin import BloqueInicioAdmin, CarruselMultipleForm, DatosEscuelaAdmin
+from .models import BloqueInicio, DatosEscuela
 
 
 class CarruselMultipleFormTests(TestCase):
@@ -35,3 +35,15 @@ class DatosEscuelaAdminTests(TestCase):
         self.assertIn("hero_titulo", form_class.base_fields)
         self.assertIn("hero_subtitulo", form_class.base_fields)
         self.assertIn("hero_imagen", form_class.base_fields)
+
+
+class BloqueInicioAdminTests(TestCase):
+    def test_admin_exposes_home_block_fields(self):
+        admin_instance = BloqueInicioAdmin(BloqueInicio, admin.site)
+        form_class = admin_instance.get_form(None)
+
+        self.assertIn("titulo", form_class.base_fields)
+        self.assertIn("descripcion", form_class.base_fields)
+        self.assertIn("icono", form_class.base_fields)
+        self.assertIn("orden", form_class.base_fields)
+        self.assertIn("activa", form_class.base_fields)

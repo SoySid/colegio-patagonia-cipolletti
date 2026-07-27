@@ -1,0 +1,1 @@
+web: gunicorn pagina_escuela.wsgi:application
