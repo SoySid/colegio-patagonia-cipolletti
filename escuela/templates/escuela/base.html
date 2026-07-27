@@ -9,7 +9,7 @@
 </head>
 <body>
     <header>
-        <div class="brand">
+        <a href="/" class="brand" style="text-decoration: none; color: inherit;">
             {% if escuela_info.logo %}
                 <img src="{{ escuela_info.logo.url }}" alt="Logo {{ escuela_info.nombre }}" class="brand-logo">
             {% endif %}
@@ -19,11 +19,11 @@
                     <small class="brand-phrase">{{ escuela_info.frase }}</small>
                 {% endif %}
             </div>
-        </div>
+        </a>
         <nav>
             <a href="/">Inicio</a>
             <a href="/requisitos/">Requisitos</a>
-            <a href="/faq/">Preguntas Frecuentes</a>
+            <a href="/faq/">Dudas</a>
             <a href="/contacto/">Contacto</a>
             <a href="/portal/" class="btn-portal">Portal Alumnos</a>
         </nav>
