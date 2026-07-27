@@ -6,16 +6,16 @@
 <section class="hero">
     <div class="hero-container">
         <div class="hero-content">
-            <span class="hero-tag">Inscripciones Abiertas 2026</span>
-            <h1>EDUCACIÓN INTEGRAL Y DE EXCELENCIA</h1>
-            <p>Propuesta pedagógica comprometida con una formación humana de calidad desde Nivel Maternal hasta Primario.</p>
+            <span class="hero-tag">{{ escuela_info.hero_tag|default:"Inscripciones Abiertas" }}</span>
+            <h1>{{ escuela_info.hero_titulo|default:"EDUCACIÓN INTEGRAL Y DE EXCELENCIA" }}</h1>
+            <p>{{ escuela_info.hero_subtitulo|default:"Propuesta pedagógica comprometida con una formación humana de calidad desde Nivel Maternal hasta Primario." }}</p>
             <div class="hero-buttons">
-                <a href="/requisitos/" class="btn-hero-primary">VER REQUISITOS DE INSCRIPCIÓN</a>
-                <a href="/contacto/" class="btn-hero-secondary">CONTACTANOS</a>
+                <a href="{{ escuela_info.hero_boton_principal_url|default:'/requisitos/' }}" class="btn-hero-primary">{{ escuela_info.hero_boton_principal_text|default:"VER REQUISITOS DE INSCRIPCIÓN" }}</a>
+                <a href="{{ escuela_info.hero_boton_secundario_url|default:'/contacto/' }}" class="btn-hero-secondary">{{ escuela_info.hero_boton_secundario_text|default:"CONTACTANOS" }}</a>
             </div>
         </div>
         <div class="hero-image">
-            <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=800&auto=format&fit=crop" alt="Colegio Patagonia - Educación">
+            <img src="{% if escuela_info.hero_imagen %}{{ escuela_info.hero_imagen.url }}{% else %}https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=800&auto=format&fit=crop{% endif %}" alt="{{ escuela_info.nombre|default:'Colegio Patagonia' }} - Educación">
         </div>
     </div>
 </section>

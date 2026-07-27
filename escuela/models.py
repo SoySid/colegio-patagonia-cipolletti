@@ -72,6 +72,14 @@ class DatosEscuela(models.Model):
     horario = models.CharField(max_length=150, blank=True, null=True)
     facebook_url = models.URLField(blank=True, null=True)
     instagram_url = models.URLField(blank=True, null=True)
+    hero_tag = models.CharField(max_length=80, blank=True, null=True, default="Inscripciones Abiertas", help_text="Texto corto del banner principal")
+    hero_titulo = models.CharField(max_length=150, blank=True, null=True, default="EDUCACIÓN INTEGRAL Y DE EXCELENCIA")
+    hero_subtitulo = models.TextField(blank=True, null=True, default="Propuesta pedagógica comprometida con una formación humana de calidad desde Nivel Maternal hasta Primario.")
+    hero_imagen = models.ImageField(upload_to='escuela/hero/', blank=True, null=True, help_text="Imagen principal del inicio")
+    hero_boton_principal_text = models.CharField(max_length=80, blank=True, null=True, default="VER REQUISITOS DE INSCRIPCIÓN")
+    hero_boton_principal_url = models.CharField(max_length=255, blank=True, null=True, default="/requisitos/")
+    hero_boton_secundario_text = models.CharField(max_length=80, blank=True, null=True, default="CONTACTANOS")
+    hero_boton_secundario_url = models.CharField(max_length=255, blank=True, null=True, default="/contacto/")
 
     class Meta:
         verbose_name = "Datos de la Escuela"

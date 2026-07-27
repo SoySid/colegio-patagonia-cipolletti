@@ -26,3 +26,12 @@ class DatosEscuelaAdminTests(TestCase):
         form_class = admin_instance.get_form(None)
 
         self.assertIn("logo", form_class.base_fields)
+
+    def test_admin_exposes_hero_fields(self):
+        admin_instance = DatosEscuelaAdmin(DatosEscuela, admin.site)
+        form_class = admin_instance.get_form(None)
+
+        self.assertIn("hero_tag", form_class.base_fields)
+        self.assertIn("hero_titulo", form_class.base_fields)
+        self.assertIn("hero_subtitulo", form_class.base_fields)
+        self.assertIn("hero_imagen", form_class.base_fields)

@@ -46,6 +46,9 @@ class DatosEscuelaAdmin(admin.ModelAdmin):
         ('Datos generales', {
             'fields': ('nombre', 'frase', 'logo')
         }),
+        ('Inicio', {
+            'fields': ('hero_tag', 'hero_titulo', 'hero_subtitulo', 'hero_imagen', 'hero_boton_principal_text', 'hero_boton_principal_url', 'hero_boton_secundario_text', 'hero_boton_secundario_url')
+        }),
         ('Contacto', {
             'fields': ('direccion', 'telefono', 'whatsapp', 'email', 'horario')
         }),
