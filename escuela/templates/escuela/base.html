@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Escuela Institucional{% endblock %}</title>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-hover: #1d4ed8;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #0f172a;
+            --text-muted: #475569;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        nav a:hover {
+            opacity: 0.8;
+        }
+
+        main {
+            flex: 1;
+            max-width: 900px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background: #e2e8f0;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Escuela Técnica</h1>
+        <nav>
+            <a href="/">Inicio</a>
+            <a href="/contacto/">Contacto</a>
+            <a href="/portal/">Portal Alumnos</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="card">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+
+    <footer>
+        &copy; 2026 Escuela Institucional. Todos los derechos reservados.
+    </footer>
+</body>
+</html>
