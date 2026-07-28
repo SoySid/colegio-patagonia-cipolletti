@@ -79,34 +79,65 @@
     </div>
 </section>
 
-<!-- NUEVA SECCIÓN: HISTORIA DE LA ESCUELA -->
+<!-- SECCIÓN: SOBRE NOSOTROS -->
 <section class="novedades-container">
     <div class="container py-4">
-        <div class="novedades-header">
-            <h2>Nuestra Historia</h2>
+        <div class="novedades-header mb-4">
+            <h2>Sobre Nosotros</h2>
         </div>
+
         <div class="row g-4 align-items-stretch">
+            <!-- TARJETA INSTITUCIONAL CON ÍCONO VERDE DESTACADO -->
             <div class="col-12 col-lg-7">
-                <article class="benefit-card h-100" style="text-align: left;">
-                    <h3>Quiénes Somos</h3>
-                    <p style="margin-bottom: 1rem;">
+                <article class="benefit-card h-100 d-flex flex-column justify-content-center p-4">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="benefit-icon mb-0 flex-shrink-0" style="background: var(--brand-green); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(31, 122, 63, 0.25);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="#ffffff" class="bi bi-building-fill" viewBox="0 0 16 16">
+                                <path d="M3 0a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1zm1 2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM4 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM4 8.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-6 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <p class="mb-3 text-secondary" style="font-size: 1rem; line-height: 1.6;">
                         Desde nuestra fundación, en el <strong>Colegio Patagonia</strong> nos dedicamos a construir una comunidad educativa basada en el respeto, la responsabilidad y la excelencia pedagógica.
                     </p>
-                    <p style="margin-bottom: 0;">
+                    <p class="mb-0 text-secondary" style="font-size: 0.95rem; line-height: 1.6;">
                         Acompañamos a nuestros estudiantes en su desarrollo académico y humano desde los primeros años, garantizando una propuesta integral, cercana a las familias y adaptada a las necesidades de cada nivel formativo.
                     </p>
                 </article>
             </div>
+
+            <!-- TARJETAS SECUNDARIAS CON ÍCONOS AZUL Y ROJO -->
             <div class="col-12 col-lg-5">
                 <div class="d-flex flex-column gap-3 h-100">
-                    <article class="benefit-card" style="text-align: left;">
-                        <h3>Misión</h3>
-                        <p>Brindar una educación de calidad que potencie el pensamiento crítico, la formación en valores y el crecimiento personal de cada alumno.</p>
+                    
+                    <!-- MISIÓN (Ícono Azul) -->
+                    <article class="benefit-card">
+                        <div class="d-flex align-items-center gap-3 mb-2">
+                            <div class="benefit-icon mb-0 flex-shrink-0" style="background: var(--primary); width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(3, 27, 78, 0.2);">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#ffffff" class="bi bi-book-half" viewBox="0 0 16 16">
+                                    <path d="M8.5 2.687c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.334-.896 3.748-1.038 1.414-.14 2.868-.016 3.545.626.677-.642 2.131-.767 3.545-.626 1.414.142 2.866.638 3.748 1.038A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/>
+                                </svg>
+                            </div>
+                            <h3 class="mb-0">Misión</h3>
+                        </div>
+                        <p class="text-muted small mb-0">Brindar una educación de calidad que potencie el pensamiento crítico, la formación en valores y el crecimiento personal de cada alumno.</p>
                     </article>
-                    <article class="benefit-card" style="text-align: left;">
-                        <h3>Visión</h3>
-                        <p>Ser una institución de referencia por nuestra calidad humana, innovación pedagógica y compromiso constante con la comunidad.</p>
+
+                    <!-- VISIÓN (Ícono Carmesí / Rojo) -->
+                    <article class="benefit-card">
+                        <div class="d-flex align-items-center gap-3 mb-2">
+                            <div class="benefit-icon mb-0 flex-shrink-0" style="background: var(--accent); width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(185, 28, 28, 0.25);">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#ffffff" class="bi bi-mortarboard-fill" viewBox="0 0 16 16">
+                                    <path d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0 1 1h.5a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.276-.447l-7.5-3.5z"/>
+                                    <path d="M4.108 9.91a.5.5 0 0 0-.418.2 5 5 0 0 0-.938 2.012 1 1 0 0 0 .12.833 5 5 0 0 0 2.025 2.106.5.5 0 0 0 .584-.038l1.838-1.532a.5.5 0 0 0 .01-.735L5.7 11.23a.5.5 0 0 0-.756-.021L4.108 9.91zm6.784 0a.5.5 0 0 0-.836.3l-.836 1.502a.5.5 0 0 0-.01.735l1.838 1.532a.5.5 0 0 0 .584.038 5 5 0 0 0 2.025-2.106 1 1 0 0 0 .12-.833 5 5 0 0 0-.938-2.012.5.5 0 0 0-.418-.2l-.836 1.05z"/>
+                                </svg>
+                            </div>
+                            <h3 class="mb-0">Visión</h3>
+                        </div>
+                        <p class="text-muted small mb-0">Ser una institución de referencia por nuestra calidad humana, innovación pedagógica y compromiso constante con la comunidad.</p>
                     </article>
+
                 </div>
             </div>
         </div>
