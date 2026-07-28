@@ -206,8 +206,8 @@
             if (carruselLeft) carruselLeft.addEventListener('click', prevSlide);
             if (carruselRight) carruselRight.addEventListener('click', nextSlide);
 
-            // Avance automático cada 3.5 segundos
-            let autoPlayInterval = setInterval(nextSlide, 3500);
+            // Avance automático cada 2 segundos
+            let autoPlayInterval = setInterval(nextSlide, 2000);
 
             // Pausa el carrusel al pasar el mouse por encima
             carousel.addEventListener('mouseenter', () => clearInterval(autoPlayInterval));
