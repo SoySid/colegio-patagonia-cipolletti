@@ -4,13 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- TÍTULO DINÁMICO: Si el template hijo define un título lo usa; si no, muestra el nombre de la escuela -->
     <title>{% block title %}{% if escuela_info %}{{ escuela_info.nombre }}{% else %}Colegio Patagonia{% endif %}{% endblock %}</title>
+    
+    <!-- FRAMEWORK CSS: Bootstrap 5 vía CDN para maquetado rápido y grillas -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- CSS PROPIO: Punto de entrada a nuestra hoja de estilos modularizada -->
     <link rel="stylesheet" href="{% static 'escuela/css/estilos.css' %}">
 </head>
 <body>
+
+    <!-- ==========================================
+         HEADER / BARRA DE NAVEGACIÓN PRINCIPAL
+         ========================================== -->
     <header class="navbar navbar-expand-lg navbar-dark shadow-sm">
         <div class="container py-2">
+            
+            <!-- MARCA / LOGO E IDENTIDAD INSTITUCIONAL -->
             <a href="/" class="navbar-brand d-flex align-items-center gap-2 me-3">
                 {% if escuela_info.logo %}
                     <img src="{{ escuela_info.logo.url }}" alt="Logo {{ escuela_info.nombre }}" class="brand-logo">
@@ -23,16 +35,24 @@
                 </div>
             </a>
 
+            <!-- BOTÓN HAMBURGUESA: Aparece solo en pantallas chicas (celulares) para colapsar el menú -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
+            <!-- ENLACES DE NAVEGACIÓN (SECCIONES DEL SITIO) -->
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav align-items-lg-center gap-2">
                     <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
+                    
+                    <!-- NUEVA SECCIÓN: Enlace directo a la vista dinámina del Cuerpo Docente -->
+                    <li class="nav-item"><a class="nav-link" href="{% url 'docentes' %}">Cuerpo Docente</a></li>
+                    
                     <li class="nav-item"><a class="nav-link" href="/requisitos/">Requisitos</a></li>
                     <li class="nav-item"><a class="nav-link" href="/faq/">Dudas</a></li>
                     <li class="nav-item"><a class="nav-link" href="/contacto/">Contacto</a></li>
+                    
+                    <!-- BOTÓN DESTACADO: Acceso al sistema interno / portal -->
                     <li class="nav-item">
                         <a href="/portal/" class="btn btn-portal btn-sm rounded-pill px-3">Portal Alumnos</a>
                     </li>
@@ -41,14 +61,23 @@
         </div>
     </header>
 
+    <!-- ==========================================
+         CONTENIDO PRINCIPAL DINÁMICO
+         ========================================== -->
+    <!-- Este bloque 'content' es el que pisan las páginas hijas (home.html, docentes.html, etc.) -->
     <main>
         {% block content %}
         {% endblock %}
     </main>
 
+    <!-- ==========================================
+         FOOTER / PIE DE PÁGINA
+         ========================================== -->
     <footer>
         <div class="container">
             <div class="row g-4">
+                
+                <!-- COLUMNA 1: Datos de la Institución e Horarios -->
                 <div class="col-12 col-md-4">
                     <div class="card h-100 border-0 shadow-sm footer-card">
                         <div class="card-body">
@@ -63,6 +92,7 @@
                     </div>
                 </div>
 
+                <!-- COLUMNA 2: Oferta Educativa / Niveles -->
                 <div class="col-12 col-md-4">
                     <div class="card h-100 border-0 shadow-sm footer-card">
                         <div class="card-body">
@@ -72,6 +102,7 @@
                     </div>
                 </div>
 
+                <!-- COLUMNA 3: Canales de Contacto y Redes Sociales -->
                 <div class="col-12 col-md-4">
                     <div class="card h-100 border-0 shadow-sm footer-card">
                         <div class="card-body">
@@ -82,6 +113,7 @@
                                 {% if escuela_info.email %}✉️ {{ escuela_info.email }}{% endif %}
                             </p>
 
+                            <!-- Redes sociales institucionales -->
                             <div class="footer-social-container">
                                 {% if escuela_info.whatsapp %}
                                     <a href="https://wa.me/{{ escuela_info.whatsapp }}" target="_blank" class="btn-whatsapp-footer">
@@ -107,11 +139,13 @@
             </div>
         </div>
 
+        <!-- COPYRIGHT Y AÑO -->
         <div class="footer-bottom">
             &copy; 2026 {{ escuela_info.nombre|default:"Colegio Patagonia" }}. Todos los derechos reservados.
         </div>
     </footer>
 
+    <!-- SCRIPT BOOTSTRAP: Necesario para que funcione el menú desplegable en celulares y componentes interactivos -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

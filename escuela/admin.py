@@ -9,7 +9,8 @@ from .models import (
     DatosEscuela, 
     PreguntaFrecuente,
     BloqueInicio,
-    CarruselInicio
+    CarruselInicio,
+    Docente
 )
 
 
@@ -131,3 +132,10 @@ class CarruselInicioAdmin(admin.ModelAdmin):
                 )
         else:
             super().save_model(request, obj, form, change)
+
+@admin.register(Docente)
+class DocenteAdmin(admin.ModelAdmin):
+    list_display = ('nombre', 'cargo', 'nivel', 'orden', 'activo')
+    list_filter = ('nivel', 'activo')
+    search_fields = ('nombre', 'cargo')
+    list_editable = ('orden', 'activo')

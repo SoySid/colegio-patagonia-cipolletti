@@ -131,3 +131,24 @@ class CarruselInicio(models.Model):
 
     def __str__(self):
         return self.titulo or f"Imagen {self.id}"
+
+class Docente(models.Model):
+    NIVELES = [
+        ('DIRECTIVO', 'Equipo Directivo'),
+        ('INICIAL', 'Nivel Inicial / Maternal'),
+        ('PRIMARIO', 'Nivel Primario'),
+        ('ESPECIALIDAD', 'Especialidades / Talleres'),
+    ]
+
+    nombre = models.CharField(max_length=100)
+    cargo = models.CharField(max_length=100, help_text="Ej: Directora, Docente de Inglés, etc.")
+    nivel = models.CharField(max_length=20, choices=NIVELES, default='PRIMARIO')
+    foto = models.ImageField(upload_to='docentes/', blank=True, null=True)
+    orden = models.IntegerField(default=0, help_text="Para ordenar quién sale primero")
+    activo = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['orden', 'nombre']
+
+    def __str__(self):
+        return f"{self.nombre} - {self.cargo}"
