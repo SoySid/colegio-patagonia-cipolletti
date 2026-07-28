@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.db.models import Q
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
 from .models import Noticia, Requisito, Consulta, PreguntaFrecuente, BloqueInicio, CarruselInicio, PostulacionDocente, Docente
 
 def home(request):
@@ -58,6 +59,25 @@ def contacto(request):
     return render(request, 'escuela/contacto.html')
 
 def portal_login(request):
+    if request.method == 'POST':
+        usuario_input = request.POST.get('username')
+        clave_input = request.POST.get('password')
+
+        user = authenticate(request, username=usuario_input, password=clave_input)
+
+        if user is not None:
+            login(request, user)
+            
+            # Si es Admin o Staff (docente habilitado/preceptor), entra directo al Panel de Control
+            if user.is_staff or user.is_superuser:
+                return redirect('/admin/')
+            
+            # Si es Alumno/Tutor común
+            messages.success(request, f'Bienvenido/a {user.username}.')
+            return redirect('portal')
+        else:
+            messages.error(request, 'Usuario o contraseña incorrectos.')
+
     return render(request, 'escuela/portal.html')
 
 def requisitos(request):
