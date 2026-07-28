@@ -1007,3 +1007,37 @@ details[open] .faq-icon-container,
 .faq-card:hover .faq-icon-container {
     background-color: var(--brand-green);
 }
+
+/* ==========================================
+   HEADER / NAVBAR COMPACTO
+   ========================================== */
+header.navbar {
+    min-height: 50px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.brand-logo {
+    max-height: 32px !important;
+    width: auto;
+}
+
+.brand-title {
+    font-size: 0.95rem !important;
+}
+
+.brand-phrase {
+    font-size: 0.7rem !important;
+}
+
+header.navbar .nav-link {
+    padding-top: 0.4rem !important;
+    padding-bottom: 0.4rem !important;
+    font-size: 0.88rem !important;
+}
+
+header.navbar .btn-portal {
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+    font-size: 0.82rem !important;
+}
