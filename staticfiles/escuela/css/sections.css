@@ -1,21 +1,10 @@
 /* ==========================================
    3. HERO PRINCIPAL
    ========================================== */
-@keyframes fadeUp {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes scaleIn {
-    0% { opacity: 0; transform: scale(0.95); }
-    100% { opacity: 1; transform: scale(1); }
-}
-
 .hero {
     background: linear-gradient(135deg, var(--primary) 0%, var(--brand-green-dark) 100%);
     color: #ffffff;
     padding: 3.5rem 1.5rem;
-    overflow: hidden;
 }
 
 .hero-container {
@@ -44,8 +33,6 @@
     margin-bottom: 1rem;
     border: 1px solid rgba(255, 255, 255, 0.25);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    opacity: 0;
-    animation: fadeUp 0.6s ease-out forwards;
 }
 
 .hero-tag:hover {
@@ -61,8 +48,6 @@
     text-transform: uppercase;
     letter-spacing: -0.5px;
     line-height: 1.2;
-    opacity: 0;
-    animation: fadeUp 0.6s ease-out 0.15s forwards;
 }
 
 .hero-content p {
@@ -70,16 +55,12 @@
     margin-bottom: 2rem;
     color: #e2e8f0;
     line-height: 1.55;
-    opacity: 0;
-    animation: fadeUp 0.6s ease-out 0.3s forwards;
 }
 
 .hero-buttons {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
-    opacity: 0;
-    animation: fadeUp 0.6s ease-out 0.45s forwards;
 }
 
 .btn-hero-primary {
@@ -145,8 +126,6 @@
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
     border: 3px solid rgba(255, 255, 255, 0.15);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    opacity: 0;
-    animation: scaleIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
 }
 
 .hero-image img:hover {
@@ -978,106 +957,53 @@
 footer {
     background-color: var(--primary-dark);
     color: #cbd5e1;
-    padding: 4rem 0 1.5rem;
-    margin-top: 4rem;
-    border-top: 4px solid var(--brand-green);
+    padding: 3rem 0 1.5rem;
+    margin-top: 5rem;
+    border-top: 5px solid var(--brand-green);
+}
+
+.footer-card {
+    background: rgba(255,255,255,0.04);
+    color: #e2e8f0;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+}
+
+.footer-card .card-title {
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
 }
 
 .footer-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 2rem;
+    gap: 2.5rem;
     max-width: 1100px;
     margin: 0 auto;
 }
 
-.footer-card {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.06) !important;
-    border-radius: 12px;
-    padding: 1.8rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.footer-card:hover {
-    transform: translateY(-4px);
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.15) !important;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-}
-
-.footer-card h4,
-.footer-card .card-title {
-    color: #ffffff;
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin-bottom: 1.2rem;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-}
-
-/* Indicador verde sutil para los títulos */
-.footer-card h4::before,
-.footer-card .card-title::before {
-    content: '';
-    display: block;
-    width: 5px;
-    height: 16px;
-    background-color: var(--brand-green);
-    border-radius: 4px;
-}
-
-.footer-card p,
-.footer-contact-item,
-.footer-list li {
-    color: #94a3b8;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    margin-bottom: 0.6rem;
-    list-style: none;
-}
-
-.footer-contact-item {
-    word-break: break-word; /* Evita que el correo se desborde */
-}
-
-.footer-copyright {
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    padding-top: 1.5rem;
-    margin-top: 3rem;
-    text-align: center;
-    color: #64748b;
-    font-size: 0.85rem;
-}
-
 @media (max-width: 900px) {
     footer {
-        padding: 3rem 1rem 1.2rem;
+        padding: 2.2rem 1rem 1.2rem;
+        margin-top: 3rem;
     }
 
     .footer-grid {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-
-    .footer-card {
-        padding: 1.5rem;
+        gap: 1.3rem;
     }
 }
 
 @media (max-width: 560px) {
-    .footer-col h4,
-    .footer-card h4,
-    .footer-card .card-title {
+    .footer-col h4 {
         font-size: 1rem;
     }
 
     .footer-phrase,
     .footer-contact-item,
     .footer-list li,
-    .footer-schedule,
-    .footer-card p {
+    .footer-schedule {
         font-size: 0.9rem;
     }
 }
