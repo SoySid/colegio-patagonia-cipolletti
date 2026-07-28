@@ -170,25 +170,49 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const sliders = [
-            { sliderId: 'news-slider', leftId: 'slide-left', rightId: 'slide-right', step: 340 },
-            { sliderId: 'carousel-slider', leftId: 'carrusel-left', rightId: 'carrusel-right', step: 520 }
-        ];
+        // 1. SLIDER DE NOTICIAS (Novedades)
+        const newsSlider = document.getElementById('news-slider');
+        const newsLeft = document.getElementById('slide-left');
+        const newsRight = document.getElementById('slide-right');
 
-        sliders.forEach(({ sliderId, leftId, rightId, step }) => {
-            const slider = document.getElementById(sliderId);
-            const btnLeft = document.getElementById(leftId);
-            const btnRight = document.getElementById(rightId);
+        if (newsSlider && newsLeft && newsRight) {
+            newsLeft.addEventListener('click', () => newsSlider.scrollBy({ left: -340, behavior: 'smooth' }));
+            newsRight.addEventListener('click', () => newsSlider.scrollBy({ left: 340, behavior: 'smooth' }));
+        }
 
-            if (slider && btnLeft && btnRight) {
-                btnLeft.addEventListener('click', () => {
-                    slider.scrollBy({ left: -step, behavior: 'smooth' });
-                });
-                btnRight.addEventListener('click', () => {
-                    slider.scrollBy({ left: step, behavior: 'smooth' });
-                });
-            }
-        });
+        // 2. CARRUSEL DE GALERÍA (Autoplay de 1 imagen por vista)
+        const carousel = document.getElementById('carousel-slider');
+        const carruselLeft = document.getElementById('carrusel-left');
+        const carruselRight = document.getElementById('carrusel-right');
+
+        if (carousel) {
+            const nextSlide = () => {
+                const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+                if (Math.ceil(carousel.scrollLeft) >= maxScroll - 5) {
+                    carousel.scrollTo({ left: 0, behavior: 'smooth' });
+                } else {
+                    carousel.scrollBy({ left: carousel.clientWidth, behavior: 'smooth' });
+                }
+            };
+
+            const prevSlide = () => {
+                if (carousel.scrollLeft <= 5) {
+                    carousel.scrollTo({ left: carousel.scrollWidth, behavior: 'smooth' });
+                } else {
+                    carousel.scrollBy({ left: -carousel.clientWidth, behavior: 'smooth' });
+                }
+            };
+
+            if (carruselLeft) carruselLeft.addEventListener('click', prevSlide);
+            if (carruselRight) carruselRight.addEventListener('click', nextSlide);
+
+            // Avance automático cada 3.5 segundos
+            let autoPlayInterval = setInterval(nextSlide, 3500);
+
+            // Pausa el carrusel al pasar el mouse por encima
+            carousel.addEventListener('mouseenter', () => clearInterval(autoPlayInterval));
+            carousel.addEventListener('mouseleave', () => autoPlayInterval = setInterval(nextSlide, 3500));
+        }
     });
 </script>
 {% endblock %}
