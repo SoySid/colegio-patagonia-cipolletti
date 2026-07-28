@@ -93,3 +93,11 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'web@colegiopatagonia.edu.ar'
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Colegio Patagonia Cipolletti",
+    "site_header": "Colegio Patagonia Cipolletti",
+    "site_brand": "Patagonia Cipolletti",
+    "welcome_sign": "Bienvenido al Sistema del Colegio Patagonia Cipolletti",
+    "copyright": "Colegio Patagonia Cipolletti",
+}
