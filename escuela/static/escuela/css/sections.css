@@ -461,8 +461,10 @@
    ========================================== */
 .contacto-wrapper {
     max-width: 1180px;
+    width: 100%;
     margin: 3rem auto 4rem;
     padding: 0 1rem;
+    box-sizing: border-box;
 }
 
 .contacto-intro {
@@ -509,6 +511,8 @@
     border: 1px solid rgba(15, 23, 42, 0.08);
     padding: 1.6rem;
     box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+    max-width: 100%;       
+    box-sizing: border-box;
 }
 
 .contacto-side {
@@ -519,6 +523,7 @@
 
 .form-tabs {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     margin-bottom: 1.8rem;
     border-bottom: 1px solid #e2e8f0;
