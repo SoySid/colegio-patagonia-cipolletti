@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.db.models import Q
 from django.contrib import messages
-from .models import Noticia, Requisito, Consulta, PreguntaFrecuente, BloqueInicio, CarruselInicio
+from .models import Noticia, Requisito, Consulta, PreguntaFrecuente, BloqueInicio, CarruselInicio, PostulacionDocente
 
 def home(request):
     noticias = Noticia.objects.all().order_by('-fecha_creacion')
@@ -15,21 +15,45 @@ def home(request):
 
 def contacto(request):
     if request.method == 'POST':
-        nombre = request.POST.get('nombre')
-        email = request.POST.get('email')
-        telefono = request.POST.get('telefono')
-        asunto = request.POST.get('asunto')
-        mensaje = request.POST.get('mensaje')
+        tipo_form = request.POST.get('tipo_form')
 
-        Consulta.objects.create(
-            nombre=nombre,
-            email=email,
-            telefono=telefono,
-            asunto=asunto,
-            mensaje=mensaje
-        )
+        if tipo_form == 'docente':
+            nombre = request.POST.get('nombre')
+            email = request.POST.get('email')
+            telefono = request.POST.get('telefono')
+            nivel_interes = request.POST.get('asunto')
+            mensaje = request.POST.get('mensaje')
+            cv = request.FILES.get('cv')
 
-        messages.success(request, '¡Tu consulta ha sido enviada con éxito! Nos pondremos en contacto a la brevedad.')
+            if cv:
+                PostulacionDocente.objects.create(
+                    nombre=nombre,
+                    email=email,
+                    telefono=telefono,
+                    nivel_interes=nivel_interes,
+                    area_materia='Docente',
+                    cv=cv,
+                    mensaje=mensaje
+                )
+                messages.success(request, '¡Tu postulación fue enviada con éxito! Nos pondremos en contacto a la brevedad.')
+            else:
+                messages.error(request, 'Debes adjuntar un CV para enviar la postulación.')
+        else:
+            nombre = request.POST.get('nombre')
+            email = request.POST.get('email')
+            telefono = request.POST.get('telefono')
+            asunto = request.POST.get('asunto')
+            mensaje = request.POST.get('mensaje')
+
+            Consulta.objects.create(
+                nombre=nombre,
+                email=email,
+                telefono=telefono,
+                asunto=asunto,
+                mensaje=mensaje
+            )
+
+            messages.success(request, '¡Tu consulta ha sido enviada con éxito! Nos pondremos en contacto a la brevedad.')
 
     return render(request, 'escuela/contacto.html')
 
