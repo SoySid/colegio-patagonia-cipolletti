@@ -968,3 +968,42 @@ footer {
         font-size: 0.9rem;
     }
 }
+
+/* Oculta la flechita que trae el navegador por defecto */
+.faq-head::-webkit-details-marker {
+    display: none;
+}
+.faq-head {
+    list-style: none;
+    cursor: pointer;
+}
+
+/* Círculo contenedor de la flecha */
+.faq-icon-container {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: var(--primary);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background-color 0.3s ease;
+}
+
+/* Transición suave para la flechita */
+.faq-arrow {
+    transition: transform 0.3s ease;
+}
+
+/* Cuando la tarjeta se abre, rota 90 grados la flecha hacia abajo */
+details[open] .faq-arrow {
+    transform: rotate(90deg);
+}
+
+/* Cambia a verde el círculo al abrir o al pasar el mouse */
+details[open] .faq-icon-container,
+.faq-card:hover .faq-icon-container {
+    background-color: var(--brand-green);
+}
