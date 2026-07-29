@@ -3,7 +3,7 @@
 {% block title %}Contacto - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
 
 {% block content %}
-<!-- ESTILOS VIP DE NIVEL SUPERIOR CON RESPONSIVE BLINDADO -->
+<!-- ESTILOS VIP DE NIVEL SUPERIOR CON SOMBRAS, GLASSMORPHISM Y CARGA INSTANTÁNEA -->
 <style>
     .contacto-wrapper-vip {
         padding-top: 3.5rem;
@@ -18,6 +18,7 @@
         letter-spacing: 0.08em;
         border: 1px solid rgba(31, 122, 63, 0.3);
         box-shadow: 0 4px 12px rgba(31, 122, 63, 0.1);
+        backdrop-filter: blur(8px);
     }
 
     .contacto-title {
@@ -25,20 +26,23 @@
         color: var(--primary-navy, #1b365d);
         font-weight: 800;
         letter-spacing: -0.5px;
+        text-shadow: 0 2px 4px rgba(15, 23, 42, 0.05);
     }
 
-    /* TARJETAS PRINCIPALES */
+    /* TARJETAS PRINCIPALES CON SOMBRA VIP */
     .card-contacto-vip {
         background: #ffffff !important;
         border: 2px solid #cbd5e1 !important;
         border-radius: 28px !important;
-        box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08) !important;
+        box-shadow: 0 16px 40px rgba(15, 23, 42, 0.09) !important;
         position: relative;
         overflow: hidden;
         width: 100%;
+        will-change: transform, box-shadow;
+        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease !important;
     }
 
-    /* SWITCH DE PESTAÑAS RESPONSIVE */
+    /* SWITCH DE PESTAÑAS RESPONSIVE CON GLASSMORPHISM */
     .tabs-wrapper-vip {
         background-color: #e2e8f0;
         padding: 0.35rem;
@@ -47,6 +51,7 @@
         gap: 0.35rem;
         border: 1px solid #cbd5e1;
         width: 100%;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
     }
 
     .tab-btn-vip {
@@ -58,7 +63,7 @@
         font-weight: 700;
         font-size: 0.88rem;
         color: #64748b;
-        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -114,6 +119,7 @@
         font-weight: 500;
         transition: all 0.25s ease;
         width: 100%;
+        box-shadow: 0 2px 4px rgba(15, 23, 42, 0.02);
     }
 
     textarea.form-control-vip {
@@ -124,7 +130,7 @@
         background-color: #ffffff;
         border-color: var(--brand-green, #1f7a3f);
         outline: none;
-        box-shadow: 0 0 0 4px rgba(31, 122, 63, 0.15);
+        box-shadow: 0 0 0 4px rgba(31, 122, 63, 0.15), 0 4px 12px rgba(15, 23, 42, 0.05);
     }
 
     .form-control-vip:focus + i.icon-field,
@@ -143,7 +149,9 @@
         padding: 0.95rem 2rem;
         border-radius: 50rem;
         box-shadow: 0 8px 24px rgba(31, 122, 63, 0.4);
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                    box-shadow 0.3s ease, 
+                    background 0.3s ease;
         width: 100%;
         display: inline-flex;
         align-items: center;
@@ -152,7 +160,7 @@
     }
 
     .btn-submit-vip:hover {
-        transform: translateY(-3px);
+        transform: translateY(-2px);
         box-shadow: 0 12px 30px rgba(31, 122, 63, 0.55);
         background: linear-gradient(135deg, #166534 0%, #14532d 100%);
     }
@@ -166,16 +174,20 @@
         background: #ffffff !important;
         border: 2px solid #cbd5e1 !important;
         border-radius: 24px !important;
-        box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08) !important;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08) !important;
         padding: 1.85rem;
         margin-bottom: 1.5rem;
-        transition: all 0.3s ease;
+        will-change: transform, border-color, box-shadow;
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                    border-color 0.3s ease, 
+                    box-shadow 0.3s ease;
         width: 100%;
     }
 
     .card-info-vip:hover {
         border-color: var(--primary-navy, #1b365d) !important;
         transform: translateY(-4px);
+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12) !important;
     }
 
     .info-icon-box {
@@ -190,6 +202,11 @@
         font-size: 1.35rem;
         flex-shrink: 0;
         box-shadow: 0 4px 12px rgba(31, 122, 63, 0.15);
+        transition: transform 0.3s ease;
+    }
+
+    .card-info-vip:hover .info-icon-box {
+        transform: scale(1.08) rotate(-3deg);
     }
 
     .map-frame-wrapper {
@@ -204,7 +221,7 @@
        ========================================== */
     @media (max-width: 576px) {
         .contacto-wrapper-vip {
-            padding-top: 4.5rem !important; /* <--- Aumentado para que no choque con el header fijo en celu */
+            padding-top: 4.5rem !important;
             padding-bottom: 3rem;
         }
 
@@ -239,7 +256,7 @@
 <div class="container contacto-wrapper-vip">
     
     <!-- ENCABEZADO DE SECCIÓN -->
-    <div class="text-center mb-4 mb-md-5" data-aos="fade-down">
+    <div class="text-center mb-4 mb-md-5">
         <span class="badge section-badge-vip rounded-pill px-3 py-2 mb-3 d-inline-flex align-items-center gap-2">
             <i class="bi bi-headset"></i> ATENCIÓN DIRECTA Y POSTULACIONES
         </span>
@@ -254,7 +271,7 @@
     <!-- MENSAJES DE FEEDBACK DJANGO -->
     {% if messages %}
         {% for message in messages %}
-            <div class="alert alert-success alert-dismissible fade show rounded-4 shadow-sm mb-4 border-2 border-success" role="alert" data-aos="fade-up">
+            <div class="alert alert-success alert-dismissible fade show rounded-4 shadow-sm mb-4 border-2 border-success" role="alert">
                 <i class="bi bi-check-circle-fill me-2 fs-5 align-middle"></i>
                 <span class="align-middle fw-bold">{{ message }}</span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -265,7 +282,7 @@
     <div class="row g-4 align-items-start">
         
         <!-- COLUMNA IZQUIERDA: FORMULARIOS TABS (7 COLS) -->
-        <div class="col-12 col-lg-7" data-aos="fade-right" data-aos-delay="100">
+        <div class="col-12 col-lg-7">
             <div class="card-contacto-vip p-4 p-md-5">
                 
                 <!-- SWITCH TABS DE CÁPSULA NEÓN -->
@@ -389,7 +406,7 @@
         </div>
 
         <!-- COLUMNA DERECHA: TARJETAS DE INFORMACIÓN Y MAPA (5 COLS) -->
-        <div class="col-12 col-lg-5" data-aos="fade-left" data-aos-delay="200">
+        <div class="col-12 col-lg-5">
             
             <!-- TARJETA 1: INFORMACIÓN DIRECTA -->
             <div class="card-info-vip">

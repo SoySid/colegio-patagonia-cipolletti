@@ -3,7 +3,7 @@
 {% block title %}Requisitos de Inscripción - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
 
 {% block content %}
-<!-- ESTILOS EXCLUSIVOS REINVENTADOS PARA REQUISITOS -->
+<!-- ESTILOS EXCLUSIVOS CON SOMBRAS VIP, GLASSMORPHISM Y RENDIMIENTO OPTIMIZADO -->
 <style>
     /* SECCIÓN CONTENEDORA */
     .requisitos-wrapper {
@@ -19,6 +19,8 @@
         font-size: 0.8rem;
         letter-spacing: 0.06em;
         border: 1px solid rgba(31, 122, 63, 0.25);
+        box-shadow: 0 4px 12px rgba(31, 122, 63, 0.1);
+        backdrop-filter: blur(8px);
     }
 
     .requisitos-title {
@@ -26,6 +28,7 @@
         color: var(--primary-navy, #1b365d);
         font-weight: 800;
         letter-spacing: -0.5px;
+        text-shadow: 0 2px 4px rgba(15, 23, 42, 0.05);
     }
 
     /* TARJETAS DE NIVELES */
@@ -33,23 +36,30 @@
         background: #ffffff !important;
         border: 2px solid #cbd5e1 !important;
         border-radius: 24px !important;
-        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08) !important;
-        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        box-shadow: 0 16px 36px rgba(15, 23, 42, 0.09) !important;
         overflow: hidden;
+        will-change: transform, box-shadow, border-color;
+        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                    border-color 0.35s ease !important;
     }
 
+    /* ELEVACIÓN Y SOMBRA MULTICAPA EN HOVER */
     .card-req-container:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 22px 45px rgba(15, 23, 42, 0.16) !important;
+        transform: translateY(-6px);
+        box-shadow: 0 24px 50px rgba(15, 23, 42, 0.15) !important;
+        border-color: #94a3b8 !important;
     }
 
-    /* CABECERA DE COLOR DE LA TARJETA */
+    /* CABECERA DE COLOR DE LA TARJETA CON GRADIENTE Y GLASS */
     .card-req-header {
         padding: 1.5rem;
         color: #ffffff;
         display: flex;
         align-items: center;
         gap: 1rem;
+        position: relative;
+        overflow: hidden;
     }
 
     .header-inicial {
@@ -65,15 +75,23 @@
     }
 
     .icon-capsule {
-        width: 48px;
-        height: 48px;
-        border-radius: 14px;
-        background: rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(8px);
+        width: 50px;
+        height: 50px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.22);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        flex-shrink: 0;
+        transition: transform 0.35s ease;
+    }
+
+    .card-req-container:hover .icon-capsule {
+        transform: scale(1.1) rotate(-3deg);
     }
 
     /* LISTA DE REQUISITOS EN EL CUERPO */
@@ -87,31 +105,38 @@
     .req-item {
         background-color: #f8fafc;
         border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        padding: 0.85rem 1rem;
+        border-radius: 14px;
+        padding: 0.9rem 1.1rem;
         font-size: 0.93rem;
         color: #334155;
         font-weight: 500;
-        transition: all 0.25s ease;
         display: flex;
-        align-items: start;
-        gap: 0.75rem;
+        align-items: flex-start;
+        gap: 0.8rem;
+        box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                    background-color 0.25s ease, 
+                    box-shadow 0.25s ease, 
+                    border-color 0.25s ease;
     }
 
+    /* MICRO-INTERACCIÓN DESPLAZAMIENTO SUAVE EN ITEMS */
     .req-item:hover {
-        background-color: #f1f5f9;
+        background-color: #ffffff;
         border-color: #cbd5e1;
-        transform: translateX(4px);
+        transform: translateX(6px);
+        box-shadow: 0 6px 16px rgba(15, 23, 42, 0.07);
     }
 
-    /* BANNER CTA FINAL */
+    /* BANNER CTA FINAL CON SOMBRA PROFUNDA Y DIFUMINADO RADIAL */
     .cta-banner-container {
         background: linear-gradient(135deg, #0b1526 0%, #172a45 100%);
-        border-radius: 24px;
-        border: 2px solid rgba(255, 255, 255, 0.15);
-        box-shadow: 0 16px 36px rgba(11, 21, 38, 0.25);
+        border-radius: 28px;
+        border: 2px solid rgba(255, 255, 255, 0.18);
+        box-shadow: 0 20px 45px rgba(11, 21, 38, 0.35);
         position: relative;
         overflow: hidden;
+        backdrop-filter: blur(12px);
     }
 
     .cta-banner-container::before {
@@ -131,21 +156,23 @@
         border: none;
         color: #ffffff !important;
         font-weight: 700;
-        transition: all 0.3s ease;
-        box-shadow: 0 6px 20px rgba(31, 122, 63, 0.45);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                    background-color 0.3s ease, 
+                    box-shadow 0.3s ease;
+        box-shadow: 0 8px 24px rgba(31, 122, 63, 0.45);
     }
 
     .btn-cta-green:hover {
         background-color: #166534;
-        transform: translateY(-3px);
-        box-shadow: 0 10px 25px rgba(31, 122, 63, 0.6);
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 12px 30px rgba(31, 122, 63, 0.65);
     }
 </style>
 
 <div class="container requisitos-wrapper">
     
     <!-- ENCABEZADO PRINCIPAL DE LA VISTA -->
-    <div class="text-center mb-5" data-aos="fade-down">
+    <div class="text-center mb-5">
         <span class="badge section-badge-vip rounded-pill px-3 py-2 mb-3 d-inline-flex align-items-center gap-2">
             <i class="bi bi-file-earmark-text-fill"></i> PROCESO DE ADMISIÓN {% now "Y" %}
         </span>
@@ -161,7 +188,7 @@
     <div class="row g-4 mb-5 justify-content-center">
         
         <!-- TARJETA: NIVEL INICIAL -->
-        <div class="col-12 col-md-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="col-12 col-md-4">
             <article class="card-req-container h-100">
                 <div class="card-req-header header-inicial">
                     <div class="icon-capsule">
@@ -189,7 +216,7 @@
         </div>
 
         <!-- TARJETA: NIVEL PRIMARIO -->
-        <div class="col-12 col-md-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="col-12 col-md-4">
             <article class="card-req-container h-100">
                 <div class="card-req-header header-primario">
                     <div class="icon-capsule">
@@ -217,7 +244,7 @@
         </div>
 
         <!-- TARJETA: NIVEL MEDIO -->
-        <div class="col-12 col-md-4" data-aos="fade-up" data-aos-delay="300">
+        <div class="col-12 col-md-4">
             <article class="card-req-container h-100">
                 <div class="card-req-header header-medio">
                     <div class="icon-capsule">
@@ -254,7 +281,7 @@
     </div>
 
     <!-- BANNER LLAMADO A LA ACCIÓN (CTA) -->
-    <div class="cta-banner-container p-4 p-md-5 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-4 position-relative z-1" data-aos="fade-up" data-aos-delay="200">
+    <div class="cta-banner-container p-4 p-md-5 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-4 position-relative z-1">
         <div>
             <h3 class="fw-bold fs-4 mb-2 text-white" style="font-family: var(--font-titulo, 'Cinzel', serif);">
                 ¿Querés iniciar la inscripción o tenés alguna duda?

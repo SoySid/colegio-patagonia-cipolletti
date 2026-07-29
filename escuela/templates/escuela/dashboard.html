@@ -1,59 +1,46 @@
 {% extends 'escuela/base.html' %}
 
-{% block title %}Panel de Gestión Staff - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
+{% block title %}Plataforma - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
 
 {% block content %}
-<!-- ESTILOS AUTOCONTENIDOS Y EXCLUSIVOS PARA EL DASHBOARD STAFF -->
+<!-- ESTILOS EXCLUSIVOS PARA PLATAFORMA (INTERFAZ MINIMALISTA Y LIMPIA) -->
 <style>
     .dashboard-wrapper-vip {
-        padding-top: 3rem;
+        padding-top: 2.5rem;
         padding-bottom: 5rem;
     }
 
-    /* HEADER TIPO BANNER DE BIENVENIDA */
-    .dashboard-header-vip {
-        background: linear-gradient(135deg, #0b1526 0%, #172a45 100%);
-        border-radius: 24px;
-        padding: 2.25rem 2.5rem;
-        color: #ffffff;
-        box-shadow: 0 16px 36px rgba(11, 21, 38, 0.22);
-        border: 2px solid rgba(255, 255, 255, 0.12);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .dashboard-header-vip::before {
-        content: '';
-        position: absolute;
-        top: -40%;
-        right: -10%;
-        width: 400px;
-        height: 400px;
-        background: radial-gradient(circle, rgba(31, 122, 63, 0.35) 0%, rgba(0, 0, 0, 0) 70%);
-        border-radius: 50%;
-        pointer-events: none;
+    /* ENCABEZADO MINIMALISTA DE PLATAFORMA */
+    .dashboard-header-clean {
+        background: #ffffff;
+        border: 2px solid #cbd5e1;
+        border-radius: 20px;
+        padding: 1.5rem 2rem;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
     }
 
     .dashboard-title {
-        font-family: var(--font-titulo, 'Cinzel', serif);
-        font-weight: 800;
-        letter-spacing: -0.5px;
+        font-family: var(--font-cuerpo, 'Inter', sans-serif) !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.6px;
+        color: var(--primary-navy, #1b365d);
     }
 
     .user-badge-online {
-        background-color: rgba(74, 222, 128, 0.15);
-        color: #4ade80;
-        border: 1px solid rgba(74, 222, 128, 0.3);
-        font-size: 0.8rem;
+        background-color: rgba(31, 122, 63, 0.1);
+        color: var(--brand-green, #1f7a3f);
+        border: 1px solid rgba(31, 122, 63, 0.25);
+        font-size: 0.78rem;
         font-weight: 700;
+        letter-spacing: 0.04em;
     }
 
-    /* TITULARES DE SECCIÓN */
+    /* TITULARES DE SECCIÓN SANS-SERIF */
     .section-title-vip {
-        font-family: var(--font-titulo, 'Cinzel', serif);
+        font-family: var(--font-cuerpo, 'Inter', sans-serif) !important;
         color: var(--primary-navy, #1b365d);
         font-weight: 800;
-        letter-spacing: -0.3px;
+        letter-spacing: -0.5px;
         display: flex;
         align-items: center;
         gap: 0.65rem;
@@ -64,27 +51,34 @@
         background: #ffffff !important;
         border: 2px solid #cbd5e1 !important;
         border-radius: 22px !important;
-        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.07) !important;
-        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05) !important;
+        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease !important;
         position: relative;
         overflow: hidden;
     }
 
     .card-module-vip:hover {
-        transform: translateY(-7px);
-        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15) !important;
+        transform: translateY(-4px);
+        box-shadow: 0 16px 32px rgba(15, 23, 42, 0.1) !important;
         border-color: var(--brand-green, #1f7a3f) !important;
     }
 
+    .module-card-title {
+        font-family: var(--font-cuerpo, 'Inter', sans-serif) !important;
+        font-weight: 700 !important;
+        letter-spacing: -0.3px;
+        color: var(--primary-navy, #1b365d);
+    }
+
     .icon-module-box {
-        width: 52px;
-        height: 52px;
-        border-radius: 16px;
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.4rem;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        font-size: 1.3rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         flex-shrink: 0;
     }
 
@@ -108,11 +102,11 @@
         color: #ffffff !important;
         font-weight: 700;
         font-size: 0.88rem;
-        padding: 0.65rem 1.4rem;
+        padding: 0.6rem 1.3rem;
         border-radius: 50rem;
         border: none;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(27, 54, 93, 0.25);
+        transition: all 0.25s ease;
+        box-shadow: 0 4px 12px rgba(27, 54, 93, 0.2);
         display: inline-flex;
         align-items: center;
         gap: 0.4rem;
@@ -121,67 +115,74 @@
     .btn-module-action:hover {
         background-color: var(--brand-green, #1f7a3f);
         transform: translateY(-2px);
-        box-shadow: 0 6px 18px rgba(31, 122, 63, 0.4);
+        box-shadow: 0 6px 16px rgba(31, 122, 63, 0.35);
     }
 
-    .btn-logout-vip {
-        background-color: rgba(239, 68, 68, 0.15);
-        color: #f87171 !important;
-        border: 1px solid rgba(239, 68, 68, 0.3);
+    .btn-logout-clean {
+        background-color: #fef2f2;
+        color: #dc2626 !important;
+        border: 1px solid #fecaca;
         font-weight: 700;
         font-size: 0.88rem;
-        transition: all 0.3s ease;
+        transition: all 0.2s ease;
     }
 
-    .btn-logout-vip:hover {
-        background-color: #ef4444;
+    .btn-logout-clean:hover {
+        background-color: #dc2626;
         color: #ffffff !important;
-        transform: translateY(-2px);
+        border-color: #dc2626;
     }
 </style>
 
 <div class="container dashboard-wrapper-vip">
     
-    <!-- BANNER ENCABEZADO Y BIENVENIDA -->
-    <div class="dashboard-header-vip mb-5 d-flex justify-content-between align-items-center flex-wrap gap-4 position-relative z-1" data-aos="fade-down">
-        <div>
-            <span class="badge user-badge-online rounded-pill px-3 py-2 mb-2 d-inline-flex align-items-center gap-2">
-                <i class="bi bi-circle-fill fs-6 text-success"></i> SESIÓN ACTIVA STAFF
-            </span>
-            <h1 class="display-6 mb-1 dashboard-title text-white">
-                Panel de Gestión Institucional
-            </h1>
-            <p class="text-white-50 fs-6 mb-0 font-normal">
-                Bienvenido/a al espacio de administración, <strong class="text-white">{{ request.user.first_name|default:request.user.username }}</strong>
-            </p>
+    <!-- ENCABEZADO LIMPIO Y MINIMALISTA -->
+    <div class="dashboard-header-clean mb-5 d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div class="d-flex align-items-center gap-3">
+            <div class="icon-module-box icon-navy">
+                <i class="bi bi-speedometer2"></i>
+            </div>
+            <div>
+                <div class="d-flex align-items-center gap-2 mb-1">
+                    <h1 class="fs-3 mb-0 dashboard-title">
+                        Plataforma de Gestión
+                    </h1>
+                    <span class="badge user-badge-online rounded-pill px-2.5 py-1">
+                        <i class="bi bi-circle-fill fs-6 text-success me-1"></i>En línea
+                    </span>
+                </div>
+                <p class="text-secondary small mb-0 fw-medium">
+                    Usuario: <strong class="text-dark">{{ request.user.first_name|default:request.user.username }}</strong>
+                </p>
+            </div>
         </div>
         
-        <a href="{% url 'escuela:logout' %}" class="btn btn-logout-vip rounded-pill px-4 py-2.5 d-inline-flex align-items-center gap-2">
+        <a href="{% url 'escuela:logout' %}" class="btn btn-logout-clean rounded-pill px-3.5 py-2 d-inline-flex align-items-center gap-2">
             <i class="bi bi-box-arrow-right fs-6"></i> Cerrar Sesión
         </a>
     </div>
 
-    <!-- SECCIÓN 1: MENSAJES Y SOLICITUDES -->
+    <!-- SECCIÓN 1: MENSAJES Y TRÁMITES -->
     <div class="mb-5">
-        <h3 class="section-title-vip fs-4 mb-4" data-aos="fade-right">
-            <i class="bi bi-inbox-fill text-success"></i> Recepción de Trámites y Mensajes
+        <h3 class="section-title-vip fs-4 mb-4">
+            <i class="bi bi-inbox-fill text-success"></i> Mensajes y Trámites
         </h3>
         
         <div class="row g-4">
             <!-- Consultas Web -->
-            <div class="col-12 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="col-12 col-md-6 col-lg-4">
                 <article class="card card-module-vip h-100 p-4 d-flex flex-column justify-content-between">
                     <div>
                         <div class="d-flex align-items-center gap-3 mb-3">
                             <div class="icon-module-box icon-navy">
                                 <i class="bi bi-envelope-paper-fill"></i>
                             </div>
-                            <h4 class="fw-bold fs-5 mb-0" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d);">
-                                Consultas Familias
+                            <h4 class="fw-bold fs-5 mb-0 module-card-title">
+                                Consultas Web
                             </h4>
                         </div>
                         <p class="text-secondary small mb-4 fw-medium" style="line-height: 1.6;">
-                            Revisar y responder preguntas enviadas por los padres desde la web oficial.
+                            Revisar y responder preguntas enviadas desde la página institucional.
                         </p>
                     </div>
                     <div>
@@ -193,14 +194,14 @@
             </div>
 
             <!-- Postulaciones Docentes -->
-            <div class="col-12 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="col-12 col-md-6 col-lg-4">
                 <article class="card card-module-vip h-100 p-4 d-flex flex-column justify-content-between">
                     <div>
                         <div class="d-flex align-items-center gap-3 mb-3">
                             <div class="icon-module-box icon-green">
                                 <i class="bi bi-file-earmark-person-fill"></i>
                             </div>
-                            <h4 class="fw-bold fs-5 mb-0" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d);">
+                            <h4 class="fw-bold fs-5 mb-0 module-card-title">
                                 Postulaciones y CVs
                             </h4>
                         </div>
@@ -220,25 +221,25 @@
 
     <!-- SECCIÓN 2: CONTENIDO DE LA PÁGINA WEB -->
     <div>
-        <h3 class="section-title-vip fs-4 mb-4" data-aos="fade-right">
-            <i class="bi bi-globe2 text-success"></i> Gestión de Contenido del Sitio Web
+        <h3 class="section-title-vip fs-4 mb-4">
+            <i class="bi bi-globe2 text-success"></i> Administración de Contenidos
         </h3>
         
         <div class="row g-4">
             <!-- Noticias -->
-            <div class="col-12 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="col-12 col-md-6 col-lg-4">
                 <article class="card card-module-vip h-100 p-4 d-flex flex-column justify-content-between">
                     <div>
                         <div class="d-flex align-items-center gap-3 mb-3">
                             <div class="icon-module-box icon-navy">
                                 <i class="bi bi-newspaper"></i>
                             </div>
-                            <h4 class="fw-bold fs-5 mb-0" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d);">
+                            <h4 class="fw-bold fs-5 mb-0 module-card-title">
                                 Noticias y Novedades
                             </h4>
                         </div>
                         <p class="text-secondary small mb-4 fw-medium" style="line-height: 1.6;">
-                            Publicar o editar comunicados e historias que se muestran en el slider del inicio.
+                            Publicar o editar comunicados e historias del slider de inicio.
                         </p>
                     </div>
                     <div>
@@ -250,19 +251,19 @@
             </div>
 
             <!-- Requisitos por Nivel -->
-            <div class="col-12 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="150">
+            <div class="col-12 col-md-6 col-lg-4">
                 <article class="card card-module-vip h-100 p-4 d-flex flex-column justify-content-between">
                     <div>
                         <div class="d-flex align-items-center gap-3 mb-3">
                             <div class="icon-module-box icon-green">
                                 <i class="bi bi-clipboard-check-fill"></i>
                             </div>
-                            <h4 class="fw-bold fs-5 mb-0" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d);">
-                                Requisitos por Nivel
+                            <h4 class="fw-bold fs-5 mb-0 module-card-title">
+                                Requisitos de Ingreso
                             </h4>
                         </div>
                         <p class="text-secondary small mb-4 fw-medium" style="line-height: 1.6;">
-                            Actualizar la lista de documentación requerida para Inicial, Primario y Medio.
+                            Actualizar la lista de documentación para Inicial, Primario y Medio.
                         </p>
                     </div>
                     <div>
@@ -274,19 +275,19 @@
             </div>
 
             <!-- Autoridades y Docentes -->
-            <div class="col-12 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="col-12 col-md-6 col-lg-4">
                 <article class="card card-module-vip h-100 p-4 d-flex flex-column justify-content-between">
                     <div>
                         <div class="d-flex align-items-center gap-3 mb-3">
                             <div class="icon-module-box icon-gold">
                                 <i class="bi bi-people-fill"></i>
                             </div>
-                            <h4 class="fw-bold fs-5 mb-0" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d);">
+                            <h4 class="fw-bold fs-5 mb-0 module-card-title">
                                 Cuerpo Docente
                             </h4>
                         </div>
                         <p class="text-secondary small mb-4 fw-medium" style="line-height: 1.6;">
-                            Cargar o modificar los nombres, fotos y cargos del personal y autoridades.
+                            Cargar o modificar los nombres, fotos y cargos del equipo.
                         </p>
                     </div>
                     <div>
@@ -298,19 +299,19 @@
             </div>
 
             <!-- Preguntas Frecuentes -->
-            <div class="col-12 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="250">
+            <div class="col-12 col-md-6 col-lg-4">
                 <article class="card card-module-vip h-100 p-4 d-flex flex-column justify-content-between">
                     <div>
                         <div class="d-flex align-items-center gap-3 mb-3">
                             <div class="icon-module-box icon-navy">
                                 <i class="bi bi-patch-question-fill"></i>
                             </div>
-                            <h4 class="fw-bold fs-5 mb-0" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d);">
+                            <h4 class="fw-bold fs-5 mb-0 module-card-title">
                                 Preguntas Frecuentes
                             </h4>
                         </div>
                         <p class="text-secondary small mb-4 fw-medium" style="line-height: 1.6;">
-                            Agregar, corregir o eliminar respuestas en la sección de consultas usuales.
+                            Agregar o corregir respuestas en la sección de consultas habituales.
                         </p>
                     </div>
                     <div>
@@ -322,19 +323,19 @@
             </div>
 
             <!-- Fotos del Carrusel -->
-            <div class="col-12 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
+            <div class="col-12 col-md-6 col-lg-4">
                 <article class="card card-module-vip h-100 p-4 d-flex flex-column justify-content-between">
                     <div>
                         <div class="d-flex align-items-center gap-3 mb-3">
                             <div class="icon-module-box icon-green">
                                 <i class="bi bi-images"></i>
                             </div>
-                            <h4 class="fw-bold fs-5 mb-0" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d);">
-                                Carrusel Galería
+                            <h4 class="fw-bold fs-5 mb-0 module-card-title">
+                                Galería de Inicio
                             </h4>
                         </div>
                         <p class="text-secondary small mb-4 fw-medium" style="line-height: 1.6;">
-                            Subir o actualizar las imágenes destacadas que se muestran en el inicio.
+                            Subir o actualizar las imágenes del carrusel principal.
                         </p>
                     </div>
                     <div>
@@ -346,19 +347,19 @@
             </div>
 
             <!-- Datos Institucionales -->
-            <div class="col-12 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="350">
+            <div class="col-12 col-md-6 col-lg-4">
                 <article class="card card-module-vip h-100 p-4 d-flex flex-column justify-content-between">
                     <div>
                         <div class="d-flex align-items-center gap-3 mb-3">
                             <div class="icon-module-box icon-gold">
                                 <i class="bi bi-gear-wide-connected"></i>
                             </div>
-                            <h4 class="fw-bold fs-5 mb-0" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d);">
+                            <h4 class="fw-bold fs-5 mb-0 module-card-title">
                                 Información General
                             </h4>
                         </div>
                         <p class="text-secondary small mb-4 fw-medium" style="line-height: 1.6;">
-                            Modificar teléfonos, dirección, logo, redes sociales y correo de contacto.
+                            Modificar teléfonos, dirección, logo, redes y mails institucionales.
                         </p>
                     </div>
                     <div>

@@ -3,7 +3,7 @@
 {% block title %}Cuerpo Docente - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
 
 {% block content %}
-<!-- ESTILOS EXCLUSIVOS CON DIFERENCIACIÓN REAL DE COLORES -->
+<!-- ESTILOS EXCLUSIVOS VIP CON GLASSMORPHISM Y CARGA INSTANTÁNEA -->
 <style>
     /* SECCIÓN CONTENEDORA */
     .docentes-wrapper {
@@ -19,6 +19,8 @@
         font-size: 0.8rem;
         letter-spacing: 0.06em;
         border: 1px solid rgba(31, 122, 63, 0.25);
+        box-shadow: 0 4px 12px rgba(31, 122, 63, 0.1);
+        backdrop-filter: blur(8px);
     }
 
     .docentes-title {
@@ -26,6 +28,7 @@
         color: var(--primary-navy, #1b365d);
         font-weight: 800;
         letter-spacing: -0.5px;
+        text-shadow: 0 2px 4px rgba(15, 23, 42, 0.05);
     }
 
     /* TARJETAS DE DOCENTES VIP */
@@ -33,14 +36,17 @@
         background: #ffffff !important;
         border: 2px solid #cbd5e1 !important;
         border-radius: 24px !important;
-        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08) !important;
-        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08) !important;
+        will-change: transform, box-shadow, border-color;
+        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                    border-color 0.35s ease !important;
         overflow: hidden;
     }
 
     .card-docente-vip:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 22px 45px rgba(15, 23, 42, 0.16) !important;
+        transform: translateY(-6px);
+        box-shadow: 0 24px 50px rgba(15, 23, 42, 0.15) !important;
     }
 
     /* FOTOS Y AVATARES */
@@ -48,12 +54,12 @@
         width: 130px;
         height: 130px;
         object-fit: cover;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-        transition: transform 0.35s ease;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
+        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .card-docente-vip:hover .docente-avatar {
-        transform: scale(1.05);
+        transform: scale(1.06);
     }
 
     .docente-avatar-placeholder {
@@ -61,7 +67,12 @@
         height: 130px;
         background-color: #e2e8f0;
         border: 4px solid #94a3b8;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .card-docente-vip:hover .docente-avatar-placeholder {
+        transform: scale(1.06);
     }
 
     /* ==========================================
@@ -94,21 +105,23 @@
         letter-spacing: 0.03em;
         color: #ffffff !important;
         border: 1px solid rgba(255, 255, 255, 0.25);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
     /* ESTADO VACÍO */
     .empty-docentes-box {
         background-color: #ffffff;
         border: 2px dashed #cbd5e1;
-        border-radius: 20px;
+        border-radius: 24px;
         padding: 3.5rem 2rem;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.05);
     }
 </style>
 
 <div class="container docentes-wrapper">
     
     <!-- ENCABEZADO PRINCIPAL DE LA VISTA -->
-    <div class="text-center mb-5" data-aos="fade-down">
+    <div class="text-center mb-5">
         <span class="badge section-badge-vip rounded-pill px-3 py-2 mb-3 d-inline-flex align-items-center gap-2">
             <i class="bi bi-award-fill"></i> EXCELENCIA ACADÉMICA
         </span>
@@ -128,7 +141,7 @@
                 <!-- EVALUACIÓN DIRECTA DE PALABRAS CLAVE EN EL MODELO -->
                 {% with nivel_str=docente.get_nivel_display|default:docente.nivel|upper %}
                     
-                    <div class="col-12 col-sm-6 col-lg-4 col-xl-3" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:1 }}00">
+                    <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
                         
                         <article class="card card-docente-vip h-100 p-4 text-center d-flex flex-column align-items-center justify-content-between 
                             {% if 'DIRECTIV' in nivel_str or 'EQUIPO' in nivel_str or 'AUTORIDAD' in nivel_str %}card-directivo
@@ -138,10 +151,10 @@
                             {% else %}card-primario{% endif %}">
                             
                             <div class="w-100 d-flex flex-column align-items-center">
-                                <!-- FOTO / AVATAR CON BORDE DIFERENCIADO -->
+                                <!-- FOTO / AVATAR CON BORDE DIFERENCIADO Y SOMBRA PROFUNDA -->
                                 <div class="mb-3 position-relative">
                                     {% if docente.foto %}
-                                        <img src="{{ docente.foto.url }}" alt="{{ docente.nombre }}" class="rounded-circle docente-avatar 
+                                        <img src="{{ docente.foto.url }}" alt="{{ docente.nombre }}" loading="lazy" class="rounded-circle docente-avatar 
                                             {% if 'DIRECTIV' in nivel_str or 'EQUIPO' in nivel_str or 'AUTORIDAD' in nivel_str %}border-directivo
                                             {% elif 'INICIAL' in nivel_str %}border-inicial
                                             {% elif 'PRIMAR' in nivel_str %}border-primario
@@ -189,7 +202,7 @@
         </div>
     {% else %}
         <!-- ESTADO VACÍO -->
-        <div class="empty-docentes-box text-center mx-auto" style="max-width: 500px;" data-aos="fade-up">
+        <div class="empty-docentes-box text-center mx-auto" style="max-width: 500px;">
             <i class="bi bi-people-fill text-secondary opacity-50 display-3 mb-3 d-block"></i>
             <h4 class="fw-bold fs-5 text-dark mb-1" style="font-family: var(--font-titulo, 'Cinzel', serif);">Sin Registros Cargados</h4>
             <p class="text-muted small mb-0">No hay miembros del cuerpo docente o autoridades publicados por el momento.</p>
