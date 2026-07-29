@@ -978,112 +978,139 @@
 }
 
 /* ==========================================
-   7. FOOTER
+   7. FOOTER (OPTIMIZADO Y UNIFICADO)
    ========================================== */
-footer {
-    background-color: var(--primary-dark);
+footer,
+.site-footer {
+    background-color: var(--primary-dark, #031430);
     color: #cbd5e1;
-    padding: 4rem 0 1.5rem;
+    padding: 2.5rem 0 1rem;
     margin-top: 4rem;
-    border-top: 4px solid var(--brand-green);
+    border-top: 4px solid var(--brand-green, #16a34a);
+    font-size: 0.9rem;
 }
 
-.footer-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 2rem;
-    max-width: 1100px;
-    margin: 0 auto;
-}
-
-.footer-card {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.06) !important;
-    border-radius: 12px;
-    padding: 1.8rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.footer-card:hover {
-    transform: translateY(-4px);
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.15) !important;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-}
-
+/* Títulos con la barrita verde lateral */
+.footer-title,
+footer h4,
 .footer-card h4,
 .footer-card .card-title {
     color: #ffffff;
     font-size: 1.1rem;
     font-weight: 700;
-    margin-bottom: 1.2rem;
+    margin-bottom: 0.8rem;
     display: flex;
     align-items: center;
     gap: 0.6rem;
 }
 
-/* Indicador verde sutil para los títulos */
+.footer-title::before,
+footer h4::before,
 .footer-card h4::before,
 .footer-card .card-title::before {
     content: '';
-    display: block;
+    display: inline-block;
     width: 5px;
     height: 16px;
-    background-color: var(--brand-green);
+    background-color: var(--brand-green, #16a34a);
     border-radius: 4px;
 }
 
-.footer-card p,
-.footer-contact-item,
-.footer-list li {
+/* Textos y listas de niveles/contacto */
+.footer-phrase {
+    font-style: italic;
+    color: #cbd5e1;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+
+.footer-schedule,
+.footer-hours {
     color: #94a3b8;
+    font-size: 0.85rem;
+}
+
+.footer-levels-list,
+.footer-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+    color: #cbd5e1;
+    line-height: 1.6;
+}
+
+.footer-levels-list li,
+.footer-list li,
+.footer-contact-info p,
+.footer-contact-item {
+    color: #cbd5e1;
     font-size: 0.95rem;
     line-height: 1.6;
-    margin-bottom: 0.6rem;
-    list-style: none;
+    margin-bottom: 0.5rem;
+    word-break: break-word; /* Evita que correos largos rompan la grilla */
 }
 
-.footer-contact-item {
-    word-break: break-word; /* Evita que el correo se desborde */
+/* Botones de Redes Sociales */
+.footer-social-links,
+.footer-socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.8rem;
 }
 
+.social-btn,
+.footer-socials a {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    transition: all 0.2s ease;
+}
+
+.social-btn:hover,
+.footer-socials a:hover {
+    background-color: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* Copyright inferior */
 .footer-copyright {
     border-top: 1px solid rgba(255, 255, 255, 0.08);
-    padding-top: 1.5rem;
-    margin-top: 3rem;
+    padding-top: 1rem;
+    margin-top: 2rem;
     text-align: center;
     color: #64748b;
     font-size: 0.85rem;
 }
 
+/* Responsivo para Celulares y Tablets */
 @media (max-width: 900px) {
-    footer {
-        padding: 3rem 1rem 1.2rem;
-    }
-
-    .footer-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-
-    .footer-card {
-        padding: 1.5rem;
+    footer,
+    .site-footer {
+        padding: 2rem 1rem 1rem;
     }
 }
 
 @media (max-width: 560px) {
-    .footer-col h4,
-    .footer-card h4,
-    .footer-card .card-title {
+    .footer-title,
+    footer h4 {
         font-size: 1rem;
     }
 
     .footer-phrase,
-    .footer-contact-item,
-    .footer-list li,
-    .footer-schedule,
-    .footer-card p {
-        font-size: 0.9rem;
+    .footer-levels-list li,
+    .footer-contact-info p,
+    .footer-schedule {
+        font-size: 0.88rem;
     }
 }
 

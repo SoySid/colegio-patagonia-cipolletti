@@ -8,38 +8,28 @@
         <div class="hero-container">
             <div class="hero-content">
                 <span class="hero-tag">{{ escuela_info.hero_tag|default:"Inscripciones Abiertas" }}</span>
+                
                 <h1>{{ escuela_info.hero_titulo|default:"EDUCACIÓN INTEGRAL Y DE EXCELENCIA" }}</h1>
-                <p>{{ escuela_info.hero_subtitulo|default:"Propuesta pedagógica comprometida con una formación humana de calidad desde Nivel Maternal hasta Primario." }}</p>
+                
+                <p>{{ escuela_info.hero_subtitulo|default:"Propuesta pedagógica comprometida con una formación humana de calidad desde Nivel Inicial hasta Nivel Medio" }}</p>
+                
                 <div class="hero-buttons">
-                    <a href="{{ escuela_info.hero_boton_principal_url|default:'/requisitos/' }}" class="btn-hero-primary">{{ escuela_info.hero_boton_principal_text|default:"VER REQUISITOS DE INSCRIPCIÓN" }}</a>
-                    <a href="{{ escuela_info.hero_boton_secundario_url|default:'/contacto/' }}" class="btn-hero-secondary">{{ escuela_info.hero_boton_secundario_text|default:"CONTACTANOS" }}</a>
+                    <a href="{% if escuela_info.hero_boton_principal_url %}{{ escuela_info.hero_boton_principal_url }}{% else %}{% url 'escuela:requisitos' %}{% endif %}" class="btn-hero-primary">
+                        {{ escuela_info.hero_boton_principal_text|default:"VER REQUISITOS DE INSCRIPCIÓN" }}
+                    </a>
+                    
+                    <a href="{% if escuela_info.hero_boton_secundario_url %}{{ escuela_info.hero_boton_secundario_url }}{% else %}{% url 'escuela:contacto' %}{% endif %}" class="btn-hero-secondary">
+                        {{ escuela_info.hero_boton_secundario_text|default:"CONTACTANOS" }}
+                    </a>
                 </div>
             </div>
+            
             <div class="hero-image">
                 <img src="{% if escuela_info.hero_imagen %}{{ escuela_info.hero_imagen.url }}{% else %}https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=800&auto=format&fit=crop{% endif %}" alt="{{ escuela_info.nombre|default:'Colegio Patagonia' }} - Educación">
             </div>
         </div>
     </div>
 </section>
-
-{% if bloques %}
-<section class="novedades-container">
-    <div class="container py-4">
-        <div class="novedades-header">
-            <h2>Por qué elegir nuestra escuela</h2>
-        </div>
-        <div class="benefits-grid">
-            {% for bloque in bloques %}
-                <article class="benefit-card">
-                    {% if bloque.icono %}<div class="benefit-icon">{{ bloque.icono }}</div>{% endif %}
-                    <h3>{{ bloque.titulo }}</h3>
-                    {% if bloque.descripcion %}<p>{{ bloque.descripcion }}</p>{% endif %}
-                </article>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-{% endif %}
 
 <section class="novedades-container">
     <div class="container py-4">
