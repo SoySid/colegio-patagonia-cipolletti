@@ -23,7 +23,7 @@
         <div class="container py-0">
             
             <!-- MARCA / LOGO E IDENTIDAD INSTITUCIONAL -->
-            <a href="/" class="navbar-brand d-flex align-items-center gap-2 me-3">
+            <a href="{% url 'escuela:home' %}" class="navbar-brand d-flex align-items-center gap-2 me-3">
                 {% if escuela_info.logo %}
                     <img src="{{ escuela_info.logo.url }}" alt="Logo {{ escuela_info.nombre }}" class="brand-logo">
                 {% endif %}
@@ -43,16 +43,15 @@
             <!-- ENLACES DE NAVEGACIÓN (SECCIONES DEL SITIO) -->
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav align-items-lg-center gap-2">
-                    <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/requisitos/">Inscripción</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'docentes' %}">Autoridades</a></li>
-                    
-                    <li class="nav-item"><a class="nav-link" href="/faq/">Consultas</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/contacto/">Contacto</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'escuela:home' %}">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'escuela:requisitos' %}">Inscripción</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'escuela:docentes' %}">Autoridades</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'escuela:faq' %}">Consultas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'escuela:contacto' %}">Contacto</a></li>
                     
                     <!-- BOTÓN DESTACADO: Acceso al sistema interno / portal -->
                     <li class="nav-item">
-                        <a href="/portal/" class="btn btn-portal btn-sm rounded-pill px-3">Aula virtual</a>
+                        <a href="{% url 'escuela:portal' %}" class="btn btn-portal btn-sm rounded-pill px-3">Aula virtual</a>
                     </li>
                 </ul>
             </div>
@@ -69,74 +68,74 @@
     </main>
 
     <!-- ==========================================
-     FOOTER / PIE DE PÁGINA OPTIMIZADO
-     ========================================== -->
-<footer class="site-footer">
-    <div class="container py-4">
-        <div class="row g-4 align-items-start">
-            
-            <!-- COLUMNA 1: Marca, Frase e Horarios (3 de 12) -->
-            <div class="col-12 col-md-3">
-                <h4 class="footer-title">{{ escuela_info.nombre|default:"Colegio Patagonia" }}</h4>
-                {% if escuela_info.frase %}
-                    <p class="footer-phrase">"{{ escuela_info.frase }}"</p>
-                {% endif %}
-                {% if escuela_info.horario %}
-                    <p class="footer-schedule">🕒 {{ escuela_info.horario }}</p>
-                {% endif %}
-            </div>
-
-            <!-- COLUMNA 2: Oferta Educativa / Niveles (4 de 12) -->
-            <div class="col-12 col-md-4">
-                <h4 class="footer-title">Niveles Educativos</h4>
-                <ul class="footer-levels-list">
-                    <li>• Nivel Inicial (salas de 3, 4 y 5 años)</li>
-                    <li>• Nivel Primario (1ro a 7mo grado)</li>
-                    <li>• Nivel Medio (1ro y 2do año)</li>
-                </ul>
-            </div>
-
-            <!-- COLUMNA 3: Canales de Contacto y Redes (5 de 12 para máximo ancho) -->
-            <div class="col-12 col-md-5">
-                <h4 class="footer-title">Contacto</h4>
-                <div class="footer-contact-info">
-                    {% if escuela_info.direccion %}<p class="mb-1">📍 {{ escuela_info.direccion }}</p>{% endif %}
-                    {% if escuela_info.telefono %}<p class="mb-1">📞 Tel: {{ escuela_info.telefono }}</p>{% endif %}
-                    {% if escuela_info.email %}<p class="mb-2 text-nowrap-md">✉️ {{ escuela_info.email }}</p>{% endif %}
-                </div>
-
-                <!-- Redes sociales institucionales -->
-                <div class="footer-social-links">
-                    {% if escuela_info.whatsapp %}
-                        <a href="https://wa.me/{{ escuela_info.whatsapp }}" target="_blank" class="social-btn whatsapp">
-                            💬 WhatsApp
-                        </a>
+         FOOTER / PIE DE PÁGINA OPTIMIZADO
+         ========================================== -->
+    <footer class="site-footer">
+        <div class="container py-4">
+            <div class="row g-4 align-items-start">
+                
+                <!-- COLUMNA 1: Marca, Frase e Horarios (3 de 12) -->
+                <div class="col-12 col-md-3">
+                    <h4 class="footer-title">{{ escuela_info.nombre|default:"Colegio Patagonia" }}</h4>
+                    {% if escuela_info.frase %}
+                        <p class="footer-phrase">"{{ escuela_info.frase }}"</p>
                     {% endif %}
-
-                    {% if escuela_info.instagram_url %}
-                        <a href="{{ escuela_info.instagram_url }}" target="_blank" class="social-btn instagram">
-                            📷 Instagram
-                        </a>
-                    {% endif %}
-
-                    {% if escuela_info.facebook_url %}
-                        <a href="{{ escuela_info.facebook_url }}" target="_blank" class="social-btn facebook">
-                            📘 Facebook
-                        </a>
+                    {% if escuela_info.horario %}
+                        <p class="footer-schedule">🕒 {{ escuela_info.horario }}</p>
                     {% endif %}
                 </div>
-            </div>
 
+                <!-- COLUMNA 2: Oferta Educativa / Niveles (4 de 12) -->
+                <div class="col-12 col-md-4">
+                    <h4 class="footer-title">Niveles Educativos</h4>
+                    <ul class="footer-levels-list">
+                        <li>• Nivel Inicial (salas de 3, 4 y 5 años)</li>
+                        <li>• Nivel Primario (1ro a 7mo grado)</li>
+                        <li>• Nivel Medio (1ro y 2do año)</li>
+                    </ul>
+                </div>
+
+                <!-- COLUMNA 3: Canales de Contacto y Redes (5 de 12 para máximo ancho) -->
+                <div class="col-12 col-md-5">
+                    <h4 class="footer-title">Contacto</h4>
+                    <div class="footer-contact-info">
+                        {% if escuela_info.direccion %}<p class="mb-1">📍 {{ escuela_info.direccion }}</p>{% endif %}
+                        {% if escuela_info.telefono %}<p class="mb-1">📞 Tel: {{ escuela_info.telefono }}</p>{% endif %}
+                        {% if escuela_info.email %}<p class="mb-2 text-nowrap-md">✉️ {{ escuela_info.email }}</p>{% endif %}
+                    </div>
+
+                    <!-- Redes sociales institucionales -->
+                    <div class="footer-social-links">
+                        {% if escuela_info.whatsapp %}
+                            <a href="https://wa.me/{{ escuela_info.whatsapp }}" target="_blank" class="social-btn whatsapp">
+                                💬 WhatsApp
+                            </a>
+                        {% endif %}
+
+                        {% if escuela_info.instagram_url %}
+                            <a href="{{ escuela_info.instagram_url }}" target="_blank" class="social-btn instagram">
+                                📷 Instagram
+                            </a>
+                        {% endif %}
+
+                        {% if escuela_info.facebook_url %}
+                            <a href="{{ escuela_info.facebook_url }}" target="_blank" class="social-btn facebook">
+                                📘 Facebook
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
         </div>
-    </div>
 
-    <!-- COPYRIGHT Y AÑO -->
-    <div class="footer-copyright text-center py-3 border-top border-secondary-subtle">
-        <small>&copy; {% now "Y" %} {{ escuela_info.nombre|default:"Colegio Patagonia" }}. Todos los derechos reservados.</small>
-    </div>
-</footer>
+        <!-- COPYRIGHT Y AÑO -->
+        <div class="footer-copyright text-center py-3 border-top border-secondary-subtle">
+            <small>&copy; {% now "Y" %} {{ escuela_info.nombre|default:"Colegio Patagonia" }}. Todos los derechos reservados.</small>
+        </div>
+    </footer>
 
-<!-- SCRIPT BOOTSTRAP -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SCRIPT BOOTSTRAP -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

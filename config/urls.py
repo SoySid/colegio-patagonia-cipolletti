@@ -5,7 +5,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('escuela.urls')),
+    # Incluimos la app con la tupla (urls, app_name) y registramos el namespace
+    path('', include(('escuela.urls', 'escuela'), namespace='escuela')),
 ]
 
 if settings.DEBUG:

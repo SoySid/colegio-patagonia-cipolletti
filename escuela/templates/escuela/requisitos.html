@@ -3,12 +3,24 @@
 {% block title %}Requisitos de Inscripción - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
 
 {% block content %}
-<div style="max-width: 900px; margin: 3rem auto; padding: 0 5%;">
+<div style="max-width: 1200px; margin: 3rem auto; padding: 0 5%;">
     <h2 style="font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem;">Requisitos de Inscripción 2026</h2>
     <p style="color: var(--text-muted); margin-bottom: 2.5rem;">Documentación obligatoria para la reserva de vacante y confección del legajo del alumno.</p>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
         
+        <!-- Nivel Inicial -->
+        <div style="background: white; padding: 2rem; border-radius: 10px; border: 1px solid #e2e8f0; border-top: 4px solid var(--brand-green, #16a34a);">
+            <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.3rem;">Nivel Inicial</h3>
+            <ul style="color: var(--text-muted); line-height: 2; padding-left: 1.2rem; font-size: 0.95rem;">
+                {% for req in req_inicial %}
+                    <li>{{ req.descripcion }}</li>
+                {% empty %}
+                    <li>No hay requisitos cargados para este nivel.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
         <!-- Nivel Primario -->
         <div style="background: white; padding: 2rem; border-radius: 10px; border: 1px solid #e2e8f0; border-top: 4px solid var(--primary);">
             <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.3rem;">Nivel Primario</h3>
@@ -21,14 +33,18 @@
             </ul>
         </div>
 
-        <!-- Nivel Secundario -->
-        <div style="background: white; padding: 2rem; border-radius: 10px; border: 1px solid #e2e8f0; border-top: 4px solid var(--accent);">
-            <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.3rem;">Nivel Secundario</h3>
+        <!-- Nivel Medio -->
+        <div style="background: white; padding: 2rem; border-radius: 10px; border: 1px solid #e2e8f0; border-top: 4px solid var(--accent, #dc2626);">
+            <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.3rem;">Nivel Medio</h3>
             <ul style="color: var(--text-muted); line-height: 2; padding-left: 1.2rem; font-size: 0.95rem;">
-                {% for req in req_secundario %}
+                {% for req in req_medio %}
                     <li>{{ req.descripcion }}</li>
                 {% empty %}
-                    <li>No hay requisitos cargados para este nivel.</li>
+                    {% for req in req_secundario %}
+                        <li>{{ req.descripcion }}</li>
+                    {% empty %}
+                        <li>No hay requisitos cargados para este nivel.</li>
+                    {% endfor %}
                 {% endfor %}
             </ul>
         </div>
@@ -38,7 +54,7 @@
     <!-- Botón de consulta rápida -->
     <div style="margin-top: 3rem; background: #e0f2fe; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #0284c7; text-align: center;">
         <p style="color: #0369a1; font-weight: 600; margin-bottom: 0.5rem;">¿Tenés dudas con la documentación?</p>
-        <a href="/contacto/" style="color: var(--primary); font-weight: 700; text-decoration: underline;">Comunicate con Secretaría para recibir asistencia personalizada</a>
+        <a href="{% url 'escuela:contacto' %}" style="color: var(--primary); font-weight: 700; text-decoration: underline;">Comunicate con Secretaría para recibir asistencia personalizada</a>
     </div>
 </div>
 {% endblock %}
