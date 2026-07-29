@@ -56,9 +56,10 @@
             flex: 1;
             width: 100%;
             overflow-x: hidden;
+            padding-top: 80px; /* Compensación para que el header fixed no pise el contenido */
         }
 
-        /* NAVBAR FINO Y COMPACTO CON GLASSMORPHISM */
+        /* NAVBAR FINO Y COMPACTO CON INTELIGENCIA DE SCROLL */
         .navbar-vip {
             background: rgba(11, 21, 38, 0.96) !important;
             backdrop-filter: blur(14px) !important;
@@ -67,6 +68,18 @@
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
             padding-top: 0.35rem !important;
             padding-bottom: 0.35rem !important;
+            
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* CLASE DINÁMICA QUE OCULTA EL HEADER AL BAJAR */
+        .navbar-vip.nav-hidden {
+            transform: translateY(-115%);
         }
 
         /* LOGO GIGANTE DE 90PX CON SOBRESALIDA / OVERLAPPING */
@@ -229,7 +242,6 @@
            REGLAS RESPONSIVE GLOBALES (MÓVIL & TABLET)
            ========================================== */
         @media (max-width: 991px) {
-            /* Despliegue prolijo del menú en móviles */
             .navbar-collapse {
                 background-color: #0b1526;
                 padding: 1.25rem;
@@ -244,7 +256,10 @@
         }
 
         @media (max-width: 768px) {
-            /* Adaptación del Header en celulares */
+            main {
+                padding-top: 65px;
+            }
+
             .brand-logo-img {
                 height: 65px !important;
                 max-height: 65px !important;
@@ -257,10 +272,9 @@
             }
 
             .brand-phrase {
-                display: none !important; /* Oculta frase corta en celulares para no amontonar */
+                display: none !important;
             }
 
-            /* Tipografías y títulos en pantalla chica */
             h1, .display-4, .display-5 {
                 font-size: 1.85rem !important;
             }
@@ -269,7 +283,6 @@
                 font-size: 1.55rem !important;
             }
 
-            /* Footer responsive */
             .site-footer {
                 padding-top: 3rem;
             }
@@ -282,7 +295,7 @@
         @media (max-width: 480px) {
             .btn-portal-vip {
                 width: 100%;
-                text-center: center;
+                text-align: center;
             }
         }
     </style>
@@ -292,8 +305,8 @@
 </head>
 <body>
 
-    <!-- NAVBAR HEADER COMPACTO CON LOGO SOBRESALIENTE DE 90PX -->
-    <header class="navbar navbar-expand-lg navbar-dark navbar-vip sticky-top">
+    <!-- NAVBAR HEADER COMPACTO CON INTELIGENCIA DE SCROLL -->
+    <header class="navbar navbar-expand-lg navbar-dark navbar-vip">
         <div class="container">
             
             <!-- MARCA Y LOGO XXL -->
@@ -440,6 +453,39 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init({ duration: 800, once: true });
+
+        // SCRIPT NAVBAR INTELIGENTE (SMART STICKY HEADER)
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbar = document.querySelector('.navbar-vip');
+            const navbarCollapse = document.getElementById('navbarNav');
+            let lastScrollY = window.scrollY;
+
+            if (navbar) {
+                window.addEventListener('scroll', () => {
+                    // Si el menú desplegable móvil está abierto, no ocultamos el header
+                    if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+                        return;
+                    }
+
+                    const currentScrollY = window.scrollY;
+
+                    if (currentScrollY > 120) {
+                        if (currentScrollY > lastScrollY) {
+                            // Bajando: Oculta el header
+                            navbar.classList.add('nav-hidden');
+                        } else {
+                            // Subiendo: Reaparece el header
+                            navbar.classList.remove('nav-hidden');
+                        }
+                    } else {
+                        // Cerca de la parte superior siempre visible
+                        navbar.classList.remove('nav-hidden');
+                    }
+
+                    lastScrollY = currentScrollY;
+                });
+            }
+        });
     </script>
 </body>
 </html>
