@@ -12,32 +12,57 @@ from .models import (
     Docente
 )
 
+# ==========================================
+# 1. WIDGETS Y FORMULARIOS AUXILIARES
+# ==========================================
 
-@admin.register(Noticia)
-class NoticiaAdmin(admin.ModelAdmin):
-    list_display = ('titulo', 'categoria', 'fecha_creacion')
-    search_fields = ('titulo', 'descripcion')
-
-
-@admin.register(Requisito)
-class RequisitoAdmin(admin.ModelAdmin):
-    list_display = ('nivel', 'descripcion')
-    list_filter = ('nivel',)
+class MultipleFileInput(forms.ClearableFileInput):
+    allow_multiple_selected = True
 
 
-@admin.register(Consulta)
-class ConsultaAdmin(admin.ModelAdmin):
-    list_display = ('asunto', 'nombre', 'email', 'fecha_envio', 'leido')
-    list_filter = ('leido', 'fecha_envio')
-    search_fields = ('nombre', 'email', 'asunto', 'mensaje')
+class MultipleFileField(forms.FileField):
+    widget = MultipleFileInput
+
+    def clean(self, data, initial=None):
+        if data in (None, ""):
+            return []
+        if isinstance(data, (list, tuple)):
+            return [super().clean(item, initial) for item in data if item not in (None, "")]
+        return [super().clean(data, initial)]
 
 
-@admin.register(PostulacionDocente)
-class PostulacionDocenteAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'area_materia', 'nivel_interes', 'email', 'telefono', 'fecha_envio', 'revisado')
-    list_filter = ('nivel_interes', 'revisado', 'fecha_envio')
-    search_fields = ('nombre', 'email', 'area_materia')
+class CarruselMultipleForm(forms.ModelForm):
+    imagenes_multiples = MultipleFileField(
+        widget=MultipleFileInput(attrs={'multiple': True}),
+        label="Seleccionar varias imágenes juntas (Mantené presionado Ctrl o Shift)",
+        required=False
+    )
 
+    class Meta:
+        model = CarruselInicio
+        fields = ['imagenes_multiples', 'imagen', 'titulo', 'subtitulo', 'orden', 'activa']
+
+
+# ==========================================
+# 2. CLASES BASE DE ADMIN
+# ==========================================
+
+class ReadOnlyAdmin(admin.ModelAdmin):
+    """Clase base para modelos que solo reciben datos desde la web (sin creación manual)."""
+    def has_add_permission(self, request):
+        return False
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['has_add_permission'] = False
+        return super().changelist_view(request, extra_context=extra_context)
+
+
+# ==========================================
+# 3. REGISTRO DE MODELOS
+# ==========================================
+
+# --- CONFIGURACIÓN DE LA INSTITUCIÓN ---
 
 @admin.register(DatosEscuela)
 class DatosEscuelaAdmin(admin.ModelAdmin):
@@ -48,7 +73,11 @@ class DatosEscuelaAdmin(admin.ModelAdmin):
             'fields': ('nombre', 'frase', 'logo')
         }),
         ('Inicio', {
-            'fields': ('hero_tag', 'hero_titulo', 'hero_subtitulo', 'hero_imagen', 'hero_boton_principal_text', 'hero_boton_principal_url', 'hero_boton_secundario_text', 'hero_boton_secundario_url')
+            'fields': (
+                'hero_tag', 'hero_titulo', 'hero_subtitulo', 'hero_imagen',
+                'hero_boton_principal_text', 'hero_boton_principal_url',
+                'hero_boton_secundario_text', 'hero_boton_secundario_url'
+            )
         }),
         ('Contacto', {
             'fields': ('direccion', 'telefono', 'whatsapp', 'email', 'horario')
@@ -66,43 +95,7 @@ class DatosEscuelaAdmin(admin.ModelAdmin):
     logo_preview.short_description = 'Logo'
 
 
-@admin.register(PreguntaFrecuente)
-class PreguntaFrecuenteAdmin(admin.ModelAdmin):
-    list_display = ('pregunta', 'orden', 'activa')
-    list_editable = ('orden', 'activa')
-
-
-
-# WIDGET PERSONALIZADO QUE HABILITA LA SELECCIÓN MÚLTIPLE EN DJANGO
-class MultipleFileInput(forms.ClearableFileInput):
-    allow_multiple_selected = True
-
-
-class MultipleFileField(forms.FileField):
-    widget = MultipleFileInput
-
-    def clean(self, data, initial=None):
-        if data in (None, ""):
-            return []
-
-        if isinstance(data, (list, tuple)):
-            return [super().clean(item, initial) for item in data if item not in (None, "")]
-
-        return [super().clean(data, initial)]
-
-
-# FORMULARIO PARA CARGA MÚLTIPLE DE IMÁGENES
-class CarruselMultipleForm(forms.ModelForm):
-    imagenes_multiples = MultipleFileField(
-        widget=MultipleFileInput(attrs={'multiple': True}),
-        label="Seleccionar varias imágenes juntas (Mantené presionado Ctrl o Shift)",
-        required=False
-    )
-
-    class Meta:
-        model = CarruselInicio
-        fields = ['imagenes_multiples', 'imagen', 'titulo', 'subtitulo', 'orden', 'activa']
-
+# --- CONTENIDO DE LA WEB ---
 
 @admin.register(CarruselInicio)
 class CarruselInicioAdmin(admin.ModelAdmin):
@@ -126,9 +119,44 @@ class CarruselInicioAdmin(admin.ModelAdmin):
         else:
             super().save_model(request, obj, form, change)
 
+
+@admin.register(Noticia)
+class NoticiaAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'categoria', 'fecha_creacion')
+    search_fields = ('titulo', 'descripcion')
+
+
 @admin.register(Docente)
 class DocenteAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'cargo', 'nivel', 'orden', 'activo')
     list_filter = ('nivel', 'activo')
     search_fields = ('nombre', 'cargo')
     list_editable = ('orden', 'activo')
+
+
+@admin.register(PreguntaFrecuente)
+class PreguntaFrecuenteAdmin(admin.ModelAdmin):
+    list_display = ('pregunta', 'orden', 'activa')
+    list_editable = ('orden', 'activa')
+
+
+@admin.register(Requisito)
+class RequisitoAdmin(admin.ModelAdmin):
+    list_display = ('nivel', 'descripcion')
+    list_filter = ('nivel',)
+
+
+# --- RECEPCIÓN DE DATOS / SOLO LECTURA ---
+
+@admin.register(Consulta)
+class ConsultaAdmin(ReadOnlyAdmin):
+    list_display = ('asunto', 'nombre', 'email', 'fecha_envio', 'leido')
+    list_filter = ('leido', 'fecha_envio')
+    search_fields = ('nombre', 'email', 'asunto', 'mensaje')
+
+
+@admin.register(PostulacionDocente)
+class PostulacionDocenteAdmin(ReadOnlyAdmin):
+    list_display = ('nombre', 'area_materia', 'nivel_interes', 'email', 'telefono', 'fecha_envio', 'revisado')
+    list_filter = ('nivel_interes', 'revisado', 'fecha_envio')
+    search_fields = ('nombre', 'email', 'area_materia')
