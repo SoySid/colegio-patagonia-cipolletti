@@ -1,9 +1,13 @@
-from pathlib import Path
 import os
+from pathlib import Path
 import dj_database_url
 from dotenv import load_dotenv
 
 load_dotenv()
+
+# ==========================================
+# 1. CONFIGURACIÓN BÁSICA DE RUTA Y SEGURIDAD
+# ==========================================
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -12,6 +16,11 @@ SECRET_KEY = 'django-insecure-=)%q$4cf7ibo_79$n#lh31x&n%-hy(ci)n0tq^-)20mw^c)qdp
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+
+
+# ==========================================
+# 2. APLICACIONES E INTEGRACIONES (INSTALLED APPS)
+# ==========================================
 
 INSTALLED_APPS = [
     'jazzmin',
@@ -26,6 +35,11 @@ INSTALLED_APPS = [
     'escuela',
 ]
 
+
+# ==========================================
+# 3. MIDDLEWARE & RUTAS
+# ==========================================
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -38,6 +52,13 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'config.urls'
+
+WSGI_APPLICATION = 'config.wsgi.application'
+
+
+# ==========================================
+# 4. TEMPLATES Y CONTEXT PROCESSORS
+# ==========================================
 
 TEMPLATES = [
     {
@@ -55,7 +76,10 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'config.wsgi.application'
+
+# ==========================================
+# 5. BASE DE DATOS
+# ==========================================
 
 DATABASES = {
     'default': dj_database_url.config(
@@ -64,6 +88,11 @@ DATABASES = {
         ssl_require=True
     )
 }
+
+
+# ==========================================
+# 6. VALIDACIÓN DE CONTRASEÑAS
+# ==========================================
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -80,6 +109,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+# ==========================================
+# 7. IDIOMA Y ZONA HORARIA
+# ==========================================
+
 LANGUAGE_CODE = 'es-ar'
 
 TIME_ZONE = 'America/Argentina/Buenos_Aires'
@@ -87,6 +121,11 @@ TIME_ZONE = 'America/Argentina/Buenos_Aires'
 USE_I18N = True
 
 USE_TZ = True
+
+
+# ==========================================
+# 8. ARCHIVOS ESTÁTICOS Y MULTIMEDIA (CLOUDINARY)
+# ==========================================
 
 STATIC_URL = 'static/'
 
@@ -98,17 +137,6 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_EMAIL = 'web@colegiopatagonia.edu.ar'
-
-JAZZMIN_SETTINGS = {
-    "site_title": "Colegio Patagonia Cipolletti",
-    "site_header": "Colegio Patagonia Cipolletti",
-    "site_brand": "Patagonia Cipolletti",
-    "welcome_sign": "Bienvenido al Sistema del Colegio Patagonia Cipolletti",
-    "copyright": "Colegio Patagonia Cipolletti",
-}
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
@@ -129,3 +157,28 @@ STORAGES = {
 # Compatibilidad con librerías viejas
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+
+
+# ==========================================
+# 9. PERSISTENCIA DE SESIÓN (STAFF/USUARIOS)
+# ==========================================
+
+SESSION_COOKIE_AGE = 86400  # Mantiene la sesión iniciada por 24 horas (en segundos)
+SESSION_SAVE_EVERY_REQUEST = True  # Renueva la sesión con cada interacción del usuario
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Mantiene la sesión aunque se cierre la pestaña
+
+
+# ==========================================
+# 10. CORREO ELECTRÓNICO Y PANEL JAZZMIN
+# ==========================================
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'web@colegiopatagonia.edu.ar'
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Colegio Patagonia Cipolletti",
+    "site_header": "Colegio Patagonia Cipolletti",
+    "site_brand": "Patagonia Cipolletti",
+    "welcome_sign": "Bienvenido al Sistema del Colegio Patagonia Cipolletti",
+    "copyright": "Colegio Patagonia Cipolletti",
+}

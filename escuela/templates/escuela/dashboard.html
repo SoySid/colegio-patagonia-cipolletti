@@ -1,0 +1,98 @@
+{% extends 'escuela/base.html' %}
+
+{% block title %}Panel de Gestión Staff - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
+
+{% block content %}
+<div style="max-width: 1200px; margin: 3rem auto; padding: 0 1.5rem;">
+    
+    <!-- Encabezado del Panel -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 1.2rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <h2 style="color: var(--primary); font-size: 1.8rem; margin: 0; font-weight: 700;">Panel de Gestión Institucional</h2>
+            <p style="color: var(--text-muted); margin: 0.3rem 0 0 0; font-size: 0.95rem;">
+                Bienvenido/a al espacio de trabajo, <strong>{{ request.user.first_name|default:request.user.username }}</strong>
+            </p>
+        </div>
+        <a href="{% url 'escuela:logout' %}" class="btn btn-outline-danger btn-sm rounded-pill px-3 py-2" style="font-weight: 600;">
+            🚪 Cerrar Sesión
+        </a>
+    </div>
+
+    <!-- SECCIÓN 1: MENSAJES Y SOLICITUDES -->
+    <h3 style="color: var(--primary); font-size: 1.2rem; margin-bottom: 1rem; font-weight: 700;">📥 Recepción de Trámites y Mensajes</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+        
+        <!-- Consultas Web -->
+        <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+            <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">📩</div>
+            <h4 style="color: var(--primary); font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 700;">Consultas de Familias</h4>
+            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.2rem; line-height: 1.4;">Revisar y responder las preguntas enviadas por los padres desde la web.</p>
+            <a href="/admin/escuela/consulta/" class="btn btn-primary btn-sm rounded-pill px-3" style="font-weight: 600;">Ver Consultas</a>
+        </div>
+
+        <!-- Postulaciones Docentes -->
+        <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+            <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">📄</div>
+            <h4 style="color: var(--primary); font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 700;">Postulaciones y CVs</h4>
+            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.2rem; line-height: 1.4;">Descargar y evaluar los currículums de postulantes a vacantes docentes.</p>
+            <a href="/admin/escuela/postulaciondocente/" class="btn btn-primary btn-sm rounded-pill px-3" style="font-weight: 600;">Ver Postulaciones</a>
+        </div>
+
+    </div>
+
+    <!-- SECCIÓN 2: CONTENIDO DE LA PÁGINA WEB -->
+    <h3 style="color: var(--primary); font-size: 1.2rem; margin-bottom: 1rem; font-weight: 700;">🌐 Gestión de Contenido del Sitio Web</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+        
+        <!-- Noticias -->
+        <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+            <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">📰</div>
+            <h4 style="color: var(--primary); font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 700;">Noticias y Novedades</h4>
+            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.2rem; line-height: 1.4;">Publicar o editar las comunicados e historias de la página de inicio.</p>
+            <a href="/admin/escuela/noticia/" class="btn btn-primary btn-sm rounded-pill px-3" style="font-weight: 600;">Gestionar Noticias</a>
+        </div>
+
+        <!-- Requisitos por Nivel -->
+        <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+            <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">📋</div>
+            <h4 style="color: var(--primary); font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 700;">Requisitos por Nivel</h4>
+            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.2rem; line-height: 1.4;">Actualizar la documentación obligatoria para Inicial, Primario y Medio.</p>
+            <a href="/admin/escuela/requisito/" class="btn btn-primary btn-sm rounded-pill px-3" style="font-weight: 600;">Editar Requisitos</a>
+        </div>
+
+        <!-- Autoridades y Docentes -->
+        <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+            <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">👨‍🏫</div>
+            <h4 style="color: var(--primary); font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 700;">Cuerpo Docente</h4>
+            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.2rem; line-height: 1.4;">Cargar y ordenar las fotos y nombres del personal o autoridades.</p>
+            <a href="/admin/escuela/docente/" class="btn btn-primary btn-sm rounded-pill px-3" style="font-weight: 600;">Gestionar Equipo</a>
+        </div>
+
+        <!-- Preguntas Frecuentes -->
+        <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+            <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">❓</div>
+            <h4 style="color: var(--primary); font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 700;">Preguntas Frecuentes</h4>
+            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.2rem; line-height: 1.4;">Agregar o corregir respuestas en la sección de consultas usuales.</p>
+            <a href="/admin/escuela/preguntafrecuente/" class="btn btn-primary btn-sm rounded-pill px-3" style="font-weight: 600;">Editar Preguntas</a>
+        </div>
+
+        <!-- Fotos del Carrusel -->
+        <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+            <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🖼️</div>
+            <h4 style="color: var(--primary); font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 700;">Carrusel de Fotos</h4>
+            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.2rem; line-height: 1.4;">Subir o cambiar las imágenes desplegables del banner principal.</p>
+            <a href="/admin/escuela/carruselinicio/" class="btn btn-primary btn-sm rounded-pill px-3" style="font-weight: 600;">Cambiar Fotos</a>
+        </div>
+
+        <!-- Datos Institucionales -->
+        <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+            <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">⚙️</div>
+            <h4 style="color: var(--primary); font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 700;">Información General</h4>
+            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.2rem; line-height: 1.4;">Modificar los teléfonos, el logo, las redes sociales y el e-mail.</p>
+            <a href="/admin/escuela/datosescuela/" class="btn btn-primary btn-sm rounded-pill px-3" style="font-weight: 600;">Editar Datos</a>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

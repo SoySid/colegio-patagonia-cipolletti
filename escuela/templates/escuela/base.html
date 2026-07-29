@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- TÍTULO DINÁMICO: Si el template hijo define un título lo usa; si no, muestra el nombre de la escuela -->
+    <!-- TÍTULO DINÁMICO -->
     <title>{% block title %}{% if escuela_info %}{{ escuela_info.nombre }}{% else %}Colegio Patagonia{% endif %}{% endblock %}</title>
     
-    <!-- FRAMEWORK CSS: Bootstrap 5 vía CDN para maquetado rápido y grillas -->
+    <!-- FRAMEWORK CSS: Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     
-    <!-- CSS PROPIO: Punto de entrada a nuestra hoja de estilos modularizada -->
+    <!-- CSS PROPIO -->
     <link rel="stylesheet" href="{% static 'escuela/css/estilos.css' %}">
 </head>
 <body>
@@ -35,12 +35,12 @@
                 </div>
             </a>
 
-            <!-- BOTÓN HAMBURGUESA: Aparece solo en pantallas chicas (celulares) para colapsar el menú -->
+            <!-- BOTÓN HAMBURGUESA (MÓVIL) -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- ENLACES DE NAVEGACIÓN (SECCIONES DEL SITIO) -->
+            <!-- ENLACES DE NAVEGACIÓN -->
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav align-items-lg-center gap-2">
                     <li class="nav-item"><a class="nav-link" href="{% url 'escuela:home' %}">Inicio</a></li>
@@ -49,9 +49,13 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'escuela:faq' %}">Consultas</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'escuela:contacto' %}">Contacto</a></li>
                     
-                    <!-- BOTÓN DESTACADO: Acceso al sistema interno / portal -->
+                    <!-- BOTÓN DESTACADO: Cambia si la sesión está activa -->
                     <li class="nav-item">
-                        <a href="{% url 'escuela:portal' %}" class="btn btn-portal btn-sm rounded-pill px-3">Aula virtual</a>
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'escuela:dashboard' %}" class="btn btn-success btn-sm rounded-pill px-3">Mi Panel</a>
+                        {% else %}
+                            <a href="{% url 'escuela:portal' %}" class="btn btn-portal btn-sm rounded-pill px-3">Acceso Staff</a>
+                        {% endif %}
                     </li>
                 </ul>
             </div>
@@ -61,20 +65,19 @@
     <!-- ==========================================
          CONTENIDO PRINCIPAL DINÁMICO
          ========================================== -->
-    <!-- Este bloque 'content' es el que pisan las páginas hijas (home.html, docentes.html, etc.) -->
     <main>
         {% block content %}
         {% endblock %}
     </main>
 
     <!-- ==========================================
-         FOOTER / PIE DE PÁGINA OPTIMIZADO
+         FOOTER / PIE DE PÁGINA
          ========================================== -->
     <footer class="site-footer">
         <div class="container py-4">
             <div class="row g-4 align-items-start">
                 
-                <!-- COLUMNA 1: Marca, Frase e Horarios (3 de 12) -->
+                <!-- COLUMNA 1: Marca, Frase e Horarios -->
                 <div class="col-12 col-md-3">
                     <h4 class="footer-title">{{ escuela_info.nombre|default:"Colegio Patagonia" }}</h4>
                     {% if escuela_info.frase %}
@@ -85,7 +88,7 @@
                     {% endif %}
                 </div>
 
-                <!-- COLUMNA 2: Oferta Educativa / Niveles (4 de 12) -->
+                <!-- COLUMNA 2: Niveles -->
                 <div class="col-12 col-md-4">
                     <h4 class="footer-title">Niveles Educativos</h4>
                     <ul class="footer-levels-list">
@@ -95,7 +98,7 @@
                     </ul>
                 </div>
 
-                <!-- COLUMNA 3: Canales de Contacto y Redes (5 de 12 para máximo ancho) -->
+                <!-- COLUMNA 3: Contacto y Redes -->
                 <div class="col-12 col-md-5">
                     <h4 class="footer-title">Contacto</h4>
                     <div class="footer-contact-info">
@@ -104,7 +107,7 @@
                         {% if escuela_info.email %}<p class="mb-2 text-nowrap-md">✉️ {{ escuela_info.email }}</p>{% endif %}
                     </div>
 
-                    <!-- Redes sociales institucionales -->
+                    <!-- Redes sociales -->
                     <div class="footer-social-links">
                         {% if escuela_info.whatsapp %}
                             <a href="https://wa.me/{{ escuela_info.whatsapp }}" target="_blank" class="social-btn whatsapp">

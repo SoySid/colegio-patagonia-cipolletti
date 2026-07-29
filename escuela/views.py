@@ -1,10 +1,24 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
-from .models import Noticia, Requisito, Consulta, PreguntaFrecuente, CarruselInicio, PostulacionDocente, Docente
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from .models import (
+    Noticia, 
+    Requisito, 
+    Consulta, 
+    PreguntaFrecuente, 
+    CarruselInicio, 
+    PostulacionDocente, 
+    Docente
+)
+
+# ==========================================
+# 1. PÁGINAS PÚBLICAS Y CONTENIDO INSTITUCIONAL
+# ==========================================
 
 def home(request):
+    """Página principal con noticias y carrusel activo."""
     noticias = Noticia.objects.all().order_by('-fecha_creacion')
     carrusel = CarruselInicio.objects.filter(activa=True).order_by('orden')
     return render(request, 'escuela/home.html', {
@@ -12,7 +26,38 @@ def home(request):
         'carrusel': carrusel,
     })
 
+
+def requisitos(request):
+    """Muestra los requisitos de inscripción organizados por los 3 niveles."""
+    req_inicial = Requisito.objects.filter(Q(nivel='INICIAL') | Q(nivel='AMBOS'))
+    req_primario = Requisito.objects.filter(Q(nivel='PRIMARIO') | Q(nivel='AMBOS'))
+    req_medio = Requisito.objects.filter(Q(nivel='MEDIO') | Q(nivel='SECUNDARIO') | Q(nivel='AMBOS'))
+    
+    return render(request, 'escuela/requisitos.html', {
+        'req_inicial': req_inicial,
+        'req_primario': req_primario,
+        'req_medio': req_medio,
+    })
+
+
+def faq(request):
+    """Listado de Preguntas Frecuentes activas."""
+    faqs = PreguntaFrecuente.objects.filter(activa=True)
+    return render(request, 'escuela/faq.html', {'faqs': faqs})
+
+
+def docentes_view(request):
+    """Listado de autoridades y cuerpo docente activo."""
+    docentes = Docente.objects.filter(activo=True)
+    return render(request, 'escuela/docentes.html', {'docentes': docentes})
+
+
+# ==========================================
+# 2. CONTACTO Y FORMULARIOS DE RECEPCIÓN
+# ==========================================
+
 def contacto(request):
+    """Manejo de consultas generales y postulaciones docentes."""
     if request.method == 'POST':
         tipo_form = request.POST.get('tipo_form')
 
@@ -56,7 +101,17 @@ def contacto(request):
 
     return render(request, 'escuela/contacto.html')
 
+
+# ==========================================
+# 3. ACCESO STAFF Y GESTIÓN DE SESIÓN
+# ==========================================
+
 def portal_login(request):
+    """Acceso exclusivo para el personal del colegio (Staff)."""
+    # Si el usuario ya está autenticado, no pide clave de nuevo y lo manda directo al panel propio
+    if request.user.is_authenticated:
+        return redirect('escuela:dashboard')
+
     if request.method == 'POST':
         usuario_input = request.POST.get('username')
         clave_input = request.POST.get('password')
@@ -64,32 +119,21 @@ def portal_login(request):
         user = authenticate(request, username=usuario_input, password=clave_input)
 
         if user is not None:
-            login(request, user)
-            
-            # Si es Admin o Staff (docente habilitado/preceptor), entra directo al Panel de Control
-            if user.is_staff or user.is_superuser:
-                return redirect('/admin/')
-            
-            # Si es Alumno/Tutor común
-            messages.success(request, f'Bienvenido/a {user.username}.')
-            return redirect('portal')
+            login(request, user)  # Guarda la sesión firmada en las cookies
+            return redirect('escuela:dashboard')
         else:
             messages.error(request, 'Usuario o contraseña incorrectos.')
 
     return render(request, 'escuela/portal.html')
 
-def requisitos(request):
-    req_primario = Requisito.objects.filter(Q(nivel='PRIMARIO') | Q(nivel='AMBOS'))
-    req_secundario = Requisito.objects.filter(Q(nivel='SECUNDARIO') | Q(nivel='AMBOS'))
-    return render(request, 'escuela/requisitos.html', {
-        'req_primario': req_primario,
-        'req_secundario': req_secundario
-    })
 
-def faq(request):
-    faqs = PreguntaFrecuente.objects.filter(activa=True)
-    return render(request, 'escuela/faq.html', {'faqs': faqs})
+@login_required(login_url='escuela:portal')
+def dashboard_view(request):
+    """Panel de Control para el Staff dentro del diseño de la misma web."""
+    return render(request, 'escuela/dashboard.html')
 
-def docentes_view(request):
-    docentes = Docente.objects.filter(activo=True)
-    return render(request, 'escuela/docentes.html', {'docentes': docentes})
+
+def cerrar_sesion(request):
+    """Cierra la sesión del usuario y redirige al inicio."""
+    logout(request)
+    return redirect('escuela:home')

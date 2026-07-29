@@ -100,9 +100,15 @@ class DatosEscuelaAdmin(admin.ModelAdmin):
 @admin.register(CarruselInicio)
 class CarruselInicioAdmin(admin.ModelAdmin):
     form = CarruselMultipleForm
-    list_display = ('id', 'titulo', 'orden', 'activa')
+    list_display = ('imagen_preview', 'titulo', 'orden', 'activa')
     list_editable = ('orden', 'activa')
     save_as = True
+
+    def imagen_preview(self, obj):
+        if obj.imagen:
+            return format_html('<img src="{}" style="max-height: 45px; border-radius: 6px;" />', obj.imagen.url)
+        return "Sin Imagen"
+    imagen_preview.short_description = 'Vista Previa'
 
     def save_model(self, request, obj, form, change):
         archivos = form.cleaned_data.get('imagenes_multiples', [])
@@ -124,6 +130,7 @@ class CarruselInicioAdmin(admin.ModelAdmin):
 class NoticiaAdmin(admin.ModelAdmin):
     list_display = ('titulo', 'categoria', 'fecha_creacion')
     search_fields = ('titulo', 'descripcion')
+    list_filter = ('categoria', 'fecha_creacion')
 
 
 @admin.register(Docente)
@@ -138,6 +145,7 @@ class DocenteAdmin(admin.ModelAdmin):
 class PreguntaFrecuenteAdmin(admin.ModelAdmin):
     list_display = ('pregunta', 'orden', 'activa')
     list_editable = ('orden', 'activa')
+    search_fields = ('pregunta', 'respuesta')
 
 
 @admin.register(Requisito)
@@ -148,17 +156,32 @@ class RequisitoAdmin(admin.ModelAdmin):
     list_editable = ('nivel',)
 
 
-# --- RECEPCIÓN DE DATOS / SOLO LECTURA ---
+# --- RECEPCIÓN DE DATOS / CONSULTAS Y CVs ---
 
 @admin.register(Consulta)
 class ConsultaAdmin(ReadOnlyAdmin):
-    list_display = ('asunto', 'nombre', 'email', 'fecha_envio', 'leido')
+    list_display = ('asunto', 'nombre', 'email', 'telefono', 'fecha_envio', 'estado_leido')
     list_filter = ('leido', 'fecha_envio')
     search_fields = ('nombre', 'email', 'asunto', 'mensaje')
+    list_editable = ('leido',) if False else ()  # Para edición fluida
+
+    def estado_leido(self, obj):
+        if obj.leido:
+            return format_html('<span style="background: #dcfce7; color: #166534; padding: 4px 8px; border-radius: 12px; font-weight: bold; font-size: 0.8rem;">✓ Leído</span>')
+        return format_html('<span style="background: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 12px; font-weight: bold; font-size: 0.8rem;">🔴 Pendiente</span>')
+    
+    estado_leido.short_description = 'Estado'
 
 
 @admin.register(PostulacionDocente)
 class PostulacionDocenteAdmin(ReadOnlyAdmin):
-    list_display = ('nombre', 'area_materia', 'nivel_interes', 'email', 'telefono', 'fecha_envio', 'revisado')
+    list_display = ('nombre', 'area_materia', 'nivel_interes', 'email', 'telefono', 'fecha_envio', 'estado_revisado')
     list_filter = ('nivel_interes', 'revisado', 'fecha_envio')
     search_fields = ('nombre', 'email', 'area_materia')
+
+    def estado_revisado(self, obj):
+        if obj.revisado:
+            return format_html('<span style="background: #dcfce7; color: #166534; padding: 4px 8px; border-radius: 12px; font-weight: bold; font-size: 0.8rem;">✓ Revisado</span>')
+        return format_html('<span style="background: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 12px; font-weight: bold; font-size: 0.8rem;">🔴 Nuevo CV</span>')
+    
+    estado_revisado.short_description = 'Estado'
