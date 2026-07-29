@@ -4,27 +4,31 @@
 
 {% block content %}
 <section class="contacto-wrapper">
+    <!-- CABECERA DE SECCIÓN -->
     <div class="contacto-intro">
         <p class="contacto-kicker">Canal de comunicación</p>
         <h2>Contacto y búsqueda laboral</h2>
         <p>Podés comunicarte para solicitar información sobre el proceso de inscripción y aranceles, agendar una entrevista presencial, realizar consultas generales o postularte a búsquedas laborales.</p>
     </div>
 
+    <!-- MENSAJES DE FEEDBACK / ALERTA -->
     {% if messages %}
         {% for message in messages %}
-            <div class="alert-success">
+            <div class="alert-success" role="alert">
                 {{ message }}
             </div>
         {% endfor %}
     {% endif %}
 
     <div class="contacto-grid">
+        <!-- COLUMNA IZQUIERDA: FORMULARIOS CON TABS -->
         <div class="contacto-card">
-            <div class="form-tabs">
-                <button type="button" class="tab-btn active" id="btn-consulta">Consulta General</button>
-                <button type="button" class="tab-btn" id="btn-docente">Sumate como Docente</button>
+            <div class="form-tabs" role="tablist">
+                <button type="button" class="tab-btn active" id="btn-consulta" aria-selected="true">Consulta General</button>
+                <button type="button" class="tab-btn" id="btn-docente" aria-selected="false">Sumate como Docente</button>
             </div>
 
+            <!-- Formulario 1: Consulta General -->
             <form method="POST" id="form-consulta" class="form-contacto">
                 {% csrf_token %}
                 <input type="hidden" name="tipo_form" value="consulta">
@@ -59,13 +63,14 @@
                 <button type="submit" class="btn-submit">ENVIAR CONSULTA</button>
             </form>
 
+            <!-- Formulario 2: Postulación Docente -->
             <form method="POST" id="form-docente" class="form-contacto form-oculto" enctype="multipart/form-data">
                 {% csrf_token %}
                 <input type="hidden" name="tipo_form" value="docente">
 
                 <div class="form-group">
                     <label for="nombre_docente">Nombre Completo *</label>
-                    <input type="text" id="nombre_docente" name="nombre" placeholder="Ej: Maria Gonzalez" required>
+                    <input type="text" id="nombre_docente" name="nombre" placeholder="Ej: María González" required>
                 </div>
 
                 <div class="form-row">
@@ -105,17 +110,19 @@
             </form>
         </div>
 
+        <!-- COLUMNA DERECHA: TARJETAS DE INFORMACIÓN Y MAPA -->
         <div class="contacto-side">
+            <!-- Tarjeta 1: Información de Contacto Directo -->
             <div class="info-card">
                 <h3>Información de contacto</h3>
-                <p class="info-subtitle">Comunicate directamente con la secretaría o visítanos en nuestro establecimiento.</p>
+                <p class="info-subtitle">Comunicate directamente con la secretaría o visitanos en nuestro establecimiento.</p>
 
                 <div class="info-items">
                     <div class="info-item">
                         <div class="info-icon">📞</div>
                         <div class="info-text">
                             <strong>Teléfono Directo</strong>
-                            <span>0299 15-570-2824</span>
+                            <span>{{ escuela_info.telefono|default:"0299 15-570-2824" }}</span>
                         </div>
                     </div>
 
@@ -123,7 +130,7 @@
                         <div class="info-icon">✉️</div>
                         <div class="info-text">
                             <strong>Correo Electrónico</strong>
-                            <span>patagoniaescuelaprimaria@gmail.com</span>
+                            <span>{{ escuela_info.email|default:"patagoniaescuelaprimaria@gmail.com" }}</span>
                         </div>
                     </div>
 
@@ -132,29 +139,43 @@
                         <div class="info-text">
                             <strong>Horario de Atención</strong>
                             <span>Lunes a Viernes</span>
-                            <small>07:00 a 19:00 hs</small>
+                            <small>{{ escuela_info.horario|default:"07:00 a 19:00 hs" }}</small>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Tarjeta 2: Ubicación Dinámica y Mapa Interactivo -->
             <div class="location-card">
                 <h3>Ubicación</h3>
-                <p class="info-subtitle">Nos encontrás en el barrio 12 de Septiembre.</p>
 
                 <div class="location-address">
-                    <strong>Saavedra 750 (tira 1 B° 12 Sept.)</strong>
+                    <strong>{{ escuela_info.direccion|default:"Saavedra 750 (tira 1 B° 12 Sept.)" }}</strong>
                     <span>Cipolletti, Río Negro</span>
                     <small>8324, Argentina</small>
                 </div>
 
-                <a href="https://maps.google.com/?q=Saavedra+750+Cipolletti" target="_blank" rel="noopener noreferrer" class="btn-map">Ver en Google Maps</a>
+                <!-- Contenedor del Mapa Embebido de Google Maps -->
+                <div class="map-container" style="margin: 1.2rem 0; overflow: hidden; border-radius: 12px; border: 1px solid #e2e8f0;">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3102.53123456789!2d-67.9945!3d-38.9385!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x960a325000000000%3A0x0!2sSaavedra%20750%2C%20Cipolletti%2C%20R%C3%ADo%20Negro!5e0!3m2!1ses!2sar!4v1600000000000!5m2!1ses!2sar" 
+                        width="100%" 
+                        height="200" 
+                        style="border:0; display: block;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+
+                <!-- Link dinámico a Google Maps usando la dirección guardada -->
+                <a href="https://maps.google.com/?q={{ escuela_info.direccion|urlencode|default:'Saavedra+750+Cipolletti' }}" target="_blank" rel="noopener noreferrer" class="btn-map">Ver en Google Maps</a>
             </div>
         </div>
     </div>
 </section>
 
-<!-- SCRIPT PESTAÑAS (TABS) -->
+<!-- SCRIPT PESTAÑAS (TABS) OPTIMIZADO -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const btnConsulta = document.getElementById('btn-consulta');
@@ -162,20 +183,19 @@
         const formConsulta = document.getElementById('form-consulta');
         const formDocente = document.getElementById('form-docente');
 
-        if (btnConsulta && btnDocente) {
-            btnConsulta.addEventListener('click', () => {
-                btnConsulta.classList.add('active');
-                btnDocente.classList.remove('active');
-                formConsulta.classList.remove('form-oculto');
-                formDocente.classList.add('form-oculto');
-            });
+        const switchTab = (activeBtn, inactiveBtn, showForm, hideForm) => {
+            activeBtn.classList.add('active');
+            activeBtn.setAttribute('aria-selected', 'true');
+            inactiveBtn.classList.remove('active');
+            inactiveBtn.setAttribute('aria-selected', 'false');
 
-            btnDocente.addEventListener('click', () => {
-                btnDocente.classList.add('active');
-                btnConsulta.classList.remove('active');
-                formDocente.classList.remove('form-oculto');
-                formConsulta.classList.add('form-oculto');
-            });
+            showForm.classList.remove('form-oculto');
+            hideForm.classList.add('form-oculto');
+        };
+
+        if (btnConsulta && btnDocente) {
+            btnConsulta.addEventListener('click', () => switchTab(btnConsulta, btnDocente, formConsulta, formDocente));
+            btnDocente.addEventListener('click', () => switchTab(btnDocente, btnConsulta, formDocente, formConsulta));
         }
     });
 </script>
