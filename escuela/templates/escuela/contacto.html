@@ -3,7 +3,7 @@
 {% block title %}Contacto - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
 
 {% block content %}
-<!-- ESTILOS VIP DE NIVEL SUPERIOR -->
+<!-- ESTILOS VIP DE NIVEL SUPERIOR CON RESPONSIVE BLINDADO -->
 <style>
     .contacto-wrapper-vip {
         padding-top: 3.5rem;
@@ -27,7 +27,7 @@
         letter-spacing: -0.5px;
     }
 
-    /* TARJETA PRINCIPAL DEL FORMULARIO */
+    /* TARJETAS PRINCIPALES */
     .card-contacto-vip {
         background: #ffffff !important;
         border: 2px solid #cbd5e1 !important;
@@ -35,32 +35,35 @@
         box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08) !important;
         position: relative;
         overflow: hidden;
+        width: 100%;
     }
 
-    /* SWITCH DE PESTAÑAS TIPO CÁPSULA NEÓN */
+    /* SWITCH DE PESTAÑAS RESPONSIVE */
     .tabs-wrapper-vip {
         background-color: #e2e8f0;
-        padding: 0.4rem;
+        padding: 0.35rem;
         border-radius: 50rem;
         display: flex;
-        gap: 0.4rem;
+        gap: 0.35rem;
         border: 1px solid #cbd5e1;
+        width: 100%;
     }
 
     .tab-btn-vip {
         flex: 1;
         border: none;
         background: transparent;
-        padding: 0.8rem 1.2rem;
+        padding: 0.75rem 1rem;
         border-radius: 50rem;
         font-weight: 700;
-        font-size: 0.9rem;
+        font-size: 0.88rem;
         color: #64748b;
         transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 0.5rem;
+        gap: 0.4rem;
+        text-align: center;
     }
 
     .tab-btn-vip.active {
@@ -72,7 +75,7 @@
     /* INPUTS CON ICONO DENTRO */
     .input-group-vip {
         position: relative;
-        margin-bottom: 1.35rem;
+        margin-bottom: 1.25rem;
     }
 
     .input-group-vip label {
@@ -88,6 +91,7 @@
         position: relative;
         display: flex;
         align-items: center;
+        width: 100%;
     }
 
     .input-icon-wrapper i.icon-field {
@@ -97,6 +101,7 @@
         font-size: 1.1rem;
         transition: color 0.25s ease;
         pointer-events: none;
+        z-index: 2;
     }
 
     .form-control-vip {
@@ -165,6 +170,7 @@
         padding: 1.85rem;
         margin-bottom: 1.5rem;
         transition: all 0.3s ease;
+        width: 100%;
     }
 
     .card-info-vip:hover {
@@ -192,12 +198,48 @@
         border: 2px solid #cbd5e1;
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
     }
+
+    /* ==========================================
+       AJUSTES RESPONSIVE MÓVILES EXCLUSIVOS
+       ========================================== */
+    @media (max-width: 576px) {
+        .contacto-wrapper-vip {
+            padding-top: 1.5rem;
+            padding-bottom: 3rem;
+        }
+
+        .card-contacto-vip {
+            padding: 1.25rem 1rem !important;
+            border-radius: 20px !important;
+        }
+
+        .card-info-vip {
+            padding: 1.25rem 1rem !important;
+            border-radius: 20px !important;
+        }
+
+        .tabs-wrapper-vip {
+            padding: 0.25rem;
+            border-radius: 16px;
+        }
+
+        .tab-btn-vip {
+            padding: 0.65rem 0.5rem;
+            font-size: 0.78rem;
+            border-radius: 12px;
+            gap: 0.25rem;
+        }
+
+        .tab-btn-vip i {
+            font-size: 0.9rem;
+        }
+    }
 </style>
 
 <div class="container contacto-wrapper-vip">
     
     <!-- ENCABEZADO DE SECCIÓN -->
-    <div class="text-center mb-5" data-aos="fade-down">
+    <div class="text-center mb-4 mb-md-5" data-aos="fade-down">
         <span class="badge section-badge-vip rounded-pill px-3 py-2 mb-3 d-inline-flex align-items-center gap-2">
             <i class="bi bi-headset"></i> ATENCIÓN DIRECTA Y POSTULACIONES
         </span>
@@ -229,10 +271,10 @@
                 <!-- SWITCH TABS DE CÁPSULA NEÓN -->
                 <div class="tabs-wrapper-vip mb-4" role="tablist">
                     <button type="button" class="tab-btn-vip active" id="btn-consulta" aria-selected="true">
-                        <i class="bi bi-chat-left-dots-fill"></i> Consulta General
+                        <i class="bi bi-chat-left-dots-fill"></i> <span>Consulta General</span>
                     </button>
                     <button type="button" class="tab-btn-vip" id="btn-docente" aria-selected="false">
-                        <i class="bi bi-person-badge-fill"></i> Sumate como Docente
+                        <i class="bi bi-person-badge-fill"></i> <span>Sumate como Docente</span>
                     </button>
                 </div>
 
@@ -356,7 +398,7 @@
                 </h3>
                 <p class="text-secondary small mb-4">Secretaría general e instalaciones del colegio.</p>
 
-                <div class="d-flex flex-column gap-3.5">
+                <div class="d-flex flex-column gap-3">
                     <div class="d-flex align-items-center gap-3">
                         <div class="info-icon-box">
                             <i class="bi bi-telephone-fill"></i>
@@ -371,9 +413,9 @@
                         <div class="info-icon-box">
                             <i class="bi bi-envelope-fill"></i>
                         </div>
-                        <div>
+                        <div style="min-width: 0;">
                             <strong class="d-block text-dark small">Correo Electrónico</strong>
-                            <span class="text-secondary fw-semibold small text-break">{{ escuela_info.email|default:"patagoniaescuelaprimaria@gmail.com" }}</span>
+                            <span class="text-secondary fw-semibold small text-break d-block">{{ escuela_info.email|default:"patagoniaescuelaprimaria@gmail.com" }}</span>
                         </div>
                     </div>
 

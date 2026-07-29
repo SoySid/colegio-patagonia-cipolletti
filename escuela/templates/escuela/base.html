@@ -38,11 +38,15 @@
             --font-cuerpo: 'Inter', sans-serif;
         }
 
+        html, body {
+            overflow-x: hidden !important;
+            width: 100%;
+        }
+
         body {
             font-family: var(--font-cuerpo);
             background-color: var(--bg-light);
             color: var(--text-dark);
-            overflow-x: hidden;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
@@ -50,6 +54,8 @@
 
         main {
             flex: 1;
+            width: 100%;
+            overflow-x: hidden;
         }
 
         /* NAVBAR FINO Y COMPACTO CON GLASSMORPHISM */
@@ -217,6 +223,67 @@
             color: #94a3b8;
             font-size: 0.86rem;
             font-weight: 500;
+        }
+
+        /* ==========================================
+           REGLAS RESPONSIVE GLOBALES (MÓVIL & TABLET)
+           ========================================== */
+        @media (max-width: 991px) {
+            /* Despliegue prolijo del menú en móviles */
+            .navbar-collapse {
+                background-color: #0b1526;
+                padding: 1.25rem;
+                border-radius: 20px;
+                margin-top: 0.75rem;
+                border: 1px solid rgba(255, 255, 255, 0.15);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            }
+            .nav-link {
+                padding: 0.65rem 1rem !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            /* Adaptación del Header en celulares */
+            .brand-logo-img {
+                height: 65px !important;
+                max-height: 65px !important;
+                margin-top: 0 !important;
+                margin-bottom: 0 !important;
+            }
+
+            .brand-title-compact {
+                font-size: 1.05rem !important;
+            }
+
+            .brand-phrase {
+                display: none !important; /* Oculta frase corta en celulares para no amontonar */
+            }
+
+            /* Tipografías y títulos en pantalla chica */
+            h1, .display-4, .display-5 {
+                font-size: 1.85rem !important;
+            }
+
+            h2 {
+                font-size: 1.55rem !important;
+            }
+
+            /* Footer responsive */
+            .site-footer {
+                padding-top: 3rem;
+            }
+            
+            .footer-copyright {
+                margin-top: 2.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .btn-portal-vip {
+                width: 100%;
+                text-center: center;
+            }
         }
     </style>
 
