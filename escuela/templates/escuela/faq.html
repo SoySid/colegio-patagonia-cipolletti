@@ -1,52 +1,232 @@
 {% extends 'escuela/base.html' %}
 
-{% block title %}Consultas - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
+{% block title %}Consultas Frecuentes - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
 
 {% block content %}
-<section class="faq-wrapper">
-    <div class="faq-hero">
-        <div class="faq-hero-content">
-            <p class="faq-kicker">Información clara y cercana</p>
-            <h2>Consultas</h2>
-            <p>Encontrá respuestas rápidas sobre inscripción, trámites, horarios y otras consultas del día a día.</p>
-        </div>
-        <div class="faq-hero-badge">
-            <span>¿Necesitás ayuda?</span>
-            <strong>Estamos para acompañarte</strong>
-        </div>
+<!-- ESTILOS EXCLUSIVOS REFINADOS CON SOPORTE PARA SALTOS DE LÍNEA -->
+<style>
+    .faq-wrapper-vip {
+        padding-top: 3.5rem;
+        padding-bottom: 4.5rem;
+    }
+
+    .section-badge-vip {
+        background-color: rgba(31, 122, 63, 0.12);
+        color: var(--brand-green, #1f7a3f);
+        font-weight: 700;
+        font-size: 0.8rem;
+        letter-spacing: 0.06em;
+        border: 1px solid rgba(31, 122, 63, 0.25);
+    }
+
+    .faq-title {
+        font-family: var(--font-titulo, 'Cinzel', serif);
+        color: var(--primary-navy, #1b365d);
+        font-weight: 800;
+        letter-spacing: -0.5px;
+    }
+
+    /* BARRA DE BÚSQUEDA RÁPIDA CENTRADA */
+    .search-box-faq {
+        background-color: #ffffff;
+        border: 2px solid #cbd5e1;
+        border-radius: 50rem;
+        padding: 0.6rem 1.4rem;
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+        transition: all 0.3s ease;
+        max-width: 700px;
+        margin: 0 auto 2.5rem;
+    }
+
+    .search-box-faq:focus-within {
+        border-color: var(--brand-green, #1f7a3f);
+        box-shadow: 0 10px 25px rgba(31, 122, 63, 0.2);
+    }
+
+    .search-box-faq input {
+        border: none;
+        outline: none;
+        box-shadow: none;
+        font-size: 0.98rem;
+    }
+
+    /* ACORDEÓN MEJORADO */
+    .accordion-vip .accordion-item {
+        background-color: #ffffff !important;
+        border: 2px solid #cbd5e1 !important;
+        border-radius: 18px !important;
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06) !important;
+        margin-bottom: 1.2rem;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .accordion-vip .accordion-item:hover {
+        border-color: var(--brand-green, #1f7a3f) !important;
+        box-shadow: 0 14px 28px rgba(15, 23, 42, 0.12) !important;
+        transform: translateY(-2px);
+    }
+
+    .accordion-vip .accordion-button {
+        background-color: #ffffff !important;
+        color: var(--primary-navy, #1b365d) !important;
+        font-family: var(--font-titulo, 'Cinzel', serif);
+        font-weight: 700;
+        font-size: 1.08rem;
+        padding: 1.25rem 1.5rem;
+        box-shadow: none !important;
+    }
+
+    .accordion-vip .accordion-button:not(.collapsed) {
+        background-color: rgba(31, 122, 63, 0.05) !important;
+        color: var(--brand-green, #1f7a3f) !important;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    /* PROPIEDAD CLAVE: RESPETA LOS SALTOS DE LÍNEA Y PARRAFOS (PRE-LINE) */
+    .accordion-vip .accordion-body {
+        padding: 1.25rem 1.5rem;
+        color: #475569;
+        font-size: 0.98rem;
+        line-height: 1.7;
+        font-weight: 500;
+        white-space: pre-line !important;
+    }
+
+    /* BANNER CTA INFERIOR PANORÁMICO */
+    .cta-banner-container {
+        background: linear-gradient(135deg, #0b1526 0%, #172a45 100%);
+        border-radius: 24px;
+        border: 2px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 16px 36px rgba(11, 21, 38, 0.25);
+        position: relative;
+        overflow: hidden;
+        margin-top: 3.5rem;
+    }
+
+    .cta-banner-container::before {
+        content: '';
+        position: absolute;
+        top: -40%;
+        right: -10%;
+        width: 450px;
+        height: 450px;
+        background: radial-gradient(circle, rgba(31, 122, 63, 0.35) 0%, rgba(0, 0, 0, 0) 70%);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    .btn-cta-green {
+        background-color: var(--brand-green, #1f7a3f);
+        border: none;
+        color: #ffffff !important;
+        font-weight: 700;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 20px rgba(31, 122, 63, 0.45);
+    }
+
+    .btn-cta-green:hover {
+        background-color: #166534;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(31, 122, 63, 0.6);
+    }
+
+    /* ESTADO VACÍO */
+    .empty-faq-box {
+        background-color: #ffffff;
+        border: 2px dashed #cbd5e1;
+        border-radius: 20px;
+        padding: 3.5rem 2rem;
+    }
+</style>
+
+<div class="container faq-wrapper-vip" style="max-width: 900px;">
+    
+    <!-- ENCABEZADO PRINCIPAL -->
+    <div class="text-center mb-4" data-aos="fade-down">
+        <span class="badge section-badge-vip rounded-pill px-3 py-2 mb-3 d-inline-flex align-items-center gap-2">
+            <i class="bi bi-patch-question-fill"></i> INFORMACIÓN CLARA Y CERCANA
+        </span>
+        <h1 class="display-5 mb-2 faq-title">
+            Consultas Frecuentes
+        </h1>
+        <p class="text-secondary fs-6 mb-0 fw-medium mx-auto" style="max-width: 620px;">
+            Encontrá respuestas rápidas sobre inscripción, trámites, horarios y otras dudas institucionales.
+        </p>
     </div>
 
+    <!-- BUSCADOR RÁPIDO INTERACTIVO -->
     {% if faqs %}
-        <div class="faq-list">
-            {% for faq in faqs %}
-                <details class="faq-card">
-                    <summary class="faq-head">
-                        <span>{{ faq.pregunta }}</span>
-                        <!-- Cambiamos el '+' por el contenedor circular con la flechita SVG -->
-                        <span class="faq-icon-container">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="faq-arrow" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-                            </svg>
-                        </span>
-                    </summary>
-                    <div class="faq-body">
-                        <p>{{ faq.respuesta }}</p>
-                    </div>
-                </details>
-            {% endfor %}
-        </div>
-    {% else %}
-        <div class="faq-empty">
-            <p>No hay consultas registradas por el momento.</p>
+        <div class="search-box-faq d-flex align-items-center" data-aos="fade-up">
+            <i class="bi bi-search text-success fs-5 me-3"></i>
+            <input type="text" id="faqSearchInput" class="form-control" placeholder="Escribí una palabra clave (ej: inscripción, horarios, pagos)...">
         </div>
     {% endif %}
 
-    <div class="faq-cta">
-        <div class="faq-cta-text">
-            <h3>¿Tenés otra consulta?</h3>
-            <p>Escribinos y nuestro equipo te ayudará con la información que necesitás.</p>
+    <!-- LISTADO DE PREGUNTAS (ACORDEÓN A ANCHO COMPLETO) -->
+    {% if faqs %}
+        <div class="accordion accordion-vip" id="faqAccordion">
+            {% for faq in faqs %}
+                <div class="accordion-item faq-item-target" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:1 }}00">
+                    <h2 class="accordion-header" id="heading-{{ faq.id|default:forloop.counter }}">
+                        <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ faq.id|default:forloop.counter }}" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}" aria-controls="collapse-{{ faq.id|default:forloop.counter }}">
+                            <i class="bi bi-question-circle-fill me-3 text-success fs-5 opacity-75"></i>
+                            <span class="faq-question-text">{{ faq.pregunta }}</span>
+                        </button>
+                    </h2>
+                    <div id="collapse-{{ faq.id|default:forloop.counter }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" aria-labelledby="heading-{{ faq.id|default:forloop.counter }}" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body faq-answer-text">{{ faq.respuesta }}</div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
-        <a href="/contacto/" class="btn-primary">IR A CONTACTO</a>
+    {% else %}
+        <div class="empty-faq-box text-center" data-aos="fade-up">
+            <i class="bi bi-inbox-fill text-secondary opacity-50 display-3 mb-3 d-block"></i>
+            <h4 class="fw-bold fs-5 text-dark mb-1" style="font-family: var(--font-titulo, 'Cinzel', serif);">Sin Consultas Registradas</h4>
+            <p class="text-muted small mb-0">No hay preguntas frecuentes cargadas por el momento.</p>
+        </div>
+    {% endif %}
+
+    <!-- BANNER LLAMADO A LA ACCIÓN (CTA INFERIOR PANORÁMICO) -->
+    <div class="cta-banner-container p-4 p-md-5 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-4 position-relative z-1" data-aos="fade-up" data-aos-delay="200">
+        <div>
+            <h3 class="fw-bold fs-4 mb-2 text-white" style="font-family: var(--font-titulo, 'Cinzel', serif);">
+                ¿Tenés otra consulta?
+            </h3>
+            <p class="text-white-50 mb-0 fs-6">
+                Escribinos y nuestro equipo te ayudará con la información que necesitás.
+            </p>
+        </div>
+        <a href="{% url 'escuela:contacto' %}" class="btn btn-cta-green rounded-pill px-4 py-3 text-nowrap fw-bold d-inline-flex align-items-center gap-2 flex-shrink-0" style="font-size: 0.95rem;">
+            IR A CONTACTO <i class="bi bi-arrow-right-short fs-5"></i>
+        </a>
     </div>
-</section>
+
+</div>
+
+<!-- SCRIPT DE FILTRADO EN VIVO EN EL NAVEGADOR -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('faqSearchInput');
+        const faqItems = document.querySelectorAll('.faq-item-target');
+
+        if (searchInput && faqItems) {
+            searchInput.addEventListener('keyup', (e) => {
+                const term = e.target.value.toLowerCase().trim();
+
+                faqItems.forEach(item => {
+                    const question = item.querySelector('.faq-question-text').textContent.toLowerCase();
+                    const answer = item.querySelector('.faq-answer-text').textContent.toLowerCase();
+
+                    if (question.includes(term) || answer.includes(term)) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        }
+    });
+</script>
 {% endblock %}

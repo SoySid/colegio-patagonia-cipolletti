@@ -3,95 +3,372 @@
 {% block title %}Panel de Gestión Staff - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
 
 {% block content %}
-<div style="max-width: 1200px; margin: 3rem auto; padding: 0 1.5rem;">
+<!-- ESTILOS AUTOCONTENIDOS Y EXCLUSIVOS PARA EL DASHBOARD STAFF -->
+<style>
+    .dashboard-wrapper-vip {
+        padding-top: 3rem;
+        padding-bottom: 5rem;
+    }
+
+    /* HEADER TIPO BANNER DE BIENVENIDA */
+    .dashboard-header-vip {
+        background: linear-gradient(135deg, #0b1526 0%, #172a45 100%);
+        border-radius: 24px;
+        padding: 2.25rem 2.5rem;
+        color: #ffffff;
+        box-shadow: 0 16px 36px rgba(11, 21, 38, 0.22);
+        border: 2px solid rgba(255, 255, 255, 0.12);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .dashboard-header-vip::before {
+        content: '';
+        position: absolute;
+        top: -40%;
+        right: -10%;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(31, 122, 63, 0.35) 0%, rgba(0, 0, 0, 0) 70%);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    .dashboard-title {
+        font-family: var(--font-titulo, 'Cinzel', serif);
+        font-weight: 800;
+        letter-spacing: -0.5px;
+    }
+
+    .user-badge-online {
+        background-color: rgba(74, 222, 128, 0.15);
+        color: #4ade80;
+        border: 1px solid rgba(74, 222, 128, 0.3);
+        font-size: 0.8rem;
+        font-weight: 700;
+    }
+
+    /* TITULARES DE SECCIÓN */
+    .section-title-vip {
+        font-family: var(--font-titulo, 'Cinzel', serif);
+        color: var(--primary-navy, #1b365d);
+        font-weight: 800;
+        letter-spacing: -0.3px;
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+    }
+
+    /* TARJETAS MÓDULO DEL DASHBOARD */
+    .card-module-vip {
+        background: #ffffff !important;
+        border: 2px solid #cbd5e1 !important;
+        border-radius: 22px !important;
+        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.07) !important;
+        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card-module-vip:hover {
+        transform: translateY(-7px);
+        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15) !important;
+        border-color: var(--brand-green, #1f7a3f) !important;
+    }
+
+    .icon-module-box {
+        width: 52px;
+        height: 52px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        flex-shrink: 0;
+    }
+
+    .icon-navy {
+        background: linear-gradient(135deg, #1b365d 0%, #0f1e36 100%);
+        color: #ffffff;
+    }
+
+    .icon-green {
+        background: linear-gradient(135deg, #1f7a3f 0%, #165b2e 100%);
+        color: #ffffff;
+    }
+
+    .icon-gold {
+        background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+        color: #ffffff;
+    }
+
+    .btn-module-action {
+        background-color: var(--primary-navy, #1b365d);
+        color: #ffffff !important;
+        font-weight: 700;
+        font-size: 0.88rem;
+        padding: 0.65rem 1.4rem;
+        border-radius: 50rem;
+        border: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(27, 54, 93, 0.25);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .btn-module-action:hover {
+        background-color: var(--brand-green, #1f7a3f);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(31, 122, 63, 0.4);
+    }
+
+    .btn-logout-vip {
+        background-color: rgba(239, 68, 68, 0.15);
+        color: #f87171 !important;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        font-weight: 700;
+        font-size: 0.88rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-logout-vip:hover {
+        background-color: #ef4444;
+        color: #ffffff !important;
+        transform: translateY(-2px);
+    }
+</style>
+
+<div class="container dashboard-wrapper-vip">
     
-    <!-- Encabezado del Panel -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 1.2rem; flex-wrap: wrap; gap: 1rem;">
+    <!-- BANNER ENCABEZADO Y BIENVENIDA -->
+    <div class="dashboard-header-vip mb-5 d-flex justify-content-between align-items-center flex-wrap gap-4 position-relative z-1" data-aos="fade-down">
         <div>
-            <h2 style="color: var(--primary); font-size: 1.8rem; margin: 0; font-weight: 700;">Panel de Gestión Institucional</h2>
-            <p style="color: var(--text-muted); margin: 0.3rem 0 0 0; font-size: 0.95rem;">
-                Bienvenido/a al espacio de trabajo, <strong>{{ request.user.first_name|default:request.user.username }}</strong>
+            <span class="badge user-badge-online rounded-pill px-3 py-2 mb-2 d-inline-flex align-items-center gap-2">
+                <i class="bi bi-circle-fill fs-6 text-success"></i> SESIÓN ACTIVA STAFF
+            </span>
+            <h1 class="display-6 mb-1 dashboard-title text-white">
+                Panel de Gestión Institucional
+            </h1>
+            <p class="text-white-50 fs-6 mb-0 font-normal">
+                Bienvenido/a al espacio de administración, <strong class="text-white">{{ request.user.first_name|default:request.user.username }}</strong>
             </p>
         </div>
-        <a href="{% url 'escuela:logout' %}" class="btn btn-outline-danger btn-sm rounded-pill px-3 py-2" style="font-weight: 600;">
-            🚪 Cerrar Sesión
+        
+        <a href="{% url 'escuela:logout' %}" class="btn btn-logout-vip rounded-pill px-4 py-2.5 d-inline-flex align-items-center gap-2">
+            <i class="bi bi-box-arrow-right fs-6"></i> Cerrar Sesión
         </a>
     </div>
 
     <!-- SECCIÓN 1: MENSAJES Y SOLICITUDES -->
-    <h3 style="color: var(--primary); font-size: 1.2rem; margin-bottom: 1rem; font-weight: 700;">📥 Recepción de Trámites y Mensajes</h3>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+    <div class="mb-5">
+        <h3 class="section-title-vip fs-4 mb-4" data-aos="fade-right">
+            <i class="bi bi-inbox-fill text-success"></i> Recepción de Trámites y Mensajes
+        </h3>
         
-        <!-- Consultas Web -->
-        <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-            <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">📩</div>
-            <h4 style="color: var(--primary); font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 700;">Consultas de Familias</h4>
-            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.2rem; line-height: 1.4;">Revisar y responder las preguntas enviadas por los padres desde la web.</p>
-            <a href="/admin/escuela/consulta/" class="btn btn-primary btn-sm rounded-pill px-3" style="font-weight: 600;">Ver Consultas</a>
-        </div>
+        <div class="row g-4">
+            <!-- Consultas Web -->
+            <div class="col-12 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                <article class="card card-module-vip h-100 p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="icon-module-box icon-navy">
+                                <i class="bi bi-envelope-paper-fill"></i>
+                            </div>
+                            <h4 class="fw-bold fs-5 mb-0" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d);">
+                                Consultas Familias
+                            </h4>
+                        </div>
+                        <p class="text-secondary small mb-4 fw-medium" style="line-height: 1.6;">
+                            Revisar y responder preguntas enviadas por los padres desde la web oficial.
+                        </p>
+                    </div>
+                    <div>
+                        <a href="/admin/escuela/consulta/" class="btn btn-module-action">
+                            Ver Consultas <i class="bi bi-arrow-right-short fs-5"></i>
+                        </a>
+                    </div>
+                </article>
+            </div>
 
-        <!-- Postulaciones Docentes -->
-        <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-            <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">📄</div>
-            <h4 style="color: var(--primary); font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 700;">Postulaciones y CVs</h4>
-            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.2rem; line-height: 1.4;">Descargar y evaluar los currículums de postulantes a vacantes docentes.</p>
-            <a href="/admin/escuela/postulaciondocente/" class="btn btn-primary btn-sm rounded-pill px-3" style="font-weight: 600;">Ver Postulaciones</a>
+            <!-- Postulaciones Docentes -->
+            <div class="col-12 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                <article class="card card-module-vip h-100 p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="icon-module-box icon-green">
+                                <i class="bi bi-file-earmark-person-fill"></i>
+                            </div>
+                            <h4 class="fw-bold fs-5 mb-0" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d);">
+                                Postulaciones y CVs
+                            </h4>
+                        </div>
+                        <p class="text-secondary small mb-4 fw-medium" style="line-height: 1.6;">
+                            Descargar y evaluar currículums recibidos para cubrir vacantes docentes.
+                        </p>
+                    </div>
+                    <div>
+                        <a href="/admin/escuela/postulaciondocente/" class="btn btn-module-action">
+                            Ver Postulaciones <i class="bi bi-arrow-right-short fs-5"></i>
+                        </a>
+                    </div>
+                </article>
+            </div>
         </div>
-
     </div>
 
     <!-- SECCIÓN 2: CONTENIDO DE LA PÁGINA WEB -->
-    <h3 style="color: var(--primary); font-size: 1.2rem; margin-bottom: 1rem; font-weight: 700;">🌐 Gestión de Contenido del Sitio Web</h3>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+    <div>
+        <h3 class="section-title-vip fs-4 mb-4" data-aos="fade-right">
+            <i class="bi bi-globe2 text-success"></i> Gestión de Contenido del Sitio Web
+        </h3>
         
-        <!-- Noticias -->
-        <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-            <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">📰</div>
-            <h4 style="color: var(--primary); font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 700;">Noticias y Novedades</h4>
-            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.2rem; line-height: 1.4;">Publicar o editar las comunicados e historias de la página de inicio.</p>
-            <a href="/admin/escuela/noticia/" class="btn btn-primary btn-sm rounded-pill px-3" style="font-weight: 600;">Gestionar Noticias</a>
-        </div>
+        <div class="row g-4">
+            <!-- Noticias -->
+            <div class="col-12 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                <article class="card card-module-vip h-100 p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="icon-module-box icon-navy">
+                                <i class="bi bi-newspaper"></i>
+                            </div>
+                            <h4 class="fw-bold fs-5 mb-0" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d);">
+                                Noticias y Novedades
+                            </h4>
+                        </div>
+                        <p class="text-secondary small mb-4 fw-medium" style="line-height: 1.6;">
+                            Publicar o editar comunicados e historias que se muestran en el slider del inicio.
+                        </p>
+                    </div>
+                    <div>
+                        <a href="/admin/escuela/noticia/" class="btn btn-module-action">
+                            Gestionar Noticias <i class="bi bi-arrow-right-short fs-5"></i>
+                        </a>
+                    </div>
+                </article>
+            </div>
 
-        <!-- Requisitos por Nivel -->
-        <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-            <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">📋</div>
-            <h4 style="color: var(--primary); font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 700;">Requisitos por Nivel</h4>
-            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.2rem; line-height: 1.4;">Actualizar la documentación obligatoria para Inicial, Primario y Medio.</p>
-            <a href="/admin/escuela/requisito/" class="btn btn-primary btn-sm rounded-pill px-3" style="font-weight: 600;">Editar Requisitos</a>
-        </div>
+            <!-- Requisitos por Nivel -->
+            <div class="col-12 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="150">
+                <article class="card card-module-vip h-100 p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="icon-module-box icon-green">
+                                <i class="bi bi-clipboard-check-fill"></i>
+                            </div>
+                            <h4 class="fw-bold fs-5 mb-0" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d);">
+                                Requisitos por Nivel
+                            </h4>
+                        </div>
+                        <p class="text-secondary small mb-4 fw-medium" style="line-height: 1.6;">
+                            Actualizar la lista de documentación requerida para Inicial, Primario y Medio.
+                        </p>
+                    </div>
+                    <div>
+                        <a href="/admin/escuela/requisito/" class="btn btn-module-action">
+                            Editar Requisitos <i class="bi bi-arrow-right-short fs-5"></i>
+                        </a>
+                    </div>
+                </article>
+            </div>
 
-        <!-- Autoridades y Docentes -->
-        <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-            <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">👨‍🏫</div>
-            <h4 style="color: var(--primary); font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 700;">Cuerpo Docente</h4>
-            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.2rem; line-height: 1.4;">Cargar y ordenar las fotos y nombres del personal o autoridades.</p>
-            <a href="/admin/escuela/docente/" class="btn btn-primary btn-sm rounded-pill px-3" style="font-weight: 600;">Gestionar Equipo</a>
-        </div>
+            <!-- Autoridades y Docentes -->
+            <div class="col-12 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                <article class="card card-module-vip h-100 p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="icon-module-box icon-gold">
+                                <i class="bi bi-people-fill"></i>
+                            </div>
+                            <h4 class="fw-bold fs-5 mb-0" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d);">
+                                Cuerpo Docente
+                            </h4>
+                        </div>
+                        <p class="text-secondary small mb-4 fw-medium" style="line-height: 1.6;">
+                            Cargar o modificar los nombres, fotos y cargos del personal y autoridades.
+                        </p>
+                    </div>
+                    <div>
+                        <a href="/admin/escuela/docente/" class="btn btn-module-action">
+                            Gestionar Equipo <i class="bi bi-arrow-right-short fs-5"></i>
+                        </a>
+                    </div>
+                </article>
+            </div>
 
-        <!-- Preguntas Frecuentes -->
-        <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-            <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">❓</div>
-            <h4 style="color: var(--primary); font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 700;">Preguntas Frecuentes</h4>
-            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.2rem; line-height: 1.4;">Agregar o corregir respuestas en la sección de consultas usuales.</p>
-            <a href="/admin/escuela/preguntafrecuente/" class="btn btn-primary btn-sm rounded-pill px-3" style="font-weight: 600;">Editar Preguntas</a>
-        </div>
+            <!-- Preguntas Frecuentes -->
+            <div class="col-12 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="250">
+                <article class="card card-module-vip h-100 p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="icon-module-box icon-navy">
+                                <i class="bi bi-patch-question-fill"></i>
+                            </div>
+                            <h4 class="fw-bold fs-5 mb-0" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d);">
+                                Preguntas Frecuentes
+                            </h4>
+                        </div>
+                        <p class="text-secondary small mb-4 fw-medium" style="line-height: 1.6;">
+                            Agregar, corregir o eliminar respuestas en la sección de consultas usuales.
+                        </p>
+                    </div>
+                    <div>
+                        <a href="/admin/escuela/preguntafrecuente/" class="btn btn-module-action">
+                            Editar Preguntas <i class="bi bi-arrow-right-short fs-5"></i>
+                        </a>
+                    </div>
+                </article>
+            </div>
 
-        <!-- Fotos del Carrusel -->
-        <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-            <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🖼️</div>
-            <h4 style="color: var(--primary); font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 700;">Carrusel de Fotos</h4>
-            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.2rem; line-height: 1.4;">Subir o cambiar las imágenes desplegables del banner principal.</p>
-            <a href="/admin/escuela/carruselinicio/" class="btn btn-primary btn-sm rounded-pill px-3" style="font-weight: 600;">Cambiar Fotos</a>
-        </div>
+            <!-- Fotos del Carrusel -->
+            <div class="col-12 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
+                <article class="card card-module-vip h-100 p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="icon-module-box icon-green">
+                                <i class="bi bi-images"></i>
+                            </div>
+                            <h4 class="fw-bold fs-5 mb-0" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d);">
+                                Carrusel Galería
+                            </h4>
+                        </div>
+                        <p class="text-secondary small mb-4 fw-medium" style="line-height: 1.6;">
+                            Subir o actualizar las imágenes destacadas que se muestran en el inicio.
+                        </p>
+                    </div>
+                    <div>
+                        <a href="/admin/escuela/carruselinicio/" class="btn btn-module-action">
+                            Cambiar Fotos <i class="bi bi-arrow-right-short fs-5"></i>
+                        </a>
+                    </div>
+                </article>
+            </div>
 
-        <!-- Datos Institucionales -->
-        <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-            <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">⚙️</div>
-            <h4 style="color: var(--primary); font-size: 1.15rem; margin-bottom: 0.5rem; font-weight: 700;">Información General</h4>
-            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.2rem; line-height: 1.4;">Modificar los teléfonos, el logo, las redes sociales y el e-mail.</p>
-            <a href="/admin/escuela/datosescuela/" class="btn btn-primary btn-sm rounded-pill px-3" style="font-weight: 600;">Editar Datos</a>
+            <!-- Datos Institucionales -->
+            <div class="col-12 col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="350">
+                <article class="card card-module-vip h-100 p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="icon-module-box icon-gold">
+                                <i class="bi bi-gear-wide-connected"></i>
+                            </div>
+                            <h4 class="fw-bold fs-5 mb-0" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d);">
+                                Información General
+                            </h4>
+                        </div>
+                        <p class="text-secondary small mb-4 fw-medium" style="line-height: 1.6;">
+                            Modificar teléfonos, dirección, logo, redes sociales y correo de contacto.
+                        </p>
+                    </div>
+                    <div>
+                        <a href="/admin/escuela/datosescuela/" class="btn btn-module-action">
+                            Editar Datos <i class="bi bi-arrow-right-short fs-5"></i>
+                        </a>
+                    </div>
+                </article>
+            </div>
         </div>
-
     </div>
 
 </div>

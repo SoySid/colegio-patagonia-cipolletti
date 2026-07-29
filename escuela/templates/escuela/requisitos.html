@@ -3,59 +3,270 @@
 {% block title %}Requisitos de Inscripción - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
 
 {% block content %}
-<div style="max-width: 1200px; margin: 3rem auto; padding: 0 5%;">
-    <h2 style="font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem;">Requisitos de Inscripción 2026</h2>
-    <p style="color: var(--text-muted); margin-bottom: 2.5rem;">Documentación obligatoria para la reserva de vacante y confección del legajo del alumno.</p>
+<!-- ESTILOS EXCLUSIVOS REINVENTADOS PARA REQUISITOS -->
+<style>
+    /* SECCIÓN CONTENEDORA */
+    .requisitos-wrapper {
+        padding-top: 3.5rem;
+        padding-bottom: 4rem;
+    }
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+    /* ENCABEZADO DE PÁGINA */
+    .section-badge-vip {
+        background-color: rgba(31, 122, 63, 0.12);
+        color: var(--brand-green, #1f7a3f);
+        font-weight: 700;
+        font-size: 0.8rem;
+        letter-spacing: 0.06em;
+        border: 1px solid rgba(31, 122, 63, 0.25);
+    }
+
+    .requisitos-title {
+        font-family: var(--font-titulo, 'Cinzel', serif);
+        color: var(--primary-navy, #1b365d);
+        font-weight: 800;
+        letter-spacing: -0.5px;
+    }
+
+    /* TARJETAS DE NIVELES */
+    .card-req-container {
+        background: #ffffff !important;
+        border: 2px solid #cbd5e1 !important;
+        border-radius: 24px !important;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08) !important;
+        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        overflow: hidden;
+    }
+
+    .card-req-container:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 22px 45px rgba(15, 23, 42, 0.16) !important;
+    }
+
+    /* CABECERA DE COLOR DE LA TARJETA */
+    .card-req-header {
+        padding: 1.5rem;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .header-inicial {
+        background: linear-gradient(135deg, #1f7a3f 0%, #165b2e 100%);
+    }
+
+    .header-primario {
+        background: linear-gradient(135deg, #1b365d 0%, #0f1e36 100%);
+    }
+
+    .header-medio {
+        background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    }
+
+    .icon-capsule {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    /* LISTA DE REQUISITOS EN EL CUERPO */
+    .req-list-group {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+    }
+
+    .req-item {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 0.85rem 1rem;
+        font-size: 0.93rem;
+        color: #334155;
+        font-weight: 500;
+        transition: all 0.25s ease;
+        display: flex;
+        align-items: start;
+        gap: 0.75rem;
+    }
+
+    .req-item:hover {
+        background-color: #f1f5f9;
+        border-color: #cbd5e1;
+        transform: translateX(4px);
+    }
+
+    /* BANNER CTA FINAL */
+    .cta-banner-container {
+        background: linear-gradient(135deg, #0b1526 0%, #172a45 100%);
+        border-radius: 24px;
+        border: 2px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 16px 36px rgba(11, 21, 38, 0.25);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cta-banner-container::before {
+        content: '';
+        position: absolute;
+        top: -40%;
+        right: -10%;
+        width: 450px;
+        height: 450px;
+        background: radial-gradient(circle, rgba(31, 122, 63, 0.35) 0%, rgba(0, 0, 0, 0) 70%);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    .btn-cta-green {
+        background-color: var(--brand-green, #1f7a3f);
+        border: none;
+        color: #ffffff !important;
+        font-weight: 700;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 20px rgba(31, 122, 63, 0.45);
+    }
+
+    .btn-cta-green:hover {
+        background-color: #166534;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(31, 122, 63, 0.6);
+    }
+</style>
+
+<div class="container requisitos-wrapper">
+    
+    <!-- ENCABEZADO PRINCIPAL DE LA VISTA -->
+    <div class="text-center mb-5" data-aos="fade-down">
+        <span class="badge section-badge-vip rounded-pill px-3 py-2 mb-3 d-inline-flex align-items-center gap-2">
+            <i class="bi bi-file-earmark-text-fill"></i> PROCESO DE ADMISIÓN {% now "Y" %}
+        </span>
+        <h1 class="display-5 mb-2 requisitos-title">
+            Requisitos de Inscripción
+        </h1>
+        <p class="text-secondary fs-6 mb-0 fw-medium mx-auto" style="max-width: 600px;">
+            Documentación obligatoria requerida para la reserva de vacante y confección del legajo del alumno.
+        </p>
+    </div>
+
+    <!-- TARJETAS POR NIVEL EDUCATIVO -->
+    <div class="row g-4 mb-5 justify-content-center">
         
-        <!-- Nivel Inicial -->
-        <div style="background: white; padding: 2rem; border-radius: 10px; border: 1px solid #e2e8f0; border-top: 4px solid var(--brand-green, #16a34a);">
-            <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.3rem;">Nivel Inicial</h3>
-            <ul style="color: var(--text-muted); line-height: 2; padding-left: 1.2rem; font-size: 0.95rem;">
-                {% for req in req_inicial %}
-                    <li>{{ req.descripcion }}</li>
-                {% empty %}
-                    <li>No hay requisitos cargados para este nivel.</li>
-                {% endfor %}
-            </ul>
-        </div>
+        <!-- TARJETA: NIVEL INICIAL -->
+        <div class="col-12 col-md-4" data-aos="fade-up" data-aos-delay="100">
+            <article class="card-req-container h-100">
+                <div class="card-req-header header-inicial">
+                    <div class="icon-capsule">
+                        <i class="bi bi-balloon-fill fs-4 text-white"></i>
+                    </div>
+                    <div>
+                        <h3 class="fw-bold fs-5 mb-0 text-white" style="font-family: var(--font-titulo, 'Cinzel', serif);">
+                            Nivel Inicial
+                        </h3>
+                        <small class="text-white-50">Salas de 3, 4 y 5 años</small>
+                    </div>
+                </div>
 
-        <!-- Nivel Primario -->
-        <div style="background: white; padding: 2rem; border-radius: 10px; border: 1px solid #e2e8f0; border-top: 4px solid var(--primary);">
-            <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.3rem;">Nivel Primario</h3>
-            <ul style="color: var(--text-muted); line-height: 2; padding-left: 1.2rem; font-size: 0.95rem;">
-                {% for req in req_primario %}
-                    <li>{{ req.descripcion }}</li>
-                {% empty %}
-                    <li>No hay requisitos cargados para este nivel.</li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <!-- Nivel Medio -->
-        <div style="background: white; padding: 2rem; border-radius: 10px; border: 1px solid #e2e8f0; border-top: 4px solid var(--accent, #dc2626);">
-            <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.3rem;">Nivel Medio</h3>
-            <ul style="color: var(--text-muted); line-height: 2; padding-left: 1.2rem; font-size: 0.95rem;">
-                {% for req in req_medio %}
-                    <li>{{ req.descripcion }}</li>
-                {% empty %}
-                    {% for req in req_secundario %}
-                        <li>{{ req.descripcion }}</li>
+                <div class="req-list-group">
+                    {% for req in req_inicial %}
+                        <div class="req-item">
+                            <i class="bi bi-check-circle-fill text-success fs-6 mt-0.5 flex-shrink-0"></i>
+                            <span>{{ req.descripcion }}</span>
+                        </div>
                     {% empty %}
-                        <li>No hay requisitos cargados para este nivel.</li>
+                        <p class="text-muted fst-italic text-center py-3 mb-0">No hay requisitos cargados para este nivel.</p>
                     {% endfor %}
-                {% endfor %}
-            </ul>
+                </div>
+            </article>
+        </div>
+
+        <!-- TARJETA: NIVEL PRIMARIO -->
+        <div class="col-12 col-md-4" data-aos="fade-up" data-aos-delay="200">
+            <article class="card-req-container h-100">
+                <div class="card-req-header header-primario">
+                    <div class="icon-capsule">
+                        <i class="bi bi-backpack-fill fs-4 text-white"></i>
+                    </div>
+                    <div>
+                        <h3 class="fw-bold fs-5 mb-0 text-white" style="font-family: var(--font-titulo, 'Cinzel', serif);">
+                            Nivel Primario
+                        </h3>
+                        <small class="text-white-50">1º a 7º grado</small>
+                    </div>
+                </div>
+
+                <div class="req-list-group">
+                    {% for req in req_primario %}
+                        <div class="req-item">
+                            <i class="bi bi-check-circle-fill text-primary fs-6 mt-0.5 flex-shrink-0"></i>
+                            <span>{{ req.descripcion }}</span>
+                        </div>
+                    {% empty %}
+                        <p class="text-muted fst-italic text-center py-3 mb-0">No hay requisitos cargados para este nivel.</p>
+                    {% endfor %}
+                </div>
+            </article>
+        </div>
+
+        <!-- TARJETA: NIVEL MEDIO -->
+        <div class="col-12 col-md-4" data-aos="fade-up" data-aos-delay="300">
+            <article class="card-req-container h-100">
+                <div class="card-req-header header-medio">
+                    <div class="icon-capsule">
+                        <i class="bi bi-mortarboard-fill fs-4 text-white"></i>
+                    </div>
+                    <div>
+                        <h3 class="fw-bold fs-5 mb-0 text-white" style="font-family: var(--font-titulo, 'Cinzel', serif);">
+                            Nivel Medio
+                        </h3>
+                        <small class="text-white-50">1º y 2º año</small>
+                    </div>
+                </div>
+
+                <div class="req-list-group">
+                    {% for req in req_medio %}
+                        <div class="req-item">
+                            <i class="bi bi-check-circle-fill text-warning fs-6 mt-0.5 flex-shrink-0"></i>
+                            <span>{{ req.descripcion }}</span>
+                        </div>
+                    {% empty %}
+                        {% for req in req_secundario %}
+                            <div class="req-item">
+                                <i class="bi bi-check-circle-fill text-warning fs-6 mt-0.5 flex-shrink-0"></i>
+                                <span>{{ req.descripcion }}</span>
+                            </div>
+                        {% empty %}
+                            <p class="text-muted fst-italic text-center py-3 mb-0">No hay requisitos cargados para este nivel.</p>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </article>
         </div>
 
     </div>
 
-    <!-- Banner de llamado a la acción / Contacto -->
-    <div style="margin-top: 3rem; background: #f0f9ff; padding: 2rem; border-radius: 12px; border: 1px solid #bae6fd; text-align: center;">
-        <h4 style="color: #0369a1; font-weight: 700; margin-bottom: 0.5rem; font-size: 1.25rem;">¿Querés iniciar la inscripción o tenés alguna duda?</h4>
-        <p style="color: #0284c7; margin-bottom: 1.2rem; font-size: 0.95rem;">Comunicate con Secretaría para recibir asistencia personalizada o iniciar el trámite de vacante.</p>
-        <a href="{% url 'escuela:contacto' %}" class="btn btn-primary rounded-pill px-4 py-2" style="font-weight: 600;">Ir a Contacto</a>
+    <!-- BANNER LLAMADO A LA ACCIÓN (CTA) -->
+    <div class="cta-banner-container p-4 p-md-5 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-4 position-relative z-1" data-aos="fade-up" data-aos-delay="200">
+        <div>
+            <h3 class="fw-bold fs-4 mb-2 text-white" style="font-family: var(--font-titulo, 'Cinzel', serif);">
+                ¿Querés iniciar la inscripción o tenés alguna duda?
+            </h3>
+            <p class="text-white-50 mb-0 fs-6">
+                Comunicate con Secretaría para recibir asistencia personalizada o iniciar el trámite de vacante.
+            </p>
+        </div>
+        <a href="{% url 'escuela:contacto' %}" class="btn btn-cta-green rounded-pill px-4 py-3 text-nowrap fw-bold d-inline-flex align-items-center gap-2 flex-shrink-0" style="font-size: 0.95rem;">
+            IR A CONTACTO <i class="bi bi-arrow-right-short fs-5"></i>
+        </a>
     </div>
+
 </div>
 {% endblock %}

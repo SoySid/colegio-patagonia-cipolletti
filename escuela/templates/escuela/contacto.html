@@ -3,164 +3,407 @@
 {% block title %}Contacto - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
 
 {% block content %}
-<section class="contacto-wrapper">
-    <!-- CABECERA DE SECCIÓN -->
-    <div class="contacto-intro">
-        <p class="contacto-kicker">Canal de comunicación</p>
-        <h2>Contacto y búsqueda laboral</h2>
-        <p>Podés comunicarte para solicitar información sobre el proceso de inscripción y aranceles, agendar una entrevista presencial, realizar consultas generales o postularte a búsquedas laborales.</p>
+<!-- ESTILOS VIP DE NIVEL SUPERIOR -->
+<style>
+    .contacto-wrapper-vip {
+        padding-top: 3.5rem;
+        padding-bottom: 5rem;
+    }
+
+    .section-badge-vip {
+        background: linear-gradient(135deg, rgba(31, 122, 63, 0.15) 0%, rgba(74, 222, 128, 0.15) 100%);
+        color: var(--brand-green, #1f7a3f);
+        font-weight: 700;
+        font-size: 0.82rem;
+        letter-spacing: 0.08em;
+        border: 1px solid rgba(31, 122, 63, 0.3);
+        box-shadow: 0 4px 12px rgba(31, 122, 63, 0.1);
+    }
+
+    .contacto-title {
+        font-family: var(--font-titulo, 'Cinzel', serif);
+        color: var(--primary-navy, #1b365d);
+        font-weight: 800;
+        letter-spacing: -0.5px;
+    }
+
+    /* TARJETA PRINCIPAL DEL FORMULARIO */
+    .card-contacto-vip {
+        background: #ffffff !important;
+        border: 2px solid #cbd5e1 !important;
+        border-radius: 28px !important;
+        box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08) !important;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* SWITCH DE PESTAÑAS TIPO CÁPSULA NEÓN */
+    .tabs-wrapper-vip {
+        background-color: #e2e8f0;
+        padding: 0.4rem;
+        border-radius: 50rem;
+        display: flex;
+        gap: 0.4rem;
+        border: 1px solid #cbd5e1;
+    }
+
+    .tab-btn-vip {
+        flex: 1;
+        border: none;
+        background: transparent;
+        padding: 0.8rem 1.2rem;
+        border-radius: 50rem;
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: #64748b;
+        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .tab-btn-vip.active {
+        background: var(--primary-navy, #1b365d);
+        color: #ffffff !important;
+        box-shadow: 0 6px 18px rgba(27, 54, 93, 0.3);
+    }
+
+    /* INPUTS CON ICONO DENTRO */
+    .input-group-vip {
+        position: relative;
+        margin-bottom: 1.35rem;
+    }
+
+    .input-group-vip label {
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: var(--primary-navy, #1b365d);
+        margin-bottom: 0.45rem;
+        display: block;
+        letter-spacing: -0.2px;
+    }
+
+    .input-icon-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .input-icon-wrapper i.icon-field {
+        position: absolute;
+        left: 1.1rem;
+        color: #94a3b8;
+        font-size: 1.1rem;
+        transition: color 0.25s ease;
+        pointer-events: none;
+    }
+
+    .form-control-vip {
+        background-color: #f8fafc;
+        border: 2px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 0.8rem 1rem 0.8rem 2.8rem;
+        font-size: 0.95rem;
+        color: #0f172a;
+        font-weight: 500;
+        transition: all 0.25s ease;
+        width: 100%;
+    }
+
+    textarea.form-control-vip {
+        padding-left: 1rem !important;
+    }
+
+    .form-control-vip:focus {
+        background-color: #ffffff;
+        border-color: var(--brand-green, #1f7a3f);
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(31, 122, 63, 0.15);
+    }
+
+    .form-control-vip:focus + i.icon-field,
+    .input-icon-wrapper:focus-within i.icon-field {
+        color: var(--brand-green, #1f7a3f);
+    }
+
+    /* BOTÓN VIP CON RESPLANDOR */
+    .btn-submit-vip {
+        background: linear-gradient(135deg, #1f7a3f 0%, #165b2e 100%);
+        border: none;
+        color: #ffffff !important;
+        font-weight: 800;
+        font-size: 0.98rem;
+        letter-spacing: 0.03em;
+        padding: 0.95rem 2rem;
+        border-radius: 50rem;
+        box-shadow: 0 8px 24px rgba(31, 122, 63, 0.4);
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        width: 100%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+    }
+
+    .btn-submit-vip:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 30px rgba(31, 122, 63, 0.55);
+        background: linear-gradient(135deg, #166534 0%, #14532d 100%);
+    }
+
+    .form-oculto {
+        display: none !important;
+    }
+
+    /* TARJETAS LATERALES DE INFORMACIÓN VIP */
+    .card-info-vip {
+        background: #ffffff !important;
+        border: 2px solid #cbd5e1 !important;
+        border-radius: 24px !important;
+        box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08) !important;
+        padding: 1.85rem;
+        margin-bottom: 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .card-info-vip:hover {
+        border-color: var(--primary-navy, #1b365d) !important;
+        transform: translateY(-4px);
+    }
+
+    .info-icon-box {
+        width: 48px;
+        height: 48px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, rgba(31, 122, 63, 0.15) 0%, rgba(31, 122, 63, 0.05) 100%);
+        color: var(--brand-green, #1f7a3f);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.35rem;
+        flex-shrink: 0;
+        box-shadow: 0 4px 12px rgba(31, 122, 63, 0.15);
+    }
+
+    .map-frame-wrapper {
+        border-radius: 20px;
+        overflow: hidden;
+        border: 2px solid #cbd5e1;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+</style>
+
+<div class="container contacto-wrapper-vip">
+    
+    <!-- ENCABEZADO DE SECCIÓN -->
+    <div class="text-center mb-5" data-aos="fade-down">
+        <span class="badge section-badge-vip rounded-pill px-3 py-2 mb-3 d-inline-flex align-items-center gap-2">
+            <i class="bi bi-headset"></i> ATENCIÓN DIRECTA Y POSTULACIONES
+        </span>
+        <h1 class="display-5 mb-2 contacto-title">
+            Contacto y Búsqueda Laboral
+        </h1>
+        <p class="text-secondary fs-6 mb-0 fw-medium mx-auto" style="max-width: 650px;">
+            Ponete en contacto para coordinar entrevistas, resolver dudas sobre admisión o sumarte a nuestro equipo docente.
+        </p>
     </div>
 
-    <!-- MENSAJES DE FEEDBACK / ALERTA -->
+    <!-- MENSAJES DE FEEDBACK DJANGO -->
     {% if messages %}
         {% for message in messages %}
-            <div class="alert-success" role="alert">
-                {{ message }}
+            <div class="alert alert-success alert-dismissible fade show rounded-4 shadow-sm mb-4 border-2 border-success" role="alert" data-aos="fade-up">
+                <i class="bi bi-check-circle-fill me-2 fs-5 align-middle"></i>
+                <span class="align-middle fw-bold">{{ message }}</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         {% endfor %}
     {% endif %}
 
-    <div class="contacto-grid">
-        <!-- COLUMNA IZQUIERDA: FORMULARIOS CON TABS -->
-        <div class="contacto-card">
-            <div class="form-tabs" role="tablist">
-                <button type="button" class="tab-btn active" id="btn-consulta" aria-selected="true">Consulta General</button>
-                <button type="button" class="tab-btn" id="btn-docente" aria-selected="false">Sumate como Docente</button>
+    <div class="row g-4 align-items-start">
+        
+        <!-- COLUMNA IZQUIERDA: FORMULARIOS TABS (7 COLS) -->
+        <div class="col-12 col-lg-7" data-aos="fade-right" data-aos-delay="100">
+            <div class="card-contacto-vip p-4 p-md-5">
+                
+                <!-- SWITCH TABS DE CÁPSULA NEÓN -->
+                <div class="tabs-wrapper-vip mb-4" role="tablist">
+                    <button type="button" class="tab-btn-vip active" id="btn-consulta" aria-selected="true">
+                        <i class="bi bi-chat-left-dots-fill"></i> Consulta General
+                    </button>
+                    <button type="button" class="tab-btn-vip" id="btn-docente" aria-selected="false">
+                        <i class="bi bi-person-badge-fill"></i> Sumate como Docente
+                    </button>
+                </div>
+
+                <!-- FORMULARIO 1: CONSULTA GENERAL -->
+                <form method="POST" id="form-consulta">
+                    {% csrf_token %}
+                    <input type="hidden" name="tipo_form" value="consulta">
+
+                    <div class="input-group-vip">
+                        <label for="nombre">Nombre Completo *</label>
+                        <div class="input-icon-wrapper">
+                            <i class="bi bi-person-fill icon-field"></i>
+                            <input type="text" id="nombre" name="nombre" class="form-control-vip" placeholder="Ej: Juan Pérez" required>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6 input-group-vip">
+                            <label for="email">Correo Electrónico *</label>
+                            <div class="input-icon-wrapper">
+                                <i class="bi bi-envelope-fill icon-field"></i>
+                                <input type="email" id="email" name="email" class="form-control-vip" placeholder="ejemplo@correo.com" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 input-group-vip">
+                            <label for="telefono">Teléfono</label>
+                            <div class="input-icon-wrapper">
+                                <i class="bi bi-telephone-fill icon-field"></i>
+                                <input type="tel" id="telefono" name="telefono" class="form-control-vip" placeholder="Ej: 299 1234567">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group-vip">
+                        <label for="asunto">Asunto *</label>
+                        <div class="input-icon-wrapper">
+                            <i class="bi bi-bookmark-fill icon-field"></i>
+                            <input type="text" id="asunto" name="asunto" class="form-control-vip" placeholder="Ej: Inscripciones {% now 'Y' %} / Consultas generales" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group-vip">
+                        <label for="mensaje">Mensaje *</label>
+                        <textarea id="mensaje" name="mensaje" class="form-control-vip" rows="4" placeholder="Escribí tu consulta en detalle..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit-vip">
+                        ENVIAR CONSULTA <i class="bi bi-send-fill fs-6"></i>
+                    </button>
+                </form>
+
+                <!-- FORMULARIO 2: POSTULACIÓN DOCENTE -->
+                <form method="POST" id="form-docente" class="form-oculto" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="tipo_form" value="docente">
+
+                    <div class="input-group-vip">
+                        <label for="nombre_docente">Nombre Completo *</label>
+                        <div class="input-icon-wrapper">
+                            <i class="bi bi-person-fill icon-field"></i>
+                            <input type="text" id="nombre_docente" name="nombre" class="form-control-vip" placeholder="Ej: María González" required>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6 input-group-vip">
+                            <label for="email_docente">Correo Electrónico *</label>
+                            <div class="input-icon-wrapper">
+                                <i class="bi bi-envelope-fill icon-field"></i>
+                                <input type="email" id="email_docente" name="email" class="form-control-vip" placeholder="ejemplo@correo.com" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 input-group-vip">
+                            <label for="telefono_docente">Teléfono *</label>
+                            <div class="input-icon-wrapper">
+                                <i class="bi bi-telephone-fill icon-field"></i>
+                                <input type="tel" id="telefono_docente" name="telefono" class="form-control-vip" placeholder="Ej: 299 1234567" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group-vip">
+                        <label for="nivel_interes">Nivel Educativo de Interés *</label>
+                        <div class="input-icon-wrapper">
+                            <i class="bi bi-mortarboard-fill icon-field"></i>
+                            <select id="nivel_interes" name="asunto" class="form-control-vip" required>
+                                <option value="Postulación Docente - Nivel Inicial">Nivel Inicial</option>
+                                <option value="Postulación Docente - Nivel Primario">Nivel Primario</option>
+                                <option value="Postulación Docente - Nivel Secundario">Nivel Secundario</option>
+                                <option value="Postulación Docente - Áreas Especiales">Áreas Especiales (Inglés, Edu. Física, Artística)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group-vip">
+                        <label for="mensaje_docente">Presentación / Breve Trayectoria *</label>
+                        <textarea id="mensaje_docente" name="mensaje" class="form-control-vip" rows="3" placeholder="Contanos tu formación y experiencia profesional..." required></textarea>
+                    </div>
+
+                    <div class="input-group-vip">
+                        <label for="cv_docente">Adjuntar Curriculum Vitae (PDF / Word) *</label>
+                        <input type="file" id="cv_docente" name="cv" class="form-control-vip ps-3" accept=".pdf,.doc,.docx" required>
+                        <small class="text-muted mt-1 d-block fw-medium" style="font-size: 0.8rem;">Formatos aceptados: PDF, DOC o DOCX.</small>
+                    </div>
+
+                    <button type="submit" class="btn-submit-vip">
+                        POSTULARSE AHORA <i class="bi bi-file-earmark-arrow-up-fill fs-6"></i>
+                    </button>
+                </form>
+
             </div>
-
-            <!-- Formulario 1: Consulta General -->
-            <form method="POST" id="form-consulta" class="form-contacto">
-                {% csrf_token %}
-                <input type="hidden" name="tipo_form" value="consulta">
-
-                <div class="form-group">
-                    <label for="nombre">Nombre Completo *</label>
-                    <input type="text" id="nombre" name="nombre" placeholder="Ej: Juan Pérez" required>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="email">Correo Electrónico *</label>
-                        <input type="email" id="email" name="email" placeholder="ejemplo@correo.com" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="telefono">Teléfono</label>
-                        <input type="tel" id="telefono" name="telefono" placeholder="299 1234567">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="asunto">Asunto *</label>
-                    <input type="text" id="asunto" name="asunto" placeholder="Ej: Inscripciones 2026 / Consultas varias" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="mensaje">Mensaje *</label>
-                    <textarea id="mensaje" name="mensaje" rows="4" placeholder="Escribí tu consulta aquí..." required></textarea>
-                </div>
-
-                <button type="submit" class="btn-submit">ENVIAR CONSULTA</button>
-            </form>
-
-            <!-- Formulario 2: Postulación Docente -->
-            <form method="POST" id="form-docente" class="form-contacto form-oculto" enctype="multipart/form-data">
-                {% csrf_token %}
-                <input type="hidden" name="tipo_form" value="docente">
-
-                <div class="form-group">
-                    <label for="nombre_docente">Nombre Completo *</label>
-                    <input type="text" id="nombre_docente" name="nombre" placeholder="Ej: María González" required>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="email_docente">Correo Electrónico *</label>
-                        <input type="email" id="email_docente" name="email" placeholder="ejemplo@correo.com" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="telefono_docente">Teléfono *</label>
-                        <input type="tel" id="telefono_docente" name="telefono" placeholder="299 1234567" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="nivel_interes">Nivel Educativo de Interés *</label>
-                    <select id="nivel_interes" name="asunto" required>
-                        <option value="Postulación Docente - Nivel Inicial">Nivel Inicial</option>
-                        <option value="Postulación Docente - Nivel Primario">Nivel Primario</option>
-                        <option value="Postulación Docente - Nivel Secundario">Nivel Secundario</option>
-                        <option value="Postulación Docente - Áreas Especiales">Áreas Especiales (Inglés, Educación Física, Educación Artística)</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="mensaje_docente">Presentación / Breve Experiencia *</label>
-                    <textarea id="mensaje_docente" name="mensaje" rows="4" placeholder="Contanos brevemente sobre tu trayectoria profesional..." required></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="cv_docente">Adjuntar CV (PDF o Word) *</label>
-                    <input type="file" id="cv_docente" name="cv" accept=".pdf,.doc,.docx" required>
-                    <small class="form-hint">Subí un archivo PDF, DOC o DOCX.</small>
-                </div>
-
-                <button type="submit" class="btn-submit">POSTULARSE AHORA</button>
-            </form>
         </div>
 
-        <!-- COLUMNA DERECHA: TARJETAS DE INFORMACIÓN Y MAPA -->
-        <div class="contacto-side">
-            <!-- Tarjeta 1: Información de Contacto Directo -->
-            <div class="info-card">
-                <h3>Información de contacto</h3>
-                <p class="info-subtitle">Comunicate directamente con la secretaría o visitanos en nuestro establecimiento.</p>
+        <!-- COLUMNA DERECHA: TARJETAS DE INFORMACIÓN Y MAPA (5 COLS) -->
+        <div class="col-12 col-lg-5" data-aos="fade-left" data-aos-delay="200">
+            
+            <!-- TARJETA 1: INFORMACIÓN DIRECTA -->
+            <div class="card-info-vip">
+                <h3 class="fw-bold fs-5 mb-1" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d);">
+                    Información Directa
+                </h3>
+                <p class="text-secondary small mb-4">Secretaría general e instalaciones del colegio.</p>
 
-                <div class="info-items">
-                    <div class="info-item">
-                        <div class="info-icon">📞</div>
-                        <div class="info-text">
-                            <strong>Teléfono Directo</strong>
-                            <span>{{ escuela_info.telefono|default:"0299 15-570-2824" }}</span>
+                <div class="d-flex flex-column gap-3.5">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="info-icon-box">
+                            <i class="bi bi-telephone-fill"></i>
+                        </div>
+                        <div>
+                            <strong class="d-block text-dark small">Teléfono Directo</strong>
+                            <span class="text-secondary fw-semibold small">{{ escuela_info.telefono|default:"0299 15-570-2824" }}</span>
                         </div>
                     </div>
 
-                    <div class="info-item">
-                        <div class="info-icon">✉️</div>
-                        <div class="info-text">
-                            <strong>Correo Electrónico</strong>
-                            <span>{{ escuela_info.email|default:"patagoniaescuelaprimaria@gmail.com" }}</span>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="info-icon-box">
+                            <i class="bi bi-envelope-fill"></i>
+                        </div>
+                        <div>
+                            <strong class="d-block text-dark small">Correo Electrónico</strong>
+                            <span class="text-secondary fw-semibold small text-break">{{ escuela_info.email|default:"patagoniaescuelaprimaria@gmail.com" }}</span>
                         </div>
                     </div>
 
-                    <div class="info-item">
-                        <div class="info-icon">⏰</div>
-                        <div class="info-text">
-                            <strong>Horario de Atención</strong>
-                            <span>Lunes a Viernes</span>
-                            <small>{{ escuela_info.horario|default:"07:00 a 19:00 hs" }}</small>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="info-icon-box">
+                            <i class="bi bi-clock-fill"></i>
+                        </div>
+                        <div>
+                            <strong class="d-block text-dark small">Horario de Atención</strong>
+                            <span class="text-secondary fw-semibold small">Lunes a Viernes de {{ escuela_info.horario|default:"07:00 a 19:00 hs" }}</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Tarjeta 2: Ubicación Dinámica y Mapa Interactivo -->
-            <div class="location-card">
-                <h3>Ubicación</h3>
+            <!-- TARJETA 2: UBICACIÓN Y MAPA EMBEBIDO -->
+            <div class="card-info-vip mb-0">
+                <h3 class="fw-bold fs-5 mb-1" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d);">
+                    Ubicación Establecimiento
+                </h3>
+                <p class="text-secondary small mb-3">
+                    <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                    <strong>{{ escuela_info.direccion|default:"Saavedra 750 (tira 1 B° 12 Sept.)" }}</strong> — Cipolletti, Río Negro
+                </p>
 
-                <div class="location-address">
-                    <strong>{{ escuela_info.direccion|default:"Saavedra 750 (tira 1 B° 12 Sept.)" }}</strong>
-                    <span>Cipolletti, Río Negro</span>
-                    <small>8324, Argentina</small>
-                </div>
-
-                <!-- Contenedor del Mapa Embebido de Google Maps -->
-                <div class="map-container" style="margin: 1.2rem 0; overflow: hidden; border-radius: 12px; border: 1px solid #e2e8f0;">
+                <div class="map-frame-wrapper">
                     <iframe 
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3102.53123456789!2d-67.9945!3d-38.9385!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x960a325000000000%3A0x0!2sSaavedra%20750%2C%20Cipolletti%2C%20R%C3%ADo%20Negro!5e0!3m2!1ses!2sar!4v1600000000000!5m2!1ses!2sar" 
                         width="100%" 
-                        height="200" 
+                        height="215" 
                         style="border:0; display: block;" 
                         allowfullscreen="" 
                         loading="lazy" 
@@ -168,11 +411,14 @@
                     </iframe>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
 
-<!-- SCRIPT PESTAÑAS (TABS) OPTIMIZADO -->
+        </div>
+
+    </div>
+
+</div>
+
+<!-- SCRIPT PESTAÑAS (TABS) CÁPSULA NEÓN -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const btnConsulta = document.getElementById('btn-consulta');

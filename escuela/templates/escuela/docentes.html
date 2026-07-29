@@ -3,35 +3,198 @@
 {% block title %}Cuerpo Docente - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
 
 {% block content %}
-<section class="novedades-container">
-    <div class="container py-4">
-        <div class="novedades-header mb-4">
-            <h2>Nuestro Cuerpo Docente</h2>
-        </div>
+<!-- ESTILOS EXCLUSIVOS CON DIFERENCIACIÓN REAL DE COLORES -->
+<style>
+    /* SECCIÓN CONTENEDORA */
+    .docentes-wrapper {
+        padding-top: 3.5rem;
+        padding-bottom: 4.5rem;
+    }
 
-        {% if docentes %}
-            <div class="benefits-grid">
-                {% for docente in docentes %}
-                    <article class="benefit-card text-center d-flex flex-column align-items-center">
-                        <div class="mb-3">
-                            {% if docente.foto %}
-                                <img src="{{ docente.foto.url }}" alt="{{ docente.nombre }}" class="rounded-circle shadow-sm" style="width: 120px; height: 120px; object-fit: cover; border: 3px solid var(--brand-green);">
-                            {% else %}
-                                <div class="rounded-circle d-flex align-items-center justify-content-center bg-light text-secondary border fw-bold" style="width: 120px; height: 120px; font-size: 2rem;">
-                                    {{ docente.nombre|slice:":1" }}
-                                </div>
-                            {% endif %}
-                        </div>
-                        
-                        <h3 class="mb-1">{{ docente.nombre }}</h3>
-                        <span class="badge bg-light text-dark border mb-2">{{ docente.get_nivel_display }}</span>
-                        <p class="text-muted small mb-0">{{ docente.cargo }}</p>
-                    </article>
-                {% endfor %}
-            </div>
-        {% else %}
-            <p class="text-muted">No hay miembros del cuerpo docente cargados por el momento.</p>
-        {% endif %}
+    /* ENCABEZADO DE PÁGINA */
+    .section-badge-vip {
+        background-color: rgba(31, 122, 63, 0.12);
+        color: var(--brand-green, #1f7a3f);
+        font-weight: 700;
+        font-size: 0.8rem;
+        letter-spacing: 0.06em;
+        border: 1px solid rgba(31, 122, 63, 0.25);
+    }
+
+    .docentes-title {
+        font-family: var(--font-titulo, 'Cinzel', serif);
+        color: var(--primary-navy, #1b365d);
+        font-weight: 800;
+        letter-spacing: -0.5px;
+    }
+
+    /* TARJETAS DE DOCENTES VIP */
+    .card-docente-vip {
+        background: #ffffff !important;
+        border: 2px solid #cbd5e1 !important;
+        border-radius: 24px !important;
+        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08) !important;
+        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        overflow: hidden;
+    }
+
+    .card-docente-vip:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 22px 45px rgba(15, 23, 42, 0.16) !important;
+    }
+
+    /* FOTOS Y AVATARES */
+    .docente-avatar {
+        width: 130px;
+        height: 130px;
+        object-fit: cover;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        transition: transform 0.35s ease;
+    }
+
+    .card-docente-vip:hover .docente-avatar {
+        transform: scale(1.05);
+    }
+
+    .docente-avatar-placeholder {
+        width: 130px;
+        height: 130px;
+        background-color: #e2e8f0;
+        border: 4px solid #94a3b8;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    /* ==========================================
+       PALETA DE COLORES SEGÚN CATEGORÍA
+       ========================================== */
+
+    /* 1. EQUIPO DIRECTIVO / AUTORIDADES (Gris Slate Noche) */
+    .border-directivo { border-color: #334155 !important; }
+    .bg-directivo { background-color: #334155 !important; }
+    .card-directivo:hover { border-color: #334155 !important; }
+
+    /* 2. NIVEL INICIAL (Verde Esmeralda) */
+    .border-inicial { border-color: #1f7a3f !important; }
+    .bg-inicial { background-color: #1f7a3f !important; }
+    .card-inicial:hover { border-color: #1f7a3f !important; }
+
+    /* 3. NIVEL PRIMARIO (Azul Marino) */
+    .border-primario { border-color: #1b365d !important; }
+    .bg-primario { background-color: #1b365d !important; }
+    .card-primario:hover { border-color: #1b365d !important; }
+
+    /* 4. NIVEL MEDIO / SECUNDARIO (Dorado Ámbar) */
+    .border-medio { border-color: #d97706 !important; }
+    .bg-medio { background-color: #d97706 !important; }
+    .card-medio:hover { border-color: #d97706 !important; }
+
+    .badge-nivel-docente {
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        color: #ffffff !important;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    /* ESTADO VACÍO */
+    .empty-docentes-box {
+        background-color: #ffffff;
+        border: 2px dashed #cbd5e1;
+        border-radius: 20px;
+        padding: 3.5rem 2rem;
+    }
+</style>
+
+<div class="container docentes-wrapper">
+    
+    <!-- ENCABEZADO PRINCIPAL DE LA VISTA -->
+    <div class="text-center mb-5" data-aos="fade-down">
+        <span class="badge section-badge-vip rounded-pill px-3 py-2 mb-3 d-inline-flex align-items-center gap-2">
+            <i class="bi bi-award-fill"></i> EXCELENCIA ACADÉMICA
+        </span>
+        <h1 class="display-5 mb-2 docentes-title">
+            Nuestro Cuerpo Docente
+        </h1>
+        <p class="text-secondary fs-6 mb-0 fw-medium mx-auto" style="max-width: 600px;">
+            Conocé a las autoridades y educadores comprometidos con la formación integral de nuestros alumnos.
+        </p>
     </div>
-</section>
+
+    {% if docentes %}
+        <!-- GRILLA RESPONSIVA DE DOCENTES -->
+        <div class="row g-4 justify-content-center">
+            {% for docente in docentes %}
+                
+                <!-- EVALUACIÓN DIRECTA DE PALABRAS CLAVE EN EL MODELO -->
+                {% with nivel_str=docente.get_nivel_display|default:docente.nivel|upper %}
+                    
+                    <div class="col-12 col-sm-6 col-lg-4 col-xl-3" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:1 }}00">
+                        
+                        <article class="card card-docente-vip h-100 p-4 text-center d-flex flex-column align-items-center justify-content-between 
+                            {% if 'DIRECTIV' in nivel_str or 'EQUIPO' in nivel_str or 'AUTORIDAD' in nivel_str %}card-directivo
+                            {% elif 'INICIAL' in nivel_str %}card-inicial
+                            {% elif 'PRIMAR' in nivel_str %}card-primario
+                            {% elif 'MEDIO' in nivel_str or 'SECUNDAR' in nivel_str %}card-medio
+                            {% else %}card-primario{% endif %}">
+                            
+                            <div class="w-100 d-flex flex-column align-items-center">
+                                <!-- FOTO / AVATAR CON BORDE DIFERENCIADO -->
+                                <div class="mb-3 position-relative">
+                                    {% if docente.foto %}
+                                        <img src="{{ docente.foto.url }}" alt="{{ docente.nombre }}" class="rounded-circle docente-avatar 
+                                            {% if 'DIRECTIV' in nivel_str or 'EQUIPO' in nivel_str or 'AUTORIDAD' in nivel_str %}border-directivo
+                                            {% elif 'INICIAL' in nivel_str %}border-inicial
+                                            {% elif 'PRIMAR' in nivel_str %}border-primario
+                                            {% elif 'MEDIO' in nivel_str or 'SECUNDAR' in nivel_str %}border-medio
+                                            {% else %}border-primario{% endif %}" style="border-width: 4px; border-style: solid;">
+                                    {% else %}
+                                        <div class="rounded-circle docente-avatar-placeholder d-flex align-items-center justify-content-center text-secondary 
+                                            {% if 'DIRECTIV' in nivel_str or 'EQUIPO' in nivel_str or 'AUTORIDAD' in nivel_str %}border-directivo
+                                            {% elif 'INICIAL' in nivel_str %}border-inicial
+                                            {% elif 'PRIMAR' in nivel_str %}border-primario
+                                            {% elif 'MEDIO' in nivel_str or 'SECUNDAR' in nivel_str %}border-medio
+                                            {% else %}border-primario{% endif %}" style="border-width: 4px; border-style: solid;">
+                                            <i class="bi bi-person-fill fs-1 opacity-50"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                                <!-- NOMBRE -->
+                                <h3 class="fw-bold fs-5 mb-2" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d); line-height: 1.3;">
+                                    {{ docente.nombre }}
+                                </h3>
+
+                                <!-- BADGE DE NIVEL CON COLOR PROPIO SEGÚN CATEGORÍA -->
+                                <span class="badge badge-nivel-docente rounded-pill px-3 py-2 mb-2 d-inline-flex align-items-center gap-1 
+                                    {% if 'DIRECTIV' in nivel_str or 'EQUIPO' in nivel_str or 'AUTORIDAD' in nivel_str %}bg-directivo
+                                    {% elif 'INICIAL' in nivel_str %}bg-inicial
+                                    {% elif 'PRIMAR' in nivel_str %}bg-primario
+                                    {% elif 'MEDIO' in nivel_str or 'SECUNDAR' in nivel_str %}bg-medio
+                                    {% else %}bg-primario{% endif %}">
+                                    <i class="bi bi-mortarboard-fill"></i>{{ docente.get_nivel_display|default:docente.nivel }}
+                                </span>
+                            </div>
+
+                            <!-- CARGO / FUNCIÓN -->
+                            <div class="pt-3 border-top w-100 mt-2">
+                                <p class="text-secondary small mb-0 fw-semibold">
+                                    <i class="bi bi-briefcase-fill me-1 text-success"></i>{{ docente.cargo }}
+                                </p>
+                            </div>
+                        </article>
+                    </div>
+
+                {% endwith %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <!-- ESTADO VACÍO -->
+        <div class="empty-docentes-box text-center mx-auto" style="max-width: 500px;" data-aos="fade-up">
+            <i class="bi bi-people-fill text-secondary opacity-50 display-3 mb-3 d-block"></i>
+            <h4 class="fw-bold fs-5 text-dark mb-1" style="font-family: var(--font-titulo, 'Cinzel', serif);">Sin Registros Cargados</h4>
+            <p class="text-muted small mb-0">No hay miembros del cuerpo docente o autoridades publicados por el momento.</p>
+        </div>
+    {% endif %}
+
+</div>
 {% endblock %}
