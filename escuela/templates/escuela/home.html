@@ -3,8 +3,29 @@
 {% block title %}Inicio - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
 
 {% block content %}
-<!-- ESTILOS SIN FRANJAS NI MARGENES EXTRA -->
+<!-- ESTILOS CON ANIMACIONES SUAVES Y NATIVAS (SIN INTERRUMPIR EL SCROLL) -->
 <style>
+    /* KEYFRAMES NATIVOS DE ENTRADA SUAVE */
+    @keyframes fadeInSuave {
+        from {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes pulseGlow {
+        0%, 100% {
+            box-shadow: 0 10px 28px rgba(15, 23, 42, 0.07);
+        }
+        50% {
+            box-shadow: 0 14px 35px rgba(31, 122, 63, 0.18);
+        }
+    }
+
     /* 1. HERO CON GRADIENTE AZUL NOCHE */
     .hero-vip {
         background: linear-gradient(135deg, #0b1526 0%, #172a45 50%, #0b1526 100%);
@@ -15,6 +36,7 @@
         padding-top: 3.5rem;
         padding-bottom: 4rem;
         margin: 0 !important;
+        animation: fadeInSuave 0.6s cubic-bezier(0.16, 1, 0.3, 1) ease-out;
     }
 
     .hero-vip::before {
@@ -52,13 +74,13 @@
         border: none;
         color: #ffffff !important;
         font-weight: 700;
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         box-shadow: 0 6px 20px rgba(31, 122, 63, 0.45);
     }
 
     .btn-pill-green:hover {
         background-color: #166534;
-        transform: translateY(-3px);
+        transform: translateY(-2px);
         box-shadow: 0 10px 25px rgba(31, 122, 63, 0.6);
     }
 
@@ -68,16 +90,57 @@
         color: #ffffff !important;
         font-weight: 700;
         backdrop-filter: blur(8px);
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .btn-pill-light:hover {
         background: rgba(255, 255, 255, 0.25);
-        border-color: #ffffff;
-        transform: translateY(-3px);
+        transform: translateY(-2px);
     }
 
-    /* 2. SECCIÓN NIVELES EDUCATIVOS */
+    /* 2. PILARES / POR QUÉ ELEGIRNOS */
+    .section-pilares-vip {
+        background-color: #ffffff !important;
+        padding-top: 4.5rem;
+        padding-bottom: 4.5rem;
+        border-bottom: 1px solid #cbd5e1;
+    }
+
+    .card-pilar-vip {
+        background: #f8fafc;
+        border: 2px solid #e2e8f0;
+        border-radius: 20px;
+        padding: 2rem 1.5rem;
+        height: 100%;
+        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .card-pilar-vip:hover {
+        transform: translateY(-4px);
+        border-color: var(--brand-green);
+        background: #ffffff;
+        box-shadow: 0 12px 30px rgba(31, 122, 63, 0.12);
+    }
+
+    .icon-pilar-box {
+        width: 60px;
+        height: 60px;
+        border-radius: 18px;
+        background: linear-gradient(135deg, rgba(31, 122, 63, 0.15) 0%, rgba(31, 122, 63, 0.05) 100%);
+        color: var(--brand-green);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+        margin-bottom: 1.25rem;
+        transition: transform 0.3s ease;
+    }
+
+    .card-pilar-vip:hover .icon-pilar-box {
+        transform: scale(1.1) rotate(-3deg);
+    }
+
+    /* 3. NIVELES EDUCATIVOS (ANIMACIONES SUAVES) */
     .section-niveles-vip {
         background-color: #e2e8f0 !important;
         border-bottom: 1px solid #cbd5e1;
@@ -86,31 +149,89 @@
         margin: 0 !important;
     }
 
+    .badge-kicker-vip {
+        background-color: rgba(31, 122, 63, 0.12);
+        color: var(--brand-green, #1f7a3f);
+        font-weight: 700;
+        font-size: 0.8rem;
+        letter-spacing: 0.08em;
+        border: 1px solid rgba(31, 122, 63, 0.25);
+    }
+
     .card-nivel-vip {
         background: #ffffff !important;
         border: 2px solid #cbd5e1 !important;
-        border-radius: 20px !important;
-        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08) !important;
-        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        border-radius: 24px !important;
+        box-shadow: 0 10px 28px rgba(15, 23, 42, 0.07) !important;
+        overflow: hidden;
+        position: relative;
+        will-change: transform, box-shadow;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                    border-color 0.4s ease !important;
     }
 
+    /* Animación de elevación suave e iluminación en hover */
     .card-nivel-vip:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.16) !important;
-        border-color: var(--brand-green) !important;
+        transform: translateY(-8px) scale(1.01);
+        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12) !important;
     }
 
-    .icon-square-vip {
-        width: 56px;
-        height: 56px;
+    .border-top-inicial { border-top: 6px solid var(--brand-green, #1f7a3f) !important; }
+    .border-top-primario { border-top: 6px solid var(--primary-navy, #1b365d) !important; }
+    .border-top-medio { border-top: 6px solid var(--accent-gold, #d97706) !important; }
+
+    .border-top-inicial:hover { border-color: #166534 !important; }
+    .border-top-primario:hover { border-color: #0f172a !important; }
+    .border-top-medio:hover { border-color: #b45309 !important; }
+
+    .icon-capsule-vip {
+        width: 52px;
+        height: 52px;
         border-radius: 16px;
-        display: inline-flex;
+        display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        font-size: 1.35rem;
+        color: #ffffff;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        flex-shrink: 0;
+        transition: transform 0.35s ease;
     }
 
-    /* 3. SECCIÓN NOTICIAS */
+    .card-nivel-vip:hover .icon-capsule-vip {
+        transform: scale(1.12);
+    }
+
+    .bg-icon-inicial { background: linear-gradient(135deg, #1f7a3f 0%, #165b2e 100%); }
+    .bg-icon-primario { background: linear-gradient(135deg, #1b365d 0%, #0f1e36 100%); }
+    .bg-icon-medio { background: linear-gradient(135deg, #d97706 0%, #b45309 100%); }
+
+    .badge-stage-vip {
+        background-color: #f1f5f9;
+        color: #334155;
+        font-weight: 700;
+        font-size: 0.78rem;
+        border: 1px solid #e2e8f0;
+    }
+
+    .btn-nivel-link {
+        color: var(--primary-navy, #1b365d);
+        font-weight: 700;
+        font-size: 0.88rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        transition: transform 0.25s ease, color 0.25s ease;
+    }
+
+    .btn-nivel-link:hover {
+        color: var(--brand-green, #1f7a3f);
+        transform: translateX(5px);
+    }
+
+    /* 4. SECCIÓN NOTICIAS */
     .section-noticias-vip {
         background-color: #f8fafc !important;
         border-bottom: 1px solid #cbd5e1;
@@ -119,65 +240,285 @@
         margin: 0 !important;
     }
 
-    .no-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
+    .badge-kicker-news {
+        background-color: rgba(31, 122, 63, 0.12);
+        color: var(--brand-green, #1f7a3f);
+        font-weight: 700;
+        font-size: 0.8rem;
+        letter-spacing: 0.08em;
+        border: 1px solid rgba(31, 122, 63, 0.25);
     }
-    .no-scrollbar::-webkit-scrollbar {
-        display: none;
+
+    .slider-controls-capsule {
+        background: #ffffff;
+        border: 2px solid #cbd5e1;
+        border-radius: 50rem;
+        padding: 0.35rem 0.5rem;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
     }
+
+    .btn-control-slider-vip {
+        background-color: transparent;
+        border: none;
+        color: var(--primary-navy, #1b365d);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+
+    .btn-control-slider-vip:hover {
+        background-color: var(--brand-green, #1f7a3f);
+        color: #ffffff !important;
+        transform: scale(1.05);
+    }
+
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
     .card-noticia-vip {
         width: 340px;
-        background-color: #ffffff !important;
+        background: #ffffff !important;
         border: 2px solid #cbd5e1 !important;
-        border-radius: 20px !important;
-        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.09) !important;
-        transition: all 0.35s ease !important;
+        border-radius: 24px !important;
+        box-shadow: 0 10px 28px rgba(15, 23, 42, 0.07) !important;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-self: flex-start;
+        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
     }
 
     .card-noticia-vip:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.18) !important;
-        border-color: #1b365d !important;
+        transform: translateY(-5px);
+        box-shadow: 0 16px 35px rgba(15, 23, 42, 0.12) !important;
+    }
+
+    .img-noticia-wrapper {
+        overflow: hidden;
+        height: 195px;
+        position: relative;
+        background-color: #e2e8f0;
+        flex-shrink: 0;
+    }
+
+    .img-noticia-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .card-noticia-vip:hover .img-noticia-wrapper img {
+        transform: scale(1.06);
     }
 
     .badge-categoria-vip {
-        background-color: #1b365d !important;
+        background-color: var(--primary-navy, #1b365d) !important;
         color: #ffffff !important;
-        font-size: 0.78rem;
+        font-size: 0.75rem;
         font-weight: 700;
         letter-spacing: 0.03em;
+        border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    .texto-recortado-3 {
+    .noticia-titulo {
+        font-family: var(--font-titulo, 'Cinzel', serif);
+        color: var(--primary-navy, #1b365d);
+        line-height: 1.35;
+        font-size: 1.15rem;
+        margin-bottom: 0.6rem;
+    }
+
+    .texto-resumen {
+        color: #64748b;
+        font-size: 0.88rem;
+        line-height: 1.6;
+        font-weight: 500;
+        margin-bottom: 0;
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
-        text-overflow: ellipsis;
-        line-height: 1.55;
     }
 
-    .btn-control-slider {
-        background-color: #1b365d !important;
-        color: #ffffff !important;
-        border: none !important;
+    .texto-completo {
+        color: #334155;
+        font-size: 0.9rem;
+        line-height: 1.65;
+        font-weight: 500;
+        white-space: pre-line;
+        display: none;
+    }
+
+    .card-noticia-vip.expanded .texto-resumen { display: none; }
+    .card-noticia-vip.expanded .texto-completo { display: block; }
+
+    .btn-toggle-noticia {
+        background: transparent;
+        border: none;
+        color: var(--brand-green, #1f7a3f);
+        font-weight: 700;
+        font-size: 0.85rem;
+        padding: 0;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    /* 5. GALERÍA PANORÁMICA (ANIMACIÓN CINEMÁTICA Y ZOOM SUAVE) */
+    .section-galeria-vip {
+        padding: 5rem 0;
+        background: linear-gradient(180deg, #0b1526 0%, #050a12 100%);
+        position: relative;
+        overflow: hidden;
+        border-top: 4px solid var(--brand-green, #1f7a3f);
+        border-bottom: 4px solid var(--brand-green, #1f7a3f);
+    }
+
+    .badge-kicker-galeria {
+        background-color: rgba(74, 222, 128, 0.12);
+        color: #4ade80;
+        font-weight: 700;
+        font-size: 0.8rem;
+        letter-spacing: 0.08em;
+        border: 1px solid rgba(74, 222, 128, 0.25);
+    }
+
+    .galeria-controls-capsule {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        backdrop-filter: blur(10px);
+        border-radius: 50rem;
+        padding: 0.35rem 0.5rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .btn-control-galeria-vip {
+        background-color: transparent;
+        border: none;
+        color: #ffffff;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
         transition: all 0.25s ease;
     }
 
-    .btn-control-slider:hover {
-        background-color: var(--brand-green) !important;
+    .btn-control-galeria-vip:hover {
+        background-color: var(--brand-green, #1f7a3f);
         transform: scale(1.08);
     }
 
-    /* 4. SECCIÓN GALERÍA CON CONTINUIDAD DIRECTA AL FOOTER */
-    .section-galeria-vip {
-        background-color: #0b1526;
+    /* TARJETAS GALERÍA CON EFECTO DE ZOOM Y ELEVACIÓN FLUIDA */
+    .card-galeria-item {
+        width: 360px;
+        height: 240px;
+        border-radius: 22px !important;
+        border: 2px solid rgba(255, 255, 255, 0.15) !important;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5) !important;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+        background-color: #000000;
+        will-change: transform, border-color, box-shadow;
+        transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+                    border-color 0.45s ease, 
+                    box-shadow 0.45s ease !important;
+    }
+
+    .card-galeria-item:hover {
+        transform: translateY(-6px) scale(1.02);
+        border-color: #4ade80 !important;
+        box-shadow: 0 20px 40px rgba(31, 122, 63, 0.35) !important;
+    }
+
+    .card-galeria-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .card-galeria-item:hover img {
+        transform: scale(1.08);
+    }
+
+    .galeria-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(5, 10, 18, 0.75) 100%);
+        opacity: 0.6;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 1rem;
+        transition: opacity 0.35s ease;
+    }
+
+    .card-galeria-item:hover .galeria-overlay {
+        opacity: 0.95;
+    }
+
+    /* ÍCONO DE ZOOM CON ESCALA SUAVE */
+    .galeria-zoom-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.6);
+        width: 52px;
+        height: 52px;
+        background: rgba(31, 122, 63, 0.88);
+        border: 1px solid rgba(74, 222, 128, 0.5);
         color: #ffffff;
-        padding-top: 4.5rem;
-        padding-bottom: 4.5rem;
-        margin: 0 !important;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.35rem;
+        opacity: 0;
+        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .card-galeria-item:hover .galeria-zoom-icon {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    .lightbox-modal-content {
+        background-color: rgba(5, 10, 18, 0.95) !important;
+        border: 2px solid rgba(255, 255, 255, 0.15) !important;
+        border-radius: 28px !important;
+        backdrop-filter: blur(16px);
+        overflow: hidden;
+    }
+
+    .lightbox-img-full {
+        max-height: 75vh;
+        width: 100%;
+        object-fit: contain;
+    }
+
+    @media (max-width: 576px) {
+        .card-noticia-vip, .card-galeria-item {
+            width: 82vw !important;
+            max-width: 320px !important;
+        }
     }
 </style>
 
@@ -187,7 +528,7 @@
 <section class="hero-vip">
     <div class="container position-relative z-1">
         <div class="row align-items-center g-5">
-            <div class="col-12 col-lg-7" data-aos="fade-right">
+            <div class="col-12 col-lg-7">
                 <span class="badge hero-badge-vip rounded-pill px-3 py-2 mb-3 d-inline-flex align-items-center gap-2">
                     <i class="bi bi-award-fill"></i>{{ escuela_info.hero_tag|default:"EDUCACIÓN INSTITUCIONAL" }}
                 </span>
@@ -211,9 +552,9 @@
                 </div>
             </div>
             
-            <div class="col-12 col-lg-5 text-center" data-aos="zoom-in" data-aos-delay="200">
+            <div class="col-12 col-lg-5 text-center">
                 {% if escuela_info.hero_imagen %}
-                    <img src="{{ escuela_info.hero_imagen.url }}" alt="{{ escuela_info.nombre|default:'Colegio Patagonia' }}" class="img-fluid rounded-4 shadow-lg border border-4 border-white">
+                    <img src="{{ escuela_info.hero_imagen.url }}" alt="{{ escuela_info.nombre|default:'Colegio Patagonia' }}" class="img-fluid rounded-4 shadow-lg border border-4 border-white" loading="lazy">
                 {% else %}
                     <div class="p-5 bg-white rounded-4 shadow-lg text-muted border border-4 border-white">
                         <i class="bi bi-building fs-1 d-block mb-2 text-success"></i>
@@ -226,119 +567,74 @@
 </section>
 
 <!-- ==========================================
-     2. NIVELES EDUCATIVOS (SECCIÓN VIP)
+     2. PILARES INSTITUCIONALES
      ========================================== -->
-<style>
-    /* CONTENEDOR Y ESPACIADO */
-    .section-niveles-vip {
-        padding: 4.5rem 0;
-    }
+<section class="section-pilares-vip">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="badge badge-kicker-vip rounded-pill px-3 py-2 mb-3 d-inline-flex align-items-center gap-2">
+                <i class="bi bi-star-fill"></i> NUESTRA PROPUESTA
+            </span>
+            <h2 class="fw-bold mb-2" style="font-family: var(--font-titulo, 'Cinzel', serif); font-size: 2.2rem; color: var(--primary-navy, #1b365d); letter-spacing: -0.5px;">
+                ¿Por qué elegir Colegio Patagonia?
+            </h2>
+            <p class="text-secondary fs-6 mb-0 fw-medium mx-auto" style="max-width: 580px;">
+                Brindamos una formación integral sustentada en la excelencia académica y valores humanos.
+            </p>
+        </div>
 
-    .badge-kicker-vip {
-        background-color: rgba(31, 122, 63, 0.12);
-        color: var(--brand-green, #1f7a3f);
-        font-weight: 700;
-        font-size: 0.8rem;
-        letter-spacing: 0.08em;
-        border: 1px solid rgba(31, 122, 63, 0.25);
-    }
+        <div class="row g-4">
+            <div class="col-12 col-md-4">
+                <article class="card-pilar-vip">
+                    <div class="icon-pilar-box">
+                        <i class="bi bi-lightbulb-fill"></i>
+                    </div>
+                    <h3 class="fw-bold fs-5 mb-2" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d);">
+                        Pensamiento Crítico
+                    </h3>
+                    <p class="text-secondary small mb-0" style="line-height: 1.6;">
+                        Estimulamos la curiosidad intelectual, el razonamiento autónomo y la resolución creativa de problemas desde edades tempranas.
+                    </p>
+                </article>
+            </div>
 
-    /* TARJETAS VIP DE NIVELES */
-    .card-nivel-vip {
-        background: #ffffff !important;
-        border: 2px solid #cbd5e1 !important;
-        border-radius: 24px !important;
-        box-shadow: 0 10px 28px rgba(15, 23, 42, 0.07) !important;
-        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
-        overflow: hidden;
-        position: relative;
-    }
+            <div class="col-12 col-md-4">
+                <article class="card-pilar-vip">
+                    <div class="icon-pilar-box">
+                        <i class="bi bi-heart-pulse-fill"></i>
+                    </div>
+                    <h3 class="fw-bold fs-5 mb-2" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d);">
+                        Formación Humana
+                    </h3>
+                    <p class="text-secondary small mb-0" style="line-height: 1.6;">
+                        Promovemos la empatía, el respeto mutuo y la convivencia armónica a través de proyectos solidarios y contención personal.
+                    </p>
+                </article>
+            </div>
 
-    .card-nivel-vip:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 22px 45px rgba(15, 23, 42, 0.15) !important;
-    }
+            <div class="col-12 col-md-4">
+                <article class="card-pilar-vip">
+                    <div class="icon-pilar-box">
+                        <i class="bi bi-laptop-fill"></i>
+                    </div>
+                    <h3 class="fw-bold fs-5 mb-2" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d);">
+                        Idiomas y Tecnología
+                    </h3>
+                    <p class="text-secondary small mb-0" style="line-height: 1.6;">
+                        Integración de inglés intensivo y recursos digitales interactivos para preparar a los estudiantes para los desafíos globales.
+                    </p>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
 
-    /* BORDES SUPERIORES POR NIVEL */
-    .border-top-inicial {
-        border-top: 6px solid var(--brand-green, #1f7a3f) !important;
-    }
-    .border-top-inicial:hover {
-        border-color: var(--brand-green, #1f7a3f) !important;
-    }
-
-    .border-top-primario {
-        border-top: 6px solid var(--primary-navy, #1b365d) !important;
-    }
-    .border-top-primario:hover {
-        border-color: var(--primary-navy, #1b365d) !important;
-    }
-
-    .border-top-medio {
-        border-top: 6px solid var(--accent-gold, #d97706) !important;
-    }
-    .border-top-medio:hover {
-        border-color: var(--accent-gold, #d97706) !important;
-    }
-
-    /* CÁPSULAS PARA ÍCONOS */
-    .icon-capsule-vip {
-        width: 52px;
-        height: 52px;
-        border-radius: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.35rem;
-        color: #ffffff;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-        flex-shrink: 0;
-    }
-
-    .bg-icon-inicial {
-        background: linear-gradient(135deg, #1f7a3f 0%, #165b2e 100%);
-    }
-
-    .bg-icon-primario {
-        background: linear-gradient(135deg, #1b365d 0%, #0f1e36 100%);
-    }
-
-    .bg-icon-medio {
-        background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
-    }
-
-    /* BADGES DE ALCANCE (EDADES/AÑOS) */
-    .badge-stage-vip {
-        background-color: #f1f5f9;
-        color: #334155;
-        font-weight: 700;
-        font-size: 0.78rem;
-        border: 1px solid #e2e8f0;
-    }
-
-    /* BOTÓN LINK SECUNDARIO */
-    .btn-nivel-link {
-        color: var(--primary-navy, #1b365d);
-        font-weight: 700;
-        font-size: 0.88rem;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        transition: all 0.25s ease;
-    }
-
-    .btn-nivel-link:hover {
-        color: var(--brand-green, #1f7a3f);
-        transform: translateX(4px);
-    }
-</style>
-
+<!-- ==========================================
+     3. NIVELES EDUCATIVOS
+     ========================================== -->
 <section class="section-niveles-vip">
     <div class="container">
-        
-        <!-- ENCABEZADO DE SECCIÓN -->
-        <div class="text-center mb-5" data-aos="fade-down">
+        <div class="text-center mb-5">
             <span class="badge badge-kicker-vip rounded-pill px-3 py-2 mb-3 d-inline-flex align-items-center gap-2">
                 <i class="bi bi-diagram-3-fill"></i> TRAYECTORIA EDUCATIVA
             </span>
@@ -350,11 +646,8 @@
             </p>
         </div>
 
-        <!-- GRILLA DE TARJETAS -->
         <div class="row g-4 justify-content-center">
-            
-            <!-- NIVEL INICIAL -->
-            <div class="col-12 col-md-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="col-12 col-md-4">
                 <article class="card card-nivel-vip border-top-inicial h-100 p-4 d-flex flex-column justify-content-between">
                     <div>
                         <div class="d-flex align-items-center justify-content-between mb-3">
@@ -365,16 +658,13 @@
                                 Salas de 3, 4 y 5 años
                             </span>
                         </div>
-
                         <h3 class="card-title fw-bold mb-2" style="font-family: var(--font-titulo, 'Cinzel', serif); font-size: 1.35rem; color: var(--primary-navy, #1b365d);">
                             Nivel Inicial
                         </h3>
-
                         <p class="card-text text-secondary small mb-4" style="line-height: 1.65; font-weight: 500;">
                             Estimulación temprana, aprendizaje basado en el juego, socialización, hábitos de convivencia y desarrollo de la expresión artística.
                         </p>
                     </div>
-
                     <div class="pt-3 border-top">
                         <a href="{% url 'escuela:requisitos' %}" class="btn-nivel-link">
                             Ver requisitos de ingreso <i class="bi bi-arrow-right-short fs-5"></i>
@@ -383,8 +673,7 @@
                 </article>
             </div>
 
-            <!-- NIVEL PRIMARIO -->
-            <div class="col-12 col-md-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="col-12 col-md-4">
                 <article class="card card-nivel-vip border-top-primario h-100 p-4 d-flex flex-column justify-content-between">
                     <div>
                         <div class="d-flex align-items-center justify-content-between mb-3">
@@ -395,16 +684,13 @@
                                 1º a 7º grado
                             </span>
                         </div>
-
                         <h3 class="card-title fw-bold mb-2" style="font-family: var(--font-titulo, 'Cinzel', serif); font-size: 1.35rem; color: var(--primary-navy, #1b365d);">
                             Nivel Primario
                         </h3>
-
                         <p class="card-text text-secondary small mb-4" style="line-height: 1.65; font-weight: 500;">
                             Consolidación del pensamiento lógico-matemático, lectocomprensión intensiva, idioma inglés y formación en valores ciudadanos.
                         </p>
                     </div>
-
                     <div class="pt-3 border-top">
                         <a href="{% url 'escuela:requisitos' %}" class="btn-nivel-link">
                             Ver requisitos de ingreso <i class="bi bi-arrow-right-short fs-5"></i>
@@ -413,8 +699,7 @@
                 </article>
             </div>
 
-            <!-- NIVEL MEDIO -->
-            <div class="col-12 col-md-4" data-aos="fade-up" data-aos-delay="300">
+            <div class="col-12 col-md-4">
                 <article class="card card-nivel-vip border-top-medio h-100 p-4 d-flex flex-column justify-content-between">
                     <div>
                         <div class="d-flex align-items-center justify-content-between mb-3">
@@ -425,16 +710,13 @@
                                 1º y 2º año
                             </span>
                         </div>
-
                         <h3 class="card-title fw-bold mb-2" style="font-family: var(--font-titulo, 'Cinzel', serif); font-size: 1.35rem; color: var(--primary-navy, #1b365d);">
                             Nivel Medio
                         </h3>
-
                         <p class="card-text text-secondary small mb-4" style="line-height: 1.65; font-weight: 500;">
                             Formación integral con orientación metodológica, autonomía de estudio, pensamiento crítico y proyectos pedagógicos grupales.
                         </p>
                     </div>
-
                     <div class="pt-3 border-top">
                         <a href="{% url 'escuela:requisitos' %}" class="btn-nivel-link">
                             Ver requisitos de ingreso <i class="bi bi-arrow-right-short fs-5"></i>
@@ -442,184 +724,16 @@
                     </div>
                 </article>
             </div>
-
         </div>
     </div>
 </section>
 
 <!-- ==========================================
-     3. NOTICIAS RECIENTES (EXPANSIÓN EN TARJETA)
+     4. NOTICIAS RECIENTES
      ========================================== -->
-<style>
-    /* CONTENEDOR Y PADDING */
-    .section-noticias-vip {
-        padding: 4.5rem 0;
-        background-color: #f8fafc;
-    }
-
-    .badge-kicker-news {
-        background-color: rgba(31, 122, 63, 0.12);
-        color: var(--brand-green, #1f7a3f);
-        font-weight: 700;
-        font-size: 0.8rem;
-        letter-spacing: 0.08em;
-        border: 1px solid rgba(31, 122, 63, 0.25);
-    }
-
-    /* BOTONERA CÁPSULA VIP DE CONTROL */
-    .slider-controls-capsule {
-        background: #ffffff;
-        border: 2px solid #cbd5e1;
-        border-radius: 50rem;
-        padding: 0.35rem 0.5rem;
-        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-    }
-
-    .btn-control-slider-vip {
-        background-color: transparent;
-        border: none;
-        color: var(--primary-navy, #1b365d);
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        cursor: pointer;
-    }
-
-    .btn-control-slider-vip:hover {
-        background-color: var(--brand-green, #1f7a3f);
-        color: #ffffff !important;
-        box-shadow: 0 4px 12px rgba(31, 122, 63, 0.35);
-        transform: scale(1.08);
-    }
-
-    /* OCULTAR SCROLLBAR MANTENIENDO EL SCROLL */
-    .no-scrollbar::-webkit-scrollbar {
-        display: none;
-    }
-    .no-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
-
-    /* TARJETAS DE NOTICIAS VIP CON ADAPTABILIDAD AL EXPANDIR */
-    .card-noticia-vip {
-        width: 340px;
-        background: #ffffff !important;
-        border: 2px solid #cbd5e1 !important;
-        border-radius: 24px !important;
-        box-shadow: 0 10px 28px rgba(15, 23, 42, 0.07) !important;
-        transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        align-self: flex-start; /* Permite que la tarjeta crezca hacia abajo sin deformar las de al lado */
-    }
-
-    .card-noticia-vip:hover {
-        box-shadow: 0 18px 38px rgba(15, 23, 42, 0.12) !important;
-        border-color: var(--brand-green, #1f7a3f) !important;
-    }
-
-    /* IMAGEN DE LA NOTICIA */
-    .img-noticia-wrapper {
-        overflow: hidden;
-        height: 195px;
-        position: relative;
-        background-color: #e2e8f0;
-        flex-shrink: 0;
-    }
-
-    .img-noticia-wrapper img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.4s ease;
-    }
-
-    .card-noticia-vip:hover .img-noticia-wrapper img {
-        transform: scale(1.05);
-    }
-
-    /* BADGE CATEGORÍA */
-    .badge-categoria-vip {
-        background-color: var(--primary-navy, #1b365d) !important;
-        color: #ffffff !important;
-        font-size: 0.75rem;
-        font-weight: 700;
-        letter-spacing: 0.03em;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .noticia-titulo {
-        font-family: var(--font-titulo, 'Cinzel', serif);
-        color: var(--primary-navy, #1b365d);
-        line-height: 1.35;
-        font-size: 1.15rem;
-        margin-bottom: 0.6rem;
-    }
-
-    /* LÓGICA DE TEXTO CORTO Y TEXTO COMPLETO */
-    .texto-resumen {
-        color: #64748b;
-        font-size: 0.88rem;
-        line-height: 1.6;
-        font-weight: 500;
-        margin-bottom: 0;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-
-    .texto-completo {
-        color: #334155;
-        font-size: 0.9rem;
-        line-height: 1.65;
-        font-weight: 500;
-        white-space: pre-line;
-        display: none; /* Oculto por defecto hasta expandir */
-    }
-
-    /* ESTADO EXPANDIDO DE LA TARJETA */
-    .card-noticia-vip.expanded .texto-resumen {
-        display: none;
-    }
-
-    .card-noticia-vip.expanded .texto-completo {
-        display: block;
-    }
-
-    .btn-toggle-noticia {
-        background: transparent;
-        border: none;
-        color: var(--brand-green, #1f7a3f);
-        font-weight: 700;
-        font-size: 0.85rem;
-        padding: 0;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.3rem;
-        transition: color 0.2s ease;
-    }
-
-    .btn-toggle-noticia:hover {
-        color: #166534;
-    }
-</style>
-
 <section class="section-noticias-vip">
     <div class="container">
-        
-        <!-- ENCABEZADO Y CONTROLES DEL SLIDER -->
-        <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3" data-aos="fade-up">
+        <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
             <div>
                 <span class="badge badge-kicker-news rounded-pill px-3 py-2 mb-2 d-inline-flex align-items-center gap-2">
                     <i class="bi bi-newspaper"></i> COMUNIDAD EN ACCIÓN
@@ -630,7 +744,6 @@
                 <p class="text-secondary fs-6 mb-0 fw-medium">Novedades, eventos y comunicados de nuestra institución</p>
             </div>
             
-            <!-- BOTONERA CÁPSULA ESTILIZADA -->
             <div class="slider-controls-capsule">
                 <button id="slide-left" type="button" aria-label="Noticia anterior" class="btn-control-slider-vip">
                     <i class="bi bi-arrow-left fs-5"></i>
@@ -643,15 +756,12 @@
         </div>
         
         {% if noticias %}
-            <!-- CONTENEDOR DESLIZABLE DE TARJETAS (ALIGN-ITEMS-START PARA EXPANSIÓN INDIVIDUAL) -->
             <div class="d-flex gap-4 overflow-x-auto pb-4 pt-2 no-scrollbar align-items-start" id="news-slider" style="scroll-behavior: smooth;">
                 {% for noticia in noticias %}
-                    <article class="card card-noticia-vip flex-shrink-0" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:1 }}00">
-                        
-                        <!-- IMAGEN O PLACEHOLDER -->
+                    <article class="card card-noticia-vip flex-shrink-0">
                         <div class="img-noticia-wrapper">
                             {% if noticia.imagen %}
-                                <img src="{{ noticia.imagen.url }}" alt="{{ noticia.titulo }}">
+                                <img src="{{ noticia.imagen.url }}" alt="{{ noticia.titulo }}" loading="lazy">
                             {% else %}
                                 <div class="w-100 h-100 d-flex align-items-center justify-content-center text-secondary">
                                     <i class="bi bi-newspaper display-4 opacity-50"></i>
@@ -659,7 +769,6 @@
                             {% endif %}
                         </div>
 
-                        <!-- CUERPO DE LA TARJETA -->
                         <div class="card-body p-4 d-flex flex-column justify-content-between flex-grow-1">
                             <div>
                                 <span class="badge badge-categoria-vip rounded-pill px-3 py-1.5 mb-3 d-inline-flex align-items-center gap-1">
@@ -670,12 +779,10 @@
                                     {{ noticia.titulo }}
                                 </h3>
 
-                                <!-- TEXTO RESUMEN (POR DEFECTO) -->
                                 <p class="texto-resumen">
                                     {{ noticia.descripcion|striptags }}
                                 </p>
 
-                                <!-- TEXTO COMPLETO (AL EXPANDIR) -->
                                 <div class="texto-completo">
                                     {{ noticia.descripcion|striptags }}
                                 </div>
@@ -694,33 +801,98 @@
                 {% endfor %}
             </div>
         {% else %}
-            <!-- ESTADO VACÍO -->
-            <div class="bg-white p-5 rounded-4 border border-2 text-center my-3" data-aos="fade-up">
+            <div class="bg-white p-5 rounded-4 border border-2 text-center my-3">
                 <i class="bi bi-inbox-fill text-secondary opacity-50 display-4 mb-3 d-block"></i>
                 <p class="text-muted fw-semibold mb-0">No hay novedades publicadas por el momento.</p>
             </div>
         {% endif %}
-
     </div>
 </section>
 
-<!-- SCRIPT AUTOCONTENIDO (SLIDER + EXPANSIÓN EN TARJETA) -->
+<!-- ==========================================
+     5. GALERÍA DE LA ESCUELA
+     ========================================== -->
+{% if carrusel %}
+<section class="section-galeria-vip">
+    <div class="container position-relative z-1">
+        <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
+            <div>
+                <span class="badge badge-kicker-galeria rounded-pill px-3 py-2 mb-2 d-inline-flex align-items-center gap-2">
+                    <i class="bi bi-camera-fill"></i> NUESTRAS INSTALACIONES
+                </span>
+                <h2 class="fw-bold mb-1 text-white" style="font-family: var(--font-titulo, 'Cinzel', serif); font-size: 2.2rem; letter-spacing: -0.5px;">
+                    Galería de la Escuela
+                </h2>
+                <p class="text-white-50 fs-6 mb-0 fw-medium">Un recorrido visual por nuestra infraestructura, espacios y vida institucional</p>
+            </div>
+            
+            <div class="galeria-controls-capsule">
+                <button id="carrusel-left" type="button" aria-label="Foto anterior" class="btn-control-galeria-vip">
+                    <i class="bi bi-arrow-left fs-5"></i>
+                </button>
+                <div style="width: 1px; height: 20px; background-color: rgba(255, 255, 255, 0.2);"></div>
+                <button id="carrusel-right" type="button" aria-label="Siguiente foto" class="btn-control-galeria-vip">
+                    <i class="bi bi-arrow-right fs-5"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="d-flex gap-4 overflow-x-auto pb-4 pt-2 no-scrollbar" id="carousel-slider" style="scroll-behavior: smooth;">
+            {% for item in carrusel %}
+                <article class="card-galeria-item flex-shrink-0 btn-open-lightbox" 
+                         data-img-url="{% if item.imagen %}{{ item.imagen.url }}{% endif %}">
+                    {% if item.imagen %}
+                        <img src="{{ item.imagen.url }}" alt="Galería Institucional" loading="lazy">
+                    {% endif %}
+                    
+                    <div class="galeria-zoom-icon">
+                        <i class="bi bi-zoom-in"></i>
+                    </div>
+
+                    <div class="galeria-overlay">
+                        <small class="text-white-50 fw-semibold" style="font-size: 0.8rem;">
+                            <i class="bi bi-geo-alt-fill text-success me-1"></i>Campus Escolar
+                        </small>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- MODAL LIGHTBOX -->
+<div class="modal fade" id="lightboxModalVIP" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content lightbox-modal-content text-white">
+            <div class="modal-header border-0 pb-0 justify-content-between align-items-center">
+                <h5 class="modal-title fw-bold text-white-50 fs-6" style="font-family: var(--font-titulo, 'Cinzel', serif);">
+                    <i class="bi bi-building me-2 text-success"></i>Instalaciones - Colegio Patagonia
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body text-center p-3 p-md-4">
+                <img src="" id="lightboxImg" class="lightbox-img-full rounded-4 shadow-lg" alt="Foto ampliada">
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- SCRIPT UNIFICADO Y OPTIMIZADO -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // 1. SCROLL HORIZONTAL DEL SLIDER
-        const slider = document.getElementById('news-slider');
-        const btnLeft = document.getElementById('slide-left');
-        const btnRight = document.getElementById('slide-right');
+        // 1. SLIDER NOTICIAS
+        const newsSlider = document.getElementById('news-slider');
+        const newsLeft = document.getElementById('slide-left');
+        const newsRight = document.getElementById('slide-right');
 
-        if (slider && btnLeft && btnRight) {
-            const scrollAmount = 364;
-            btnLeft.addEventListener('click', () => slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' }));
-            btnRight.addEventListener('click', () => slider.scrollBy({ left: scrollAmount, behavior: 'smooth' }));
+        if (newsSlider && newsLeft && newsRight) {
+            newsLeft.addEventListener('click', () => newsSlider.scrollBy({ left: -364, behavior: 'smooth' }));
+            newsRight.addEventListener('click', () => newsSlider.scrollBy({ left: 364, behavior: 'smooth' }));
         }
 
-        // 2. LÓGICA PARA EXPANDIR / COLAPSAR LA TARJETA
+        // 2. EXPANSIÓN DE NOTICIAS
         const toggleButtons = document.querySelectorAll('.btn-toggle-noticia');
-
         if (toggleButtons) {
             toggleButtons.forEach(btn => {
                 btn.addEventListener('click', (e) => {
@@ -741,268 +913,14 @@
                 });
             });
         }
-    });
-</script>
-<!-- ==========================================
-     4. GALERÍA DE LA ESCUELA (SECCIÓN VIP PANORÁMICA)
-     ========================================== -->
-{% if carrusel %}
-<style>
-    /* CONTENEDOR NOCTURNO PANORÁMICO */
-    .section-galeria-vip {
-        padding: 5rem 0;
-        background: linear-gradient(180deg, #0b1526 0%, #050a12 100%);
-        position: relative;
-        overflow: hidden;
-        border-top: 4px solid var(--brand-green, #1f7a3f);
-        border-bottom: 4px solid var(--brand-green, #1f7a3f);
-    }
 
-    /* EFECTO GLOW RADIAL DE FONDO */
-    .section-galeria-vip::before {
-        content: '';
-        position: absolute;
-        top: -20%;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 600px;
-        height: 600px;
-        background: radial-gradient(circle, rgba(31, 122, 63, 0.18) 0%, rgba(0, 0, 0, 0) 70%);
-        pointer-events: none;
-    }
-
-    .badge-kicker-galeria {
-        background-color: rgba(74, 222, 128, 0.12);
-        color: #4ade80;
-        font-weight: 700;
-        font-size: 0.8rem;
-        letter-spacing: 0.08em;
-        border: 1px solid rgba(74, 222, 128, 0.25);
-    }
-
-    /* BOTONERA CÁPSULA GLASSMORPHISM */
-    .galeria-controls-capsule {
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        backdrop-filter: blur(10px);
-        border-radius: 50rem;
-        padding: 0.35rem 0.5rem;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-    }
-
-    .btn-control-galeria-vip {
-        background-color: transparent;
-        border: none;
-        color: #ffffff;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        cursor: pointer;
-    }
-
-    .btn-control-galeria-vip:hover {
-        background-color: var(--brand-green, #1f7a3f);
-        color: #ffffff !important;
-        box-shadow: 0 0 12px rgba(74, 222, 128, 0.5);
-        transform: scale(1.08);
-    }
-
-    /* OCULTAR SCROLLBAR */
-    .no-scrollbar::-webkit-scrollbar {
-        display: none;
-    }
-    .no-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
-
-    /* TARJETAS DE FOTOS GALERÍA VIP */
-    .card-galeria-item {
-        width: 360px;
-        height: 240px;
-        border-radius: 22px !important;
-        border: 2px solid rgba(255, 255, 255, 0.15) !important;
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5) !important;
-        overflow: hidden;
-        position: relative;
-        cursor: pointer;
-        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
-        background-color: #000000;
-    }
-
-    .card-galeria-item:hover {
-        transform: translateY(-8px) scale(1.02);
-        border-color: #4ade80 !important;
-        box-shadow: 0 20px 40px rgba(31, 122, 63, 0.4) !important;
-    }
-
-    .card-galeria-item img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.5s ease;
-    }
-
-    .card-galeria-item:hover img {
-        transform: scale(1.08);
-    }
-
-    /* OVERLAY MINIMALISTA (SIN TEXTOS/NOMBRES) */
-    .galeria-overlay {
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(5, 10, 18, 0.75) 100%);
-        opacity: 0.6;
-        transition: opacity 0.3s ease;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-        padding: 1rem;
-    }
-
-    .card-galeria-item:hover .galeria-overlay {
-        opacity: 1;
-        background: linear-gradient(180deg, rgba(0,0,0,0.1) 30%, rgba(5, 10, 18, 0.85) 100%);
-    }
-
-    .galeria-zoom-icon {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) scale(0.6);
-        width: 52px;
-        height: 52px;
-        background: rgba(31, 122, 63, 0.85);
-        border: 1px solid rgba(74, 222, 128, 0.5);
-        color: #ffffff;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.35rem;
-        opacity: 0;
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
-    }
-
-    .card-galeria-item:hover .galeria-zoom-icon {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-    }
-
-    /* MODAL LIGHTBOX EN PANTALLA COMPLETA */
-    .lightbox-modal-content {
-        background-color: rgba(5, 10, 18, 0.95) !important;
-        border: 2px solid rgba(255, 255, 255, 0.15) !important;
-        border-radius: 28px !important;
-        backdrop-filter: blur(16px);
-        overflow: hidden;
-    }
-
-    .lightbox-img-full {
-        max-height: 75vh;
-        width: 100%;
-        object-fit: contain;
-    }
-</style>
-
-<section class="section-galeria-vip" data-aos="fade-up">
-    <div class="container position-relative z-1">
-        
-        <!-- ENCABEZADO DE SECCIÓN CON CORRECCIÓN EN KICKER -->
-        <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
-            <div>
-                <span class="badge badge-kicker-galeria rounded-pill px-3 py-2 mb-2 d-inline-flex align-items-center gap-2">
-                    <i class="bi bi-camera-fill"></i> NUESTRAS INSTALACIONES
-                </span>
-                <h2 class="fw-bold mb-1 text-white" style="font-family: var(--font-titulo, 'Cinzel', serif); font-size: 2.2rem; letter-spacing: -0.5px;">
-                    Galería de la Escuela
-                </h2>
-                <p class="text-white-50 fs-6 mb-0 fw-medium">Un recorrido visual por nuestra infraestructura, espacios y vida institucional</p>
-            </div>
-            
-            <!-- CONTROLES GLASSMORPHISM -->
-            <div class="galeria-controls-capsule">
-                <button id="carrusel-left" type="button" aria-label="Foto anterior" class="btn-control-galeria-vip">
-                    <i class="bi bi-arrow-left fs-5"></i>
-                </button>
-                <div style="width: 1px; height: 20px; background-color: rgba(255, 255, 255, 0.2);"></div>
-                <button id="carrusel-right" type="button" aria-label="Siguiente foto" class="btn-control-galeria-vip">
-                    <i class="bi bi-arrow-right fs-5"></i>
-                </button>
-            </div>
-        </div>
-
-        <!-- CARRUSEL DESLIZABLE DE FOTOS (SIN NOMBRES NI TÍTULOS EN TARJETA) -->
-        <div class="d-flex gap-4 overflow-x-auto pb-4 pt-2 no-scrollbar" id="carousel-slider" style="scroll-behavior: smooth;">
-            {% for item in carrusel %}
-                <article class="card-galeria-item flex-shrink-0 btn-open-lightbox" 
-                         data-img-url="{% if item.imagen %}{{ item.imagen.url }}{% endif %}">
-                    {% if item.imagen %}
-                        <img src="{{ item.imagen.url }}" alt="Galería Institucional">
-                    {% endif %}
-                    
-                    <div class="galeria-zoom-icon">
-                        <i class="bi bi-zoom-in"></i>
-                    </div>
-
-                    <div class="galeria-overlay">
-                        <small class="text-white-50 fw-semibold" style="font-size: 0.8rem;">
-                            <i class="bi bi-geo-alt-fill text-success me-1"></i>Campus Escolar
-                        </small>
-                    </div>
-                </article>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-
-<!-- MODAL LIGHTBOX PARA VISUALIZAR LA FOTO EN GRANDE -->
-<div class="modal fade" id="lightboxModalVIP" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content lightbox-modal-content text-white">
-            <div class="modal-header border-0 pb-0 justify-content-between align-items-center">
-                <h5 class="modal-title fw-bold text-white-50 fs-6" style="font-family: var(--font-titulo, 'Cinzel', serif);">
-                    <i class="bi bi-building me-2 text-success"></i>Instalaciones - Colegio Patagonia
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-            </div>
-            <div class="modal-body text-center p-3 p-md-4">
-                <img src="" id="lightboxImg" class="lightbox-img-full rounded-4 shadow-lg" alt="Foto ampliada">
-            </div>
-        </div>
-    </div>
-</div>
-
-{% endif %}
-
-<!-- SCRIPT UNIFICADO PARA SLIDERS Y LIGHTBOX -->
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // 1. SLIDER NOTICIAS
-        const newsSlider = document.getElementById('news-slider');
-        const newsLeft = document.getElementById('slide-left');
-        const newsRight = document.getElementById('slide-right');
-
-        if (newsSlider && newsLeft && newsRight) {
-            newsLeft.addEventListener('click', () => newsSlider.scrollBy({ left: -364, behavior: 'smooth' }));
-            newsRight.addEventListener('click', () => newsSlider.scrollBy({ left: 364, behavior: 'smooth' }));
-        }
-
-        // 2. CARRUSEL GALERÍA CON AUTOPLAY INTELIGENTE
+        // 3. CARRUSEL GALERÍA CON AUTOPLAY INTELIGENTE
         const carousel = document.getElementById('carousel-slider');
         const carruselLeft = document.getElementById('carrusel-left');
         const carruselRight = document.getElementById('carrusel-right');
 
         if (carousel) {
-            const scrollStep = 384; // 360px ancho + 24px gap
+            const scrollStep = 384;
 
             const nextSlide = () => {
                 const maxScroll = carousel.scrollWidth - carousel.clientWidth;
@@ -1024,13 +942,12 @@
             if (carruselLeft) carruselLeft.addEventListener('click', prevSlide);
             if (carruselRight) carruselRight.addEventListener('click', nextSlide);
 
-            // Autoplay pausado al pasar el mouse
-            let autoPlayInterval = setInterval(nextSlide, 2000);
+            let autoPlayInterval = setInterval(nextSlide, 3500);
             carousel.addEventListener('mouseenter', () => clearInterval(autoPlayInterval));
             carousel.addEventListener('mouseleave', () => autoPlayInterval = setInterval(nextSlide, 3500));
         }
 
-        // 3. APERTURA DE FOTOS EN MODAL LIGHTBOX
+        // 4. APERTURA DE FOTOS EN MODAL LIGHTBOX
         const lightboxBtns = document.querySelectorAll('.btn-open-lightbox');
         const lightboxModalElem = document.getElementById('lightboxModalVIP');
 
