@@ -142,8 +142,10 @@ class PreguntaFrecuenteAdmin(admin.ModelAdmin):
 
 @admin.register(Requisito)
 class RequisitoAdmin(admin.ModelAdmin):
-    list_display = ('nivel', 'descripcion')
+    list_display = ('descripcion', 'nivel')
     list_filter = ('nivel',)
+    search_fields = ('descripcion',)
+    list_editable = ('nivel',)
 
 
 # --- RECEPCIÓN DE DATOS / SOLO LECTURA ---

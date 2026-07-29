@@ -51,10 +51,11 @@
 
     </div>
 
-    <!-- Botón de consulta rápida -->
-    <div style="margin-top: 3rem; background: #e0f2fe; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #0284c7; text-align: center;">
-        <p style="color: #0369a1; font-weight: 600; margin-bottom: 0.5rem;">¿Tenés dudas con la documentación?</p>
-        <a href="{% url 'escuela:contacto' %}" style="color: var(--primary); font-weight: 700; text-decoration: underline;">Comunicate con Secretaría para recibir asistencia personalizada</a>
+    <!-- Banner de llamado a la acción / Contacto -->
+    <div style="margin-top: 3rem; background: #f0f9ff; padding: 2rem; border-radius: 12px; border: 1px solid #bae6fd; text-align: center;">
+        <h4 style="color: #0369a1; font-weight: 700; margin-bottom: 0.5rem; font-size: 1.25rem;">¿Querés iniciar la inscripción o tenés alguna duda?</h4>
+        <p style="color: #0284c7; margin-bottom: 1.2rem; font-size: 0.95rem;">Comunicate con Secretaría para recibir asistencia personalizada o iniciar el trámite de vacante.</p>
+        <a href="{% url 'escuela:contacto' %}" class="btn btn-primary rounded-pill px-4 py-2" style="font-weight: 600;">Ir a Contacto</a>
     </div>
 </div>
 {% endblock %}

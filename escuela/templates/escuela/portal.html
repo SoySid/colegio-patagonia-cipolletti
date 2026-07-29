@@ -1,14 +1,23 @@
 {% extends 'escuela/base.html' %}
 
-{% block title %}Portal Alumnos - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
+{% block title %}Portal Institucional - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
 
 {% block content %}
-<div style="max-width: 450px; margin: 4rem auto; padding: 0 1rem;">
+<div style="max-width: 480px; margin: 3.5rem auto; padding: 0 1rem;">
     <div style="background: white; padding: 2.5rem; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.06); text-align: center;">
-        <h2 style="font-size: 1.6rem; color: var(--primary); margin-bottom: 0.5rem;">Portal de Autogestión</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem;">Acceso para docentes y alumnos o tutores</p>
+        
+        <h2 style="font-size: 1.6rem; color: var(--primary); margin-bottom: 0.3rem;">Portal institucional</h2>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">Acceso exclusivo para personal docente y administrativo</p>
 
-        <!-- Bloque de Alertas / Mensajes de Error -->
+        <!-- AVISO A TUTORES Y ALUMNOS (Opción 2) -->
+        <div style="background: #f0f9ff; border: 1px solid #bae6fd; border-left: 4px solid #0284c7; padding: 0.9rem; border-radius: 8px; text-align: left; margin-bottom: 1.5rem;">
+            <p style="color: #0369a1; font-size: 0.82rem; margin: 0; line-height: 1.4;">
+                <strong>ℹ️ Aviso a Familias y Tutores:</strong><br>
+                La plataforma de autogestión y aula virtual para alumnos se encuentra en desarrollo y estará disponible próximamente.
+            </p>
+        </div>
+
+        <!-- Bloque de Alertas / Mensajes de Error de Django -->
         {% if messages %}
             {% for message in messages %}
                 <div style="padding: 0.75rem; border-radius: 6px; margin-bottom: 1rem; font-size: 0.85rem; font-weight: 600; {% if message.tags == 'error' %}background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5;{% else %}background: #dcfce7; color: #166534; border: 1px solid #86efac;{% endif %}">
@@ -17,11 +26,12 @@
             {% endfor %}
         {% endif %}
 
+        <!-- FORMULARIO DE INGRESO -->
         <form method="POST" style="display: flex; flex-direction: column; gap: 1.2rem; text-align: left;">
             {% csrf_token %}
             <div>
-                <label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.3rem; color: var(--text-dark);">Usuario o DNI</label>
-                <input type="text" name="username" placeholder="Ingrese su usuario o DNI" required style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px;">
+                <label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.3rem; color: var(--text-dark);">Usuario</label>
+                <input type="text" name="username" placeholder="Ingrese su usuario" required style="width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 6px;">
             </div>
             <div>
                 <label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.3rem; color: var(--text-dark);">Contraseña</label>
@@ -31,7 +41,7 @@
         </form>
 
         <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #f1f5f9;">
-            <a href="#" style="color: var(--accent); text-decoration: none; font-size: 0.85rem; font-weight: 600;">¿Olvidaste tu contraseña o usuario?</a>
+            <a href="{% url 'escuela:contacto' %}" style="color: var(--accent); text-decoration: none; font-size: 0.85rem; font-weight: 600;">¿Problemas para acceder? Contactar a soporte</a>
         </div>
     </div>
 </div>

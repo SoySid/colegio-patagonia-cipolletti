@@ -12,9 +12,10 @@ class Noticia(models.Model):
 
 class Requisito(models.Model):
     NIVELES = [
-        ('PRIMARIO', 'Solo Nivel Primario'),
-        ('SECUNDARIO', 'Solo Nivel Secundario'),
-        ('AMBOS', 'Ambos Niveles (General)'),
+        ('INICIAL', 'Nivel Inicial'),
+        ('PRIMARIO', 'Nivel Primario'),
+        ('MEDIO', 'Nivel Medio'),
+        ('AMBOS', 'Todos los Niveles (General)'),
     ]
 
     nivel = models.CharField(max_length=20, choices=NIVELES, default='AMBOS')
