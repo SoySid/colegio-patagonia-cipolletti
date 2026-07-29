@@ -353,7 +353,7 @@
     overflow-x: auto;
     scroll-behavior: smooth;
     padding: 0.5rem 0.2rem 1rem;
-    /* Oculta las barras de scroll feas */
+    align-items: stretch; /* Fuerza a que las tarjetas midan lo mismo de alto */
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none;  /* IE y Edge */
 }
@@ -362,7 +362,7 @@
     display: none; /* Chrome, Safari y Opera */
 }
 
-/* TARJETA CON ALTURA PROPORCIONADA */
+/* TARJETA CON ALTURA PROPORCIONADA Y UNIFORME */
 .noticia-card {
     flex: 0 0 340px;
     width: 340px;
@@ -373,6 +373,7 @@
     border: 1px solid rgba(15, 23, 42, 0.08);
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     transition: all 0.3s ease;
 }
 
@@ -416,6 +417,7 @@
     width: fit-content;
 }
 
+/* TÍTULO CON ALTURA MÍNIMA PARA PAREJO PERFECTO */
 .noticia-body h3 {
     font-size: 1.05rem;
     color: var(--primary);
@@ -424,6 +426,9 @@
     margin: 0;
     text-transform: uppercase;
     letter-spacing: -0.2px;
+    min-height: 2.85rem;
+    display: flex;
+    align-items: flex-start;
 }
 
 .noticia-descripcion-container {
@@ -454,6 +459,28 @@
     display: flex;
     align-items: center;
 }
+
+/* 1. Mantiene el slider alineando tarjetas en paralelo */
+#news-slider, .noticias-slider {
+    align-items: stretch !important;
+}
+
+/* 2. Fuerza a que ambas versiones de tarjetas tengan la misma altura */
+.card-noticia-vip, .noticia-card {
+    height: 480px !important; /* <--- Altura fija garantizada */
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+}
+
+/* 3. Reserva el espacio de 2 líneas para el título independientemente del texto */
+.noticia-titulo, .noticia-body h3 {
+    min-height: 3rem !important;
+    max-height: 3rem !important;
+    line-height: 1.35 !important;
+    overflow: hidden !important;
+}
+
 /* ==========================================
    5. CONTACTO & POSTULACIÓN DOCENTE (VERSIÓN VIP)
    ========================================== */

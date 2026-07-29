@@ -171,7 +171,6 @@
                     border-color 0.4s ease !important;
     }
 
-    /* Animación de elevación suave e iluminación en hover */
     .card-nivel-vip:hover {
         transform: translateY(-8px) scale(1.01);
         box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12) !important;
@@ -329,14 +328,19 @@
         border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
+    /* OBLIGA A QUE TODOS LOS TÍTULOS RESERVEN EL ESPACIO DE 2 LÍNEAS */
     .noticia-titulo {
         font-family: var(--font-titulo, 'Cinzel', serif);
         color: var(--primary-navy, #1b365d);
         line-height: 1.35;
         font-size: 1.15rem;
         margin-bottom: 0.6rem;
+        min-height: 3.1rem;
+        display: flex;
+        align-items: flex-start;
     }
 
+    /* TRUNCADO A 3 LÍNEAS LIMPIO SIN LINT WARNINGS */
     .texto-resumen {
         color: #64748b;
         font-size: 0.88rem;
@@ -374,7 +378,7 @@
         gap: 0.3rem;
     }
 
-    /* 5. GALERÍA PANORÁMICA (ANIMACIÓN CINEMÁTICA Y ZOOM SUAVE) */
+    /* 5. GALERÍA PANORÁMICA */
     .section-galeria-vip {
         padding: 5rem 0;
         background: linear-gradient(180deg, #0b1526 0%, #050a12 100%);
@@ -424,7 +428,6 @@
         transform: scale(1.08);
     }
 
-    /* TARJETAS GALERÍA CON EFECTO DE ZOOM Y ELEVACIÓN FLUIDA */
     .card-galeria-item {
         width: 360px;
         height: 240px;
@@ -474,7 +477,6 @@
         opacity: 0.95;
     }
 
-    /* ÍCONO DE ZOOM CON ESCALA SUAVE */
     .galeria-zoom-icon {
         position: absolute;
         top: 50%;
