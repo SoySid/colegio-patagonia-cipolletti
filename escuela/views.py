@@ -2,16 +2,14 @@ from django.shortcuts import render, redirect
 from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from .models import Noticia, Requisito, Consulta, PreguntaFrecuente, BloqueInicio, CarruselInicio, PostulacionDocente, Docente
+from .models import Noticia, Requisito, Consulta, PreguntaFrecuente, CarruselInicio, PostulacionDocente, Docente
 
 def home(request):
     noticias = Noticia.objects.all().order_by('-fecha_creacion')
     carrusel = CarruselInicio.objects.filter(activa=True).order_by('orden')
-    bloques = BloqueInicio.objects.filter(activa=True).order_by('orden')
     return render(request, 'escuela/home.html', {
         'noticias': noticias,
         'carrusel': carrusel,
-        'bloques': bloques
     })
 
 def contacto(request):

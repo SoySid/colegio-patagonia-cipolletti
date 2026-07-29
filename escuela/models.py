@@ -102,21 +102,6 @@ class PreguntaFrecuente(models.Model):
     def __str__(self):
         return self.pregunta
 
-class BloqueInicio(models.Model):
-    titulo = models.CharField(max_length=120, verbose_name="Título")
-    descripcion = models.TextField(blank=True, null=True, verbose_name="Descripción")
-    icono = models.CharField(max_length=40, blank=True, null=True, verbose_name="Icono", help_text="Ejemplo: ✨, 📚, 🏫")
-    orden = models.PositiveIntegerField(default=0, verbose_name="Orden")
-    activa = models.BooleanField(default=True, verbose_name="¿Mostrar en la web?")
-
-    class Meta:
-        verbose_name = "Bloque de Inicio"
-        verbose_name_plural = "Bloques de Inicio"
-        ordering = ['orden']
-
-    def __str__(self):
-        return self.titulo
-
 class CarruselInicio(models.Model):
     titulo = models.CharField(max_length=100, blank=True, null=True, verbose_name="Título (Opcional)")
     subtitulo = models.CharField(max_length=200, blank=True, null=True, verbose_name="Subtítulo / Bajada (Opcional)")

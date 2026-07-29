@@ -8,7 +8,6 @@ from .models import (
     PostulacionDocente, 
     DatosEscuela, 
     PreguntaFrecuente,
-    BloqueInicio,
     CarruselInicio,
     Docente
 )
@@ -72,12 +71,6 @@ class PreguntaFrecuenteAdmin(admin.ModelAdmin):
     list_display = ('pregunta', 'orden', 'activa')
     list_editable = ('orden', 'activa')
 
-
-@admin.register(BloqueInicio)
-class BloqueInicioAdmin(admin.ModelAdmin):
-    list_display = ('titulo', 'orden', 'activa')
-    list_editable = ('orden', 'activa')
-    search_fields = ('titulo', 'descripcion')
 
 
 # WIDGET PERSONALIZADO QUE HABILITA LA SELECCIÓN MÚLTIPLE EN DJANGO
