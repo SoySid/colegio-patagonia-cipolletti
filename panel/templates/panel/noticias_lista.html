@@ -1,0 +1,40 @@
+{% extends 'panel/base.html' %}
+
+{% block titulo %}Noticias{% endblock %}
+
+{% block contenido %}
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h3 style="margin: 0; font-size: 24px;">📰 Listado de Noticias</h3>
+        <a href="{% url 'panel_noticias_crear' %}" class="btn-accion btn-verde">+ CREAR NUEVA NOTICIA</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Categoría</th>
+                <th>Fecha</th>
+                <th style="width: 180px;">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for noticia in noticias %}
+                <tr>
+                    <td><strong>{{ noticia.titulo }}</strong></td>
+                    <td>{{ noticia.categoria }}</td>
+                    <td>{{ noticia.fecha_creacion|date:"d/m/Y H:i" }}</td>
+                    <td>
+                        <a href="{% url 'panel_noticias_editar' noticia.pk %}" class="btn-accion btn-azul" style="padding: 5px 10px; font-size: 14px;">Editar</a>
+                        <a href="{% url 'panel_noticias_borrar' noticia.pk %}" class="btn-accion btn-rojo" style="padding: 5px 10px; font-size: 14px;">Eliminar</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4" style="text-align: center; padding: 25px; color: #718096; font-size: 16px;">
+                        No hay noticias publicadas todavía. ¡Tocá el botón verde de arriba para cargar la primera!
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

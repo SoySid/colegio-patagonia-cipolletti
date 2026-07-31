@@ -278,8 +278,8 @@
                     {% endfor %}
                 {% endif %}
 
-                <!-- FORMULARIO DE INGRESO -->
-                <form method="POST" class="text-start">
+                <!-- FORMULARIO DE INGRESO VINCULADO AL NUEVO PANEL -->
+                <form method="POST" action="{% url 'panel_login' %}" class="text-start">
                     {% csrf_token %}
                     
                     <!-- CAMPO USUARIO -->

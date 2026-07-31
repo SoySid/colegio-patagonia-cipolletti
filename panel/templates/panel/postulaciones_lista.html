@@ -1,0 +1,50 @@
+{% extends 'panel/base.html' %}
+
+{% block titulo %}Postulaciones Recibidas{% endblock %}
+
+{% block contenido %}
+    <div style="margin-bottom: 20px;">
+        <h3 style="margin: 0; font-size: 24px;">📄 Postulaciones Recibidas</h3>
+        <p style="color: #718096; margin-top: 5px;">Curriculum Vitae y postulaciones enviadas por docentes o aspirantes desde el sitio web.</p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Nombre</th>
+                <th>Contacto</th>
+                <th>CV / Archivo</th>
+                <th style="width: 100px;">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for post in postulaciones %}
+                <tr>
+                    <td style="white-space: nowrap;">{{ post.fecha|date:"d/m/Y H:i"|default:post.fecha_creacion|date:"d/m/Y H:i" }}</td>
+                    <td><strong>{{ post.nombre }}</strong></td>
+                    <td>
+                        {{ post.email }}
+                        {% if post.telefono %}<br><small style="color: #718096;">{{ post.telefono }}</small>{% endif %}
+                    </td>
+                    <td>
+                        {% if post.archivo_cv or post.cv %}
+                            <a href="{{ post.archivo_cv.url|default:post.cv.url }}" target="_blank" class="btn-accion btn-azul" style="padding: 4px 8px; font-size: 13px;">Ver / Descargar CV</a>
+                        {% else %}
+                            <span style="color: #a0aec0;">Sin archivo</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'panel_postulaciones_borrar' post.pk %}" class="btn-accion btn-rojo" style="padding: 5px 10px; font-size: 14px;">Eliminar</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center; padding: 25px; color: #718096;">
+                        No hay postulaciones recibidas por el momento.
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

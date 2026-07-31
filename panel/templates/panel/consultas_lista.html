@@ -1,0 +1,44 @@
+{% extends 'panel/base.html' %}
+
+{% block titulo %}Consultas Recibidas{% endblock %}
+
+{% block contenido %}
+    <div style="margin-bottom: 20px;">
+        <h3 style="margin: 0; font-size: 24px;">📬 Consultas Recibidas</h3>
+        <p style="color: #718096; margin-top: 5px;">Mensajes e inquietudes enviadas por los visitantes desde la página web.</p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Nombre</th>
+                <th>Contacto</th>
+                <th>Mensaje</th>
+                <th style="width: 100px;">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for consulta in consultas %}
+                <tr>
+                    <td style="white-space: nowrap;">{{ consulta.fecha|date:"d/m/Y H:i"|default:consulta.fecha_creacion|date:"d/m/Y H:i" }}</td>
+                    <td><strong>{{ consulta.nombre }}</strong></td>
+                    <td>
+                        {{ consulta.email }}
+                        {% if consulta.telefono %}<br><small style="color: #718096;">{{ consulta.telefono }}</small>{% endif %}
+                    </td>
+                    <td>{{ consulta.mensaje|default:consulta.asunto }}</td>
+                    <td>
+                        <a href="{% url 'panel_consultas_borrar' consulta.pk %}" class="btn-accion btn-rojo" style="padding: 5px 10px; font-size: 14px;">Eliminar</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center; padding: 25px; color: #718096;">
+                        No hay consultas recibidas por el momento.
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

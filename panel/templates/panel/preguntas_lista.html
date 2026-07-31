@@ -1,0 +1,38 @@
+{% extends 'panel/base.html' %}
+
+{% block titulo %}Preguntas Frecuentes{% endblock %}
+
+{% block contenido %}
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h3 style="margin: 0; font-size: 24px;">❓ Preguntas Frecuentes</h3>
+        <a href="{% url 'panel_preguntas_crear' %}" class="btn-accion btn-verde">+ AGREGAR PREGUNTA</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Pregunta</th>
+                <th>Respuesta</th>
+                <th style="width: 180px;">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for preg in preguntas %}
+                <tr>
+                    <td><strong>{{ preg.pregunta }}</strong></td>
+                    <td>{{ preg.respuesta|truncatewords:15 }}</td>
+                    <td>
+                        <a href="{% url 'panel_preguntas_editar' preg.pk %}" class="btn-accion btn-azul" style="padding: 5px 10px; font-size: 14px;">Editar</a>
+                        <a href="{% url 'panel_preguntas_borrar' preg.pk %}" class="btn-accion btn-rojo" style="padding: 5px 10px; font-size: 14px;">Eliminar</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3" style="text-align: center; padding: 25px; color: #718096;">
+                        No hay preguntas frecuentes cargadas todavía. ¡Tocá el botón verde de arriba para sumar la primera!
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

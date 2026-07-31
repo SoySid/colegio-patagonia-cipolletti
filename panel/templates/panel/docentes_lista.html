@@ -1,0 +1,46 @@
+{% extends 'panel/base.html' %}
+
+{% block titulo %}Equipo Docente{% endblock %}
+
+{% block contenido %}
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h3 style="margin: 0; font-size: 24px;">👨‍🏫 Equipo Docente</h3>
+        <a href="{% url 'panel_docentes_crear' %}" class="btn-accion btn-verde">+ AGREGAR DOCENTE</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Cargo / Materia</th>
+                <th style="width: 180px;">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for docente in docentes %}
+                <tr>
+                    <td><strong>{{ docente.nombre }}</strong></td>
+                    <td>
+                        {% if docente.cargo %}
+                            {{ docente.cargo }}
+                        {% elif docente.materia %}
+                            {{ docente.materia }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'panel_docentes_editar' docente.pk %}" class="btn-accion btn-azul" style="padding: 5px 10px; font-size: 14px;">Editar</a>
+                        <a href="{% url 'panel_docentes_borrar' docente.pk %}" class="btn-accion btn-rojo" style="padding: 5px 10px; font-size: 14px;">Eliminar</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3" style="text-align: center; padding: 25px; color: #718096;">
+                        No hay docentes cargados todavía. ¡Tocá el botón verde para sumar al primero!
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

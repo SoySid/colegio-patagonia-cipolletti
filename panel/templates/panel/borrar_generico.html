@@ -1,0 +1,17 @@
+{% extends 'panel/base.html' %}
+
+{% block titulo %}Confirmar Eliminación{% endblock %}
+
+{% block contenido %}
+    <div style="max-width: 500px; margin: 0 auto; text-align: center; padding: 20px;">
+        <h3 style="color: #c53030;">¿Estás seguro de que querés eliminar este registro?</h3>
+        <p style="font-size: 18px;"><strong>"{{ object }}"</strong></p>
+        <p style="color: #718096;">Esta acción no se puede deshacer.</p>
+
+        <form method="POST" style="margin-top: 30px; display: flex; justify-content: center; gap: 10px;">
+            {% csrf_token %}
+            <button type="submit" class="btn-accion btn-rojo">SÍ, ELIMINAR</button>
+            <a href="javascript:history.back()" class="btn-accion" style="background: #a0aec0; color: white;">Cancelar</a>
+        </form>
+    </div>
+{% endblock %}

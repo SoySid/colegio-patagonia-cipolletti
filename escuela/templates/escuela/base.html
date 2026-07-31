@@ -342,11 +342,11 @@
                     
                     <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
                         {% if user.is_authenticated %}
-                            <a href="{% url 'escuela:dashboard' %}" class="btn btn-portal-vip rounded-pill px-3.5 py-2">
+                            <a href="{% url 'panel_inicio' %}" class="btn btn-portal-vip rounded-pill px-3.5 py-2">
                                 <i class="bi bi-speedometer2 me-1 fs-6"></i> Mi Plataforma
                             </a>
                         {% else %}
-                            <a href="{% url 'escuela:portal' %}" class="btn btn-portal-vip rounded-pill px-3.5 py-2">
+                            <a href="{% url 'panel_login' %}" class="btn btn-portal-vip rounded-pill px-3.5 py-2">
                                 <i class="bi bi-shield-lock-fill me-1 fs-6"></i> Plataforma
                             </a>
                         {% endif %}
