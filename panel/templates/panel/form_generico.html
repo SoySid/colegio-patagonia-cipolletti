@@ -1,29 +1,120 @@
 {% extends 'panel/base.html' %}
 
-{% block titulo %}{% if object %}Editar{% else %}Nuevo{% endif %}{% endblock %}
+{% block titulo %}Formulario de Gestión{% endblock %}
 
 {% block contenido %}
-    <h3>{% if object %}Editar Registro{% else %}Cargar Nuevo Registro{% endif %}</h3>
+    <style>
+        .form-card-vip {
+            max-width: 750px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
 
-    <form method="POST" enctype="multipart/form-data" style="max-width: 650px; margin-top: 20px;">
-        {% csrf_token %}
+        .form-header-vip {
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
 
-        {% for field in form %}
-            <div class="form-grupo">
-                <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
-                {{ field }}
-                {% if field.help_text %}
-                    <small style="color: #718096; display: block; margin-top: 5px;">{{ field.help_text }}</small>
-                {% endif %}
-                {% for error in field.errors %}
-                    <small style="color: #c53030; display: block; margin-top: 5px;">{{ error }}</small>
-                {% endfor %}
-            </div>
-        {% endfor %}
+        .form-header-vip h3 {
+            font-family: var(--font-titulo);
+            color: var(--primary-navy);
+            font-weight: 800;
+            font-size: 1.4rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
 
-        <div style="margin-top: 30px; display: flex; gap: 10px;">
-            <button type="submit" class="btn-accion btn-verde">GUARDAR</button>
-            <a href="javascript:history.back()" class="btn-accion" style="background: #a0aec0; color: white;">Cancelar</a>
+        /* ESTILIZAR CAMPOS AUTOMÁTICOS DE DJANGO */
+        .form-grupo p {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-grupo label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+            color: var(--primary-navy);
+            font-size: 0.92rem;
+        }
+
+        .form-grupo input[type="text"],
+        .form-grupo input[type="number"],
+        .form-grupo input[type="email"],
+        .form-grupo input[type="url"],
+        .form-grupo input[type="password"],
+        .form-grupo input[type="file"],
+        .form-grupo textarea,
+        .form-grupo select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-family: var(--font-cuerpo);
+            color: var(--text-dark);
+            transition: all 0.25s ease;
+            box-sizing: border-box;
+        }
+
+        .form-grupo input:focus,
+        .form-grupo textarea:focus,
+        .form-grupo select:focus {
+            outline: none;
+            border-color: var(--brand-green);
+            box-shadow: 0 6px 18px rgba(31, 122, 63, 0.18);
+        }
+
+        .form-grupo input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--brand-green);
+            cursor: pointer;
+            vertical-align: middle;
+        }
+
+        .helptext {
+            display: block;
+            font-size: 0.82rem;
+            color: #64748b;
+            margin-top: 0.3rem;
+        }
+
+        .acciones-form {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #f1f5f9;
+        }
+    </style>
+
+    <div class="form-card-vip">
+        <div class="form-header-vip">
+            <h3>
+                <i class="bi bi-pencil-square text-success"></i> 
+                {% if object %}Editar Registro{% else %}Agregar Nuevo Registro{% endif %}
+            </h3>
         </div>
-    </form>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-grupo">
+                {{ form.as_p }}
+            </div>
+
+            <div class="acciones-form">
+                <a href="javascript:history.back()" class="btn-accion" style="background-color: #64748b; color: white;">
+                    Cancelar
+                </a>
+                <button type="submit" class="btn-accion btn-verde">
+                    <i class="bi bi-check-circle-fill"></i> Guardar Cambios
+                </button>
+            </div>
+        </form>
+    </div>
 {% endblock %}

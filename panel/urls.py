@@ -38,7 +38,7 @@ urlpatterns = [
         auth_views.LoginView.as_view(template_name="panel/login.html"),
         name="panel_login",
     ),
-    path("logout/", auth_views.LogoutView.as_view(), name="panel_logout"),
+    path("logout/", auth_views.LogoutView.as_view(next_page="/"), name="panel_logout"),
     # Noticias
     path("noticias/", NoticiaListView.as_view(), name="panel_noticias_lista"),
     path(

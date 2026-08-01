@@ -3,36 +3,188 @@
 {% block titulo %}Preguntas Frecuentes{% endblock %}
 
 {% block contenido %}
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h3 style="margin: 0; font-size: 24px;">❓ Preguntas Frecuentes</h3>
-        <a href="{% url 'panel_preguntas_crear' %}" class="btn-accion btn-verde">+ AGREGAR PREGUNTA</a>
+    <style>
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .page-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin: 0;
+            letter-spacing: -0.4px;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .page-subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.2rem;
+        }
+
+        .btn-primary-custom {
+            background-color: var(--brand-green);
+            color: #ffffff !important;
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 0.75rem 1.4rem;
+            border-radius: 12px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 14px rgba(31, 122, 63, 0.35);
+            transition: all 0.25s ease;
+            border: none;
+        }
+
+        .btn-primary-custom:hover {
+            background-color: var(--brand-green-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(31, 122, 63, 0.5);
+        }
+
+        /* CARDS CON ACENTO VERDE INSTITUCIONAL */
+        .cards-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .card-item {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-left: 5px solid var(--brand-green);
+            border-radius: 14px;
+            padding: 1.4rem 1.6rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1.5rem;
+            box-shadow: 0 4px 15px rgba(15, 23, 42, 0.03);
+            transition: all 0.25s ease;
+        }
+
+        .card-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+            border-color: #cbd5e1;
+            border-left-color: var(--brand-green-neon);
+        }
+
+        .card-body-content {
+            flex: 1;
+        }
+
+        .card-question {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--primary-navy);
+            margin-bottom: 0.4rem;
+            line-height: 1.35;
+        }
+
+        .card-answer {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* BOTONES DE ACCIÓN CORPORATIVOS */
+        .card-actions {
+            display: flex;
+            gap: 0.6rem;
+            flex-shrink: 0;
+        }
+
+        .btn-action {
+            padding: 0.55rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-action-edit {
+            background-color: var(--primary-navy);
+            color: #ffffff !important;
+            box-shadow: 0 2px 8px rgba(27, 54, 93, 0.2);
+        }
+
+        .btn-action-edit:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-action-delete {
+            background-color: #c53030;
+            color: #ffffff !important;
+            box-shadow: 0 2px 8px rgba(197, 48, 48, 0.2);
+        }
+
+        .btn-action-delete:hover {
+            background-color: #9b2c2c;
+            transform: translateY(-1px);
+        }
+
+        .empty-box {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: #ffffff;
+            border: 2px dashed #cbd5e1;
+            border-radius: 16px;
+            color: var(--text-muted);
+        }
+    </style>
+
+    <div class="page-header">
+        <div>
+            <h2 class="page-title">
+                <i class="bi bi-patch-question-fill text-success"></i> Preguntas Frecuentes
+            </h2>
+            <div class="page-subtitle">Administrá la información que leen las familias en el sitio web.</div>
+        </div>
+        <a href="{% url 'panel_preguntas_crear' %}" class="btn-primary-custom">
+            <i class="bi bi-plus-lg"></i> Agregar Pregunta
+        </a>
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Pregunta</th>
-                <th>Respuesta</th>
-                <th style="width: 180px;">Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for preg in preguntas %}
-                <tr>
-                    <td><strong>{{ preg.pregunta }}</strong></td>
-                    <td>{{ preg.respuesta|truncatewords:15 }}</td>
-                    <td>
-                        <a href="{% url 'panel_preguntas_editar' preg.pk %}" class="btn-accion btn-azul" style="padding: 5px 10px; font-size: 14px;">Editar</a>
-                        <a href="{% url 'panel_preguntas_borrar' preg.pk %}" class="btn-accion btn-rojo" style="padding: 5px 10px; font-size: 14px;">Eliminar</a>
-                    </td>
-                </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="3" style="text-align: center; padding: 25px; color: #718096;">
-                        No hay preguntas frecuentes cargadas todavía. ¡Tocá el botón verde de arriba para sumar la primera!
-                    </td>
-                </tr>
+    {% if preguntas %}
+        <div class="cards-grid">
+            {% for item in preguntas %}
+                <div class="card-item">
+                    <div class="card-body-content">
+                        <div class="card-question">{{ item.pregunta }}</div>
+                        <p class="card-answer">{{ item.respuesta|truncatewords:25 }}</p>
+                    </div>
+                    <div class="card-actions">
+                        <a href="{% url 'panel_preguntas_editar' item.pk %}" class="btn-action btn-action-edit">
+                            <i class="bi bi-pencil-square"></i> Editar
+                        </a>
+                        <a href="{% url 'panel_preguntas_borrar' item.pk %}" class="btn-action btn-action-delete">
+                            <i class="bi bi-trash-fill"></i> Borrar
+                        </a>
+                    </div>
+                </div>
             {% endfor %}
-        </tbody>
-    </table>
+        </div>
+    {% else %}
+        <div class="empty-box">
+            <i class="bi bi-inbox fs-1 d-block mb-2 text-secondary"></i>
+            <p class="mb-0 fw-semibold">No hay preguntas cargadas por el momento.</p>
+        </div>
+    {% endif %}
 {% endblock %}
