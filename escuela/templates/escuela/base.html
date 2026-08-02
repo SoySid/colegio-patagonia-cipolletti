@@ -37,8 +37,8 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
 
-    <!-- NAVBAR INSTITUCIONAL -->
-    <header class="navbar navbar-expand-lg header-navbar sticky-top py-2">
+    <!-- NAVBAR INSTITUCIONAL (Fixed mediante la clase header-navbar) -->
+    <header class="navbar navbar-expand-lg header-navbar py-2">
         <div class="container">
             
             <a href="{% url 'escuela:home' %}" class="navbar-brand d-flex align-items-center gap-3">
@@ -99,9 +99,9 @@
     </header>
 
     <!-- CONTENIDO PRINCIPAL ANIMADO -->
-    <main class="flex-grow-1 animate-fade-in py-4">
+    <main class="flex-grow-1 animate-fade-in">
         {% if messages %}
-            <div class="container mb-4">
+            <div class="container pt-3 mb-4">
                 {% for message in messages %}
                     <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show glass-panel border-0 shadow-lg" role="alert">
                         <div class="d-flex align-items-center gap-2">

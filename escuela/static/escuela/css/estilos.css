@@ -31,17 +31,12 @@
 
 /* ==========================================================================
    1. ESTRUCTURA BASE Y RESETS GLOBALES
-   - Bloqueo de desborde horizontal para celulares y tipografía base.
    ========================================================================== */
-
-/* Bloqueo estricto de scroll horizontal para móviles */
-html, body {
+html {
     max-width: 100% !important;
     overflow-x: hidden !important;
-    position: relative;
 }
 
-/* Evitar que imágenes o videos sobrepasen su contenedor */
 img, video, iframe {
     max-width: 100%;
 }
@@ -55,8 +50,10 @@ body {
     min-height: 100vh;
 }
 
+/* Espacio superior para compensar la navbar que flota fija */
 main {
     flex: 1 0 auto;
+    padding-top: 80px; /* Compensación exacta de la altura de la navbar */
 }
 
 h1, h2, h3, h4, h5, h6, .font-titulo {
@@ -64,7 +61,6 @@ h1, h2, h3, h4, h5, h6, .font-titulo {
     color: var(--text-main);
 }
 
-/* Línea separadora Neón sutil entre secciones */
 section {
     position: relative;
 }
@@ -81,20 +77,17 @@ section:not(:last-of-type)::after {
     box-shadow: 0 0 10px var(--primary);
 }
 
-hr, .section-divider {
-    border: none;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--primary), transparent);
-    margin: 3rem 0;
-    opacity: 0.7;
-}
-
 
 /* ==========================================================================
-   2. NAVEGACIÓN Y ENCABEZADO (NAVBAR & LOGO)
-   - Barra translúcida con efecto Blur y escala de marca.
+   2. NAVEGACIÓN Y ENCABEZADO (NAVBAR & LOGO FIJO)
    ========================================================================== */
 .header-navbar {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1050 !important; /* Prioridad absoluta por encima del Hero y modales */
     background: var(--bg-navbar) !important;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -117,8 +110,6 @@ hr, .section-divider {
     width: auto !important;
     object-fit: contain;
     display: block;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
     filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.25));
     transition: transform 0.3s ease, filter 0.3s ease;
 }
@@ -144,10 +135,8 @@ hr, .section-divider {
     text-shadow: 0 0 10px rgba(52, 211, 153, 0.35);
 }
 
-
 /* ==========================================================================
    3. TARJETAS GENERALES Y NOTICIAS
-   - Estilos para paneles, tarjetas generales y fijación de alto para noticias.
    ========================================================================== */
 .card, .glass-panel {
     background-color: var(--bg-card);
@@ -210,10 +199,8 @@ hr, .section-divider {
 
 /* ==========================================================================
    4. CARRUSELES Y SLIDERS HORIZONTALES (GALERÍA Y NOTICIAS)
-   - Scroll con efecto imán, cursor agarrable y OCULTAMIENTO DE BARRAS FEAS.
    ========================================================================== */
 
-/* Contenedores con desplazamiento suave (Aplica a Noticias y a la Galería) */
 .gallery-container,
 .news-container-slider {
     display: flex;
@@ -225,7 +212,6 @@ hr, .section-divider {
     user-select: none;
     padding-bottom: 0.5rem;
     
-    /* Oculta la barra de scroll nativa blanca en todos los navegadores */
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE / Edge */
 }
@@ -240,7 +226,6 @@ hr, .section-divider {
     cursor: grabbing;
 }
 
-/* Tarjetas de la Galería de Fotos (Sección 5) */
 .gallery-item-wrapper {
     flex: 0 0 auto;
     scroll-snap-align: start;
@@ -313,7 +298,6 @@ hr, .section-divider {
     z-index: 5;
 }
 
-/* Tarjetas de Preguntas */
 .faq-item-card {
     background-color: var(--bg-card);
     border: 1px solid var(--border-subtle);
@@ -362,7 +346,6 @@ hr, .section-divider {
     background-color: rgba(15, 23, 42, 0.4);
 }
 
-/* Formulario de Contacto (Íconos e Inputs) */
 .contact-input-icon {
     position: absolute;
     left: 1rem;
@@ -427,6 +410,7 @@ hr, .section-divider {
     color: var(--primary);
 }
 
+
 /* ==========================================================================
    6. BOTONES Y ACCIONES
    ========================================================================== */
@@ -466,10 +450,8 @@ hr, .section-divider {
 
 
 /* ==========================================================================
-   7. MODALES Y VENTANAS EMERGENTES (PREVENCIÓN DE DOBLE SCROLL)
+   7. MODALES Y VENTANAS EMERGENTES
    ========================================================================== */
-
-/* Traba el scroll del body sin modificar el alto ni reiniciar la posición */
 body.modal-open {
     overflow: hidden !important;
 }
@@ -477,6 +459,7 @@ body.modal-open {
 .modal {
     overflow-y: auto !important;
 }
+
 
 /* ==========================================================================
    8. UTILIDADES Y FOOTER
@@ -558,8 +541,44 @@ body.body-panel {
 
 
 /* ==========================================================================
-   10. MEDIA QUERIES (ADAPTABILIDAD RESPONSIVE)
-   - Se ubican al final para que pisen los valores por defecto sin romperse.
+   10. HERO SECTION CENTRADO CON FONDO BLUR (AJUSTES DE APILAMIENTO Z-INDEX)
+   ========================================================================== */
+.hero-section-blur {
+    min-height: 80vh;
+    position: relative;
+    z-index: 1; /* Nivel base bajo para no tapar a .header-navbar (z-index: 1050) */
+    background-color: #0d0b14;
+}
+
+/* Imagen de fondo: Menos blur (3px) y más brillo (0.85) para apreciar el edificio */
+.hero-bg-blur {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background-size: cover;
+    background-position: center;
+    filter: blur(3px) brightness(0.85); /* <--- Desenfoque suave y brillo visible */
+    transform: scale(1.05);
+    z-index: 0;
+}
+
+/* Oscurecedor sutil para asegurar la legibilidad del texto */
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(13, 11, 20, 0.35) 0%, rgba(13, 11, 20, 0.7) 100%);
+    z-index: 1;
+}
+
+.max-w-600,
+.max-w-650 {
+    max-width: 650px;
+}
+
+/* ==========================================================================
+   11. MEDIA QUERIES
    ========================================================================== */
 @media (min-width: 768px) {
     .gallery-img-item {
