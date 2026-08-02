@@ -1,3 +1,480 @@
-/* Punto de entrada del CSS modular. */
-@import url("base.css");
-@import url("sections.css");
+/* ==========================================================================
+   HOJA DE ESTILOS UNIFICADA - ARCHIVO CONSOLIDADO Y OPTIMIZADO
+   ========================================================================== */
+
+:root {
+    /* Paleta Base (Azul Marino Petróleo Profundo) */
+    --bg-body: #0F172A;           /* Fondo general azul marino */
+    --bg-card: #1E293B;           /* Elevación azul noche para tarjetas */
+    --bg-navbar: rgba(15, 23, 42, 0.92); /* Navbar azul petróleo translúcido con blur */
+    --bg-footer: #090D16;         /* Footer Oscuro Intenso */
+    --bg-copyright: #05070D;      /* Copyright casi negro */
+    
+    /* Acento Verde Menta Neón */
+    --primary: #10B981;           /* Verde menta/esmeralda potente */
+    --primary-hover: #059669;     /* Verde oscuro para estados hover */
+    --brand-green-neon: #34D399;  /* Verde menta brillante */
+    
+    /* Textos (Alto Contraste) */
+    --text-main: #FFFFFF;         /* Blanco puro para títulos */
+    --text-muted: #94A3B8;        /* Gris azulado claro para textos secundarios */
+    
+    /* Bordes y Separadores */
+    --border-subtle: #334155;     /* Borde azul slate visible */
+    --border-acento: #10B981;     /* Borde o línea de acento verde menta */
+    
+    /* Efectos Neón & Resplandor */
+    --neon-glow: 0 0 15px rgba(16, 185, 129, 0.4);
+    --neon-glow-strong: 0 0 25px rgba(52, 211, 153, 0.6);
+}
+
+/* ==========================================================================
+   1. ESTRUCTURA BASE Y SEPARADORES DE SECCIÓN
+   ========================================================================== */
+body {
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+h1, h2, h3, h4, h5, h6, .font-titulo {
+    font-family: 'Cinzel', serif;
+    color: var(--text-main);
+}
+
+/* Línea separadora Neón sutil entre secciones (Excepto la última antes del footer) */
+section {
+    position: relative;
+}
+
+section:not(:last-of-type)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    width: 80%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    opacity: 0.6;
+    box-shadow: 0 0 10px var(--primary);
+}
+
+hr, .section-divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    margin: 3rem 0;
+    opacity: 0.7;
+}
+
+/* ==========================================================================
+   2. NAVBAR Y LOGO (ENCABEZADO COMPACTO Y ELEGANTE)
+   ========================================================================== */
+.header-navbar {
+    background: var(--bg-navbar) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-subtle);
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.header-navbar .navbar-brand,
+.navbar-nav {
+    display: flex;
+    align-items: center;
+}
+
+/* Tamaño de logo controlado para no deformar la barra */
+.brand-logo {
+    height: 65px !important;
+    max-height: 65px !important;
+    width: auto !important;
+    object-fit: contain;
+    display: block;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.25));
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.brand-logo:hover {
+    transform: scale(1.03);
+    filter: drop-shadow(0 0 12px rgba(52, 211, 153, 0.45));
+}
+
+.navbar-nav .nav-link {
+    color: var(--text-muted) !important;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.25s ease;
+    padding-left: 0.9rem !important;
+    padding-right: 0.9rem !important;
+    position: relative;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: var(--brand-green-neon) !important;
+    text-shadow: 0 0 10px rgba(52, 211, 153, 0.35);
+}
+
+/* ==========================================================================
+   3. COMPONENTES Y TARJETAS
+   ========================================================================== */
+/* Tarjetas Generales y Paneles */
+.card, .glass-panel {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: 1.5rem;
+    color: var(--text-main);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                border-color 0.3s ease, 
+                box-shadow 0.3s ease;
+}
+
+.card:hover, .glass-panel:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35), var(--neon-glow);
+}
+
+.bg-badge-custom {
+    background-color: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: var(--brand-green-neon);
+}
+
+/* Tarjetas de Noticias */
+.card-noticia-item {
+    height: 440px !important;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-noticia-img {
+    height: 170px !important;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 12px 12px 0 0;
+}
+
+.card-noticia-item h3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    white-space: normal !important;
+    height: 2.8em;
+    line-height: 1.4;
+}
+
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 4.2em;
+}
+
+/* Galería de Fotos (Slider Panorámico Horizontal) */
+.gallery-container {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.gallery-container::-webkit-scrollbar {
+    display: none;
+}
+
+.gallery-item-wrapper {
+    overflow: hidden;
+    border-radius: 16px;
+    border: 1px solid var(--border-subtle);
+    background-color: var(--bg-card);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery-item-wrapper:hover {
+    border-color: var(--primary);
+    box-shadow: var(--neon-glow);
+}
+
+.gallery-img-item {
+    height: 320px !important;
+    width: 450px !important;
+    object-fit: cover;
+    cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    display: block;
+}
+
+.gallery-img-item:hover {
+    transform: scale(1.05);
+}
+
+/* ==========================================================================
+   CONSULTAS FRECUENTES (FAQ) & BUSCADOR DEDICADO
+   ========================================================================== */
+.faq-search-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.faq-search-input {
+    background-color: var(--bg-card) !important;
+    border: 1px solid var(--border-subtle) !important;
+    color: #FFFFFF !important;
+    padding-left: 3.2rem !important;
+    border-radius: 50rem !important;
+    height: 56px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+/* Placeholder claro y visible (Gris Slate 400) */
+.faq-search-input::placeholder {
+    color: #94A3B8 !important;
+    opacity: 1 !important;
+}
+
+.faq-search-input:focus {
+    border-color: var(--primary) !important;
+    box-shadow: var(--neon-glow) !important;
+    background-color: #1E293B !important;
+}
+
+.faq-search-icon {
+    position: absolute;
+    left: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--brand-green-neon);
+    font-size: 1.2rem;
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* Tarjetas de Preguntas */
+.faq-item-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
+}
+
+.faq-item-card:hover {
+    border-color: var(--primary);
+    box-shadow: var(--neon-glow);
+    transform: translateY(-2px);
+}
+
+/* Botón de la Pregunta / Acordeón */
+.faq-question-btn,
+.accordion-button {
+    background-color: transparent !important;
+    color: var(--text-main) !important;
+    box-shadow: none !important;
+    font-weight: 700;
+    padding: 1.2rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: rgba(16, 185, 129, 0.08) !important;
+    color: var(--brand-green-neon) !important;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+/* Flechita del Acordeón con Tono Menta */
+.accordion-button::after {
+    filter: invert(68%) sepia(58%) saturate(485%) hue-rotate(113deg) brightness(98%) contrast(92%) !important;
+    opacity: 0.9;
+    transition: transform 0.3s ease;
+}
+
+/* Respuesta desplegada (Alto Contraste) */
+.faq-answer-body,
+.accordion-body {
+    padding: 1.4rem 1.5rem;
+    color: #F1F5F9 !important;
+    font-size: 0.98rem;
+    line-height: 1.7;
+    background-color: rgba(15, 23, 42, 0.4);
+}
+
+/* Formulario de Contacto y Búsqueda Laboral */
+.contact-input-custom {
+    background-color: var(--bg-body) !important;
+    border: 1px solid var(--border-subtle) !important;
+    color: #FFFFFF !important;
+    border-radius: 8px;
+    padding: 0.65rem 0.9rem 0.65rem 2.6rem !important;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.contact-input-custom:focus {
+    border-color: var(--primary) !important;
+    box-shadow: var(--neon-glow) !important;
+}
+
+.contact-input-custom::placeholder {
+    color: #94A3B8 !important;
+    opacity: 1 !important;
+}
+
+/* Solapas / Nav Pills */
+.nav-pills-custom .nav-link {
+    background-color: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.25s ease;
+}
+
+.nav-pills-custom .nav-link.active {
+    background-color: var(--primary) !important;
+    color: #0F172A !important;
+    border-color: var(--primary) !important;
+    box-shadow: var(--neon-glow);
+}
+
+.nav-pills-custom .nav-link:not(.active):hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+/* ==========================================================================
+   4. BOTONES
+   ========================================================================== */
+.btn-plataforma {
+    background-color: var(--primary);
+    color: #0F172A !important;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 50rem !important;
+    padding: 0.65rem 1.4rem !important;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+
+.btn-plataforma:hover {
+    background-color: var(--brand-green-neon);
+    color: #0F172A !important;
+    transform: translateY(-2px);
+    box-shadow: var(--neon-glow-strong);
+}
+
+.btn-red-social {
+    background-color: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 0.4rem 0.8rem;
+    transition: all 0.25s ease;
+}
+
+.btn-red-social:hover {
+    border-color: var(--primary);
+    color: var(--brand-green-neon);
+    box-shadow: var(--neon-glow);
+}
+
+/* ==========================================================================
+   5. UTILIDADES DE TEXTO Y BORDES
+   ========================================================================== */
+.text-main {
+    color: var(--text-main) !important;
+}
+
+.text-muted-custom {
+    color: var(--text-muted) !important;
+}
+
+.text-acento,
+.text-verde-escuela {
+    color: var(--brand-green-neon) !important;
+}
+
+.border-acento {
+    border-color: var(--primary) !important;
+}
+
+.border-subtle {
+    border-color: var(--border-subtle) !important;
+}
+
+/* ==========================================================================
+   6. FOOTER Y COPYRIGHT
+   ========================================================================== */
+.footer-section {
+    background-color: var(--bg-footer) !important;
+    border-top: 2px solid var(--border-subtle) !important;
+    margin-top: auto;
+}
+
+.footer-copyright {
+    background-color: var(--bg-copyright) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
+    color: var(--text-muted);
+}
+
+/* ==========================================================================
+   7. ESTILOS GENERALES DEL PANEL DE GESTIÓN (DASHBOARD)
+   ========================================================================== */
+body.body-panel {
+    background-color: var(--bg-body) !important;
+    color: #F8FAFC;
+}
+
+.header-panel-glass {
+    background: var(--bg-navbar);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+.panel-card-container {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    transition: border-color 0.3s ease;
+}
+
+.table-dark {
+    --bs-table-bg: transparent;
+    --bs-table-hover-bg: rgba(16, 185, 129, 0.05);
+    --bs-table-border-color: var(--border-subtle);
+}
+
+.table > :not(caption) > * > * {
+    padding: 1rem 1.25rem;
+}
+
+.table thead th {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    border-bottom: 2px solid var(--border-subtle);
+}

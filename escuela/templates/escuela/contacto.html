@@ -1,504 +1,255 @@
 {% extends 'escuela/base.html' %}
 
-{% block title %}Contacto - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
+{% block title %}Contacto y Búsqueda Laboral - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
 
 {% block content %}
-<!-- ESTILOS VIP DE NIVEL SUPERIOR CON SOMBRAS, GLASSMORPHISM Y CARGA INSTANTÁNEA -->
-<style>
-    .contacto-wrapper-vip {
-        padding-top: 3.5rem;
-        padding-bottom: 5rem;
-    }
+<div class="container py-5">
 
-    .section-badge-vip {
-        background: linear-gradient(135deg, rgba(31, 122, 63, 0.15) 0%, rgba(74, 222, 128, 0.15) 100%);
-        color: var(--brand-green, #1f7a3f);
-        font-weight: 700;
-        font-size: 0.82rem;
-        letter-spacing: 0.08em;
-        border: 1px solid rgba(31, 122, 63, 0.3);
-        box-shadow: 0 4px 12px rgba(31, 122, 63, 0.1);
-        backdrop-filter: blur(8px);
-    }
-
-    .contacto-title {
-        font-family: var(--font-titulo, 'Cinzel', serif);
-        color: var(--primary-navy, #1b365d);
-        font-weight: 800;
-        letter-spacing: -0.5px;
-        text-shadow: 0 2px 4px rgba(15, 23, 42, 0.05);
-    }
-
-    /* TARJETAS PRINCIPALES CON SOMBRA VIP */
-    .card-contacto-vip {
-        background: #ffffff !important;
-        border: 2px solid #cbd5e1 !important;
-        border-radius: 28px !important;
-        box-shadow: 0 16px 40px rgba(15, 23, 42, 0.09) !important;
-        position: relative;
-        overflow: hidden;
-        width: 100%;
-        will-change: transform, box-shadow;
-        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease !important;
-    }
-
-    /* SWITCH DE PESTAÑAS RESPONSIVE CON GLASSMORPHISM */
-    .tabs-wrapper-vip {
-        background-color: #e2e8f0;
-        padding: 0.35rem;
-        border-radius: 50rem;
-        display: flex;
-        gap: 0.35rem;
-        border: 1px solid #cbd5e1;
-        width: 100%;
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
-    }
-
-    .tab-btn-vip {
-        flex: 1;
-        border: none;
-        background: transparent;
-        padding: 0.75rem 1rem;
-        border-radius: 50rem;
-        font-weight: 700;
-        font-size: 0.88rem;
-        color: #64748b;
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.4rem;
-        text-align: center;
-    }
-
-    .tab-btn-vip.active {
-        background: var(--primary-navy, #1b365d);
-        color: #ffffff !important;
-        box-shadow: 0 6px 18px rgba(27, 54, 93, 0.3);
-    }
-
-    /* INPUTS CON ICONO DENTRO */
-    .input-group-vip {
-        position: relative;
-        margin-bottom: 1.25rem;
-    }
-
-    .input-group-vip label {
-        font-weight: 700;
-        font-size: 0.85rem;
-        color: var(--primary-navy, #1b365d);
-        margin-bottom: 0.45rem;
-        display: block;
-        letter-spacing: -0.2px;
-    }
-
-    .input-icon-wrapper {
-        position: relative;
-        display: flex;
-        align-items: center;
-        width: 100%;
-    }
-
-    .input-icon-wrapper i.icon-field {
-        position: absolute;
-        left: 1.1rem;
-        color: #94a3b8;
-        font-size: 1.1rem;
-        transition: color 0.25s ease;
-        pointer-events: none;
-        z-index: 2;
-    }
-
-    .form-control-vip {
-        background-color: #f8fafc;
-        border: 2px solid #e2e8f0;
-        border-radius: 16px;
-        padding: 0.8rem 1rem 0.8rem 2.8rem;
-        font-size: 0.95rem;
-        color: #0f172a;
-        font-weight: 500;
-        transition: all 0.25s ease;
-        width: 100%;
-        box-shadow: 0 2px 4px rgba(15, 23, 42, 0.02);
-    }
-
-    textarea.form-control-vip {
-        padding-left: 1rem !important;
-    }
-
-    .form-control-vip:focus {
-        background-color: #ffffff;
-        border-color: var(--brand-green, #1f7a3f);
-        outline: none;
-        box-shadow: 0 0 0 4px rgba(31, 122, 63, 0.15), 0 4px 12px rgba(15, 23, 42, 0.05);
-    }
-
-    .form-control-vip:focus + i.icon-field,
-    .input-icon-wrapper:focus-within i.icon-field {
-        color: var(--brand-green, #1f7a3f);
-    }
-
-    /* BOTÓN VIP CON RESPLANDOR */
-    .btn-submit-vip {
-        background: linear-gradient(135deg, #1f7a3f 0%, #165b2e 100%);
-        border: none;
-        color: #ffffff !important;
-        font-weight: 800;
-        font-size: 0.98rem;
-        letter-spacing: 0.03em;
-        padding: 0.95rem 2rem;
-        border-radius: 50rem;
-        box-shadow: 0 8px 24px rgba(31, 122, 63, 0.4);
-        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
-                    box-shadow 0.3s ease, 
-                    background 0.3s ease;
-        width: 100%;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.6rem;
-    }
-
-    .btn-submit-vip:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 30px rgba(31, 122, 63, 0.55);
-        background: linear-gradient(135deg, #166534 0%, #14532d 100%);
-    }
-
-    .form-oculto {
-        display: none !important;
-    }
-
-    /* TARJETAS LATERALES DE INFORMACIÓN VIP */
-    .card-info-vip {
-        background: #ffffff !important;
-        border: 2px solid #cbd5e1 !important;
-        border-radius: 24px !important;
-        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08) !important;
-        padding: 1.85rem;
-        margin-bottom: 1.5rem;
-        will-change: transform, border-color, box-shadow;
-        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
-                    border-color 0.3s ease, 
-                    box-shadow 0.3s ease;
-        width: 100%;
-    }
-
-    .card-info-vip:hover {
-        border-color: var(--primary-navy, #1b365d) !important;
-        transform: translateY(-4px);
-        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12) !important;
-    }
-
-    .info-icon-box {
-        width: 48px;
-        height: 48px;
-        border-radius: 16px;
-        background: linear-gradient(135deg, rgba(31, 122, 63, 0.15) 0%, rgba(31, 122, 63, 0.05) 100%);
-        color: var(--brand-green, #1f7a3f);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.35rem;
-        flex-shrink: 0;
-        box-shadow: 0 4px 12px rgba(31, 122, 63, 0.15);
-        transition: transform 0.3s ease;
-    }
-
-    .card-info-vip:hover .info-icon-box {
-        transform: scale(1.08) rotate(-3deg);
-    }
-
-    .map-frame-wrapper {
-        border-radius: 20px;
-        overflow: hidden;
-        border: 2px solid #cbd5e1;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-    }
-
-    /* ==========================================
-       AJUSTES RESPONSIVE MÓVILES EXCLUSIVOS
-       ========================================== */
-    @media (max-width: 576px) {
-        .contacto-wrapper-vip {
-            padding-top: 4.5rem !important;
-            padding-bottom: 3rem;
-        }
-
-        .card-contacto-vip {
-            padding: 1.25rem 1rem !important;
-            border-radius: 20px !important;
-        }
-
-        .card-info-vip {
-            padding: 1.25rem 1rem !important;
-            border-radius: 20px !important;
-        }
-
-        .tabs-wrapper-vip {
-            padding: 0.25rem;
-            border-radius: 16px;
-        }
-
-        .tab-btn-vip {
-            padding: 0.65rem 0.5rem;
-            font-size: 0.78rem;
-            border-radius: 12px;
-            gap: 0.25rem;
-        }
-
-        .tab-btn-vip i {
-            font-size: 0.9rem;
-        }
-    }
-</style>
-
-<div class="container contacto-wrapper-vip">
-    
-    <!-- ENCABEZADO DE SECCIÓN -->
-    <div class="text-center mb-4 mb-md-5">
-        <span class="badge section-badge-vip rounded-pill px-3 py-2 mb-3 d-inline-flex align-items-center gap-2">
+    <!-- ==========================================================================
+         1. ENCABEZADO PRINCIPAL DE LA SECCIÓN
+         ========================================================================== -->
+    <div class="text-center mb-5">
+        <span class="badge bg-badge-custom border border-acento text-acento rounded-pill px-3 py-2 mb-3 d-inline-flex align-items-center gap-2">
             <i class="bi bi-headset"></i> ATENCIÓN DIRECTA Y POSTULACIONES
         </span>
-        <h1 class="display-5 mb-2 contacto-title">
-            Contacto y Búsqueda Laboral
+        <h1 class="display-4 font-titulo fw-bold text-main mb-3">
+            CONTACTO Y BÚSQUEDA LABORAL
         </h1>
-        <p class="text-secondary fs-6 mb-0 fw-medium mx-auto" style="max-width: 650px;">
+        <p class="text-muted-custom fs-5 mb-0 mx-auto" style="max-width: 680px;">
             Ponete en contacto para coordinar entrevistas, resolver dudas sobre admisión o sumarte a nuestro equipo docente.
         </p>
     </div>
 
-    <!-- MENSAJES DE FEEDBACK DJANGO -->
+    <!-- Mensajes de Feedback de Django (Alertas) -->
     {% if messages %}
         {% for message in messages %}
-            <div class="alert alert-success alert-dismissible fade show rounded-4 shadow-sm mb-4 border-2 border-success" role="alert">
-                <i class="bi bi-check-circle-fill me-2 fs-5 align-middle"></i>
+            <div class="alert alert-success alert-dismissible fade show rounded-3 mb-4 border border-acento bg-badge-custom text-main" role="alert">
+                <i class="bi bi-check-circle-fill me-2 fs-5 align-middle text-acento"></i>
                 <span class="align-middle fw-bold">{{ message }}</span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Cerrar"></button>
             </div>
         {% endfor %}
     {% endif %}
 
-    <div class="row g-4 align-items-start">
+    <div class="row g-4 align-items-start mb-5">
         
-        <!-- COLUMNA IZQUIERDA: FORMULARIOS TABS (7 COLS) -->
+        <!-- ==========================================================================
+             2. COLUMNA IZQUIERDA: FORMULARIO INTERACTIVO (CONSULTA / DOCENTE)
+             ========================================================================== -->
         <div class="col-12 col-lg-7">
-            <div class="card-contacto-vip p-4 p-md-5">
+            <div class="card p-4 p-md-5 h-100 border border-subtle">
                 
-                <!-- SWITCH TABS DE CÁPSULA NEÓN -->
-                <div class="tabs-wrapper-vip mb-4" role="tablist">
-                    <button type="button" class="tab-btn-vip active" id="btn-consulta" aria-selected="true">
-                        <i class="bi bi-chat-left-dots-fill"></i> <span>Consulta General</span>
-                    </button>
-                    <button type="button" class="tab-btn-vip" id="btn-docente" aria-selected="false">
-                        <i class="bi bi-person-badge-fill"></i> <span>Sumate como Docente</span>
-                    </button>
-                </div>
+                <!-- Selector de Solapas (Pills) -->
+                <ul class="nav nav-pills nav-pills-custom nav-justified gap-2 mb-4" id="contactTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active py-2.5 px-3" id="general-tab" data-bs-toggle="pill" data-bs-target="#general-form" type="button" role="tab">
+                            <i class="bi bi-chat-left-dots-fill me-2"></i>Consulta General
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link py-2.5 px-3" id="docente-tab" data-bs-toggle="pill" data-bs-target="#docente-form" type="button" role="tab">
+                            <i class="bi bi-person-badge-fill me-2"></i>Sumate como Docente
+                        </button>
+                    </li>
+                </ul>
 
-                <!-- FORMULARIO 1: CONSULTA GENERAL -->
-                <form method="POST" id="form-consulta">
-                    {% csrf_token %}
-                    <input type="hidden" name="tipo_form" value="consulta">
-
-                    <div class="input-group-vip">
-                        <label for="nombre">Nombre Completo *</label>
-                        <div class="input-icon-wrapper">
-                            <i class="bi bi-person-fill icon-field"></i>
-                            <input type="text" id="nombre" name="nombre" class="form-control-vip" placeholder="Ej: Juan Pérez" required>
-                        </div>
-                    </div>
-
-                    <div class="row g-3">
-                        <div class="col-12 col-md-6 input-group-vip">
-                            <label for="email">Correo Electrónico *</label>
-                            <div class="input-icon-wrapper">
-                                <i class="bi bi-envelope-fill icon-field"></i>
-                                <input type="email" id="email" name="email" class="form-control-vip" placeholder="ejemplo@correo.com" required>
+                <!-- Contenido de Solapas -->
+                <div class="tab-content" id="contactTabsContent">
+                    
+                    <!-- Formulario A: Consulta General -->
+                    <div class="tab-pane fade show active" id="general-form" role="tabpanel">
+                        <form method="post" action="{% url 'escuela:contacto' %}" class="d-flex flex-column gap-3">
+                            {% csrf_token %}
+                            <input type="hidden" name="tipo_form" value="general">
+                            
+                            <div>
+                                <label class="form-label text-main fw-semibold small mb-1">Nombre Completo *</label>
+                                <div class="position-relative">
+                                    <i class="bi bi-person contact-input-icon"></i>
+                                    <input type="text" name="nombre" class="form-control contact-input-custom shadow-none" placeholder="Ej: Juan Pérez" required>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-12 col-md-6 input-group-vip">
-                            <label for="telefono">Teléfono</label>
-                            <div class="input-icon-wrapper">
-                                <i class="bi bi-telephone-fill icon-field"></i>
-                                <input type="tel" id="telefono" name="telefono" class="form-control-vip" placeholder="Ej: 299 1234567">
+
+                            <div class="row g-3">
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label text-main fw-semibold small mb-1">Correo Electrónico *</label>
+                                    <div class="position-relative">
+                                        <i class="bi bi-envelope contact-input-icon"></i>
+                                        <input type="email" name="email" class="form-control contact-input-custom shadow-none" placeholder="ejemplo@correo.com" required>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label text-main fw-semibold small mb-1">Teléfono</label>
+                                    <div class="position-relative">
+                                        <i class="bi bi-telephone contact-input-icon"></i>
+                                        <input type="tel" name="telefono" class="form-control contact-input-custom shadow-none" placeholder="Ej: 299 1234567">
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="input-group-vip">
-                        <label for="asunto">Asunto *</label>
-                        <div class="input-icon-wrapper">
-                            <i class="bi bi-bookmark-fill icon-field"></i>
-                            <input type="text" id="asunto" name="asunto" class="form-control-vip" placeholder="Ej: Inscripciones {% now 'Y' %} / Consultas generales" required>
-                        </div>
-                    </div>
-
-                    <div class="input-group-vip">
-                        <label for="mensaje">Mensaje *</label>
-                        <textarea id="mensaje" name="mensaje" class="form-control-vip" rows="4" placeholder="Escribí tu consulta en detalle..." required></textarea>
-                    </div>
-
-                    <button type="submit" class="btn-submit-vip">
-                        ENVIAR CONSULTA <i class="bi bi-send-fill fs-6"></i>
-                    </button>
-                </form>
-
-                <!-- FORMULARIO 2: POSTULACIÓN DOCENTE -->
-                <form method="POST" id="form-docente" class="form-oculto" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="hidden" name="tipo_form" value="docente">
-
-                    <div class="input-group-vip">
-                        <label for="nombre_docente">Nombre Completo *</label>
-                        <div class="input-icon-wrapper">
-                            <i class="bi bi-person-fill icon-field"></i>
-                            <input type="text" id="nombre_docente" name="nombre" class="form-control-vip" placeholder="Ej: María González" required>
-                        </div>
-                    </div>
-
-                    <div class="row g-3">
-                        <div class="col-12 col-md-6 input-group-vip">
-                            <label for="email_docente">Correo Electrónico *</label>
-                            <div class="input-icon-wrapper">
-                                <i class="bi bi-envelope-fill icon-field"></i>
-                                <input type="email" id="email_docente" name="email" class="form-control-vip" placeholder="ejemplo@correo.com" required>
+                            <div>
+                                <label class="form-label text-main fw-semibold small mb-1">Asunto *</label>
+                                <div class="position-relative">
+                                    <i class="bi bi-bookmark contact-input-icon"></i>
+                                    <input type="text" name="asunto" class="form-control contact-input-custom shadow-none" placeholder="Ej: Inscripciones 2026 / Consultas generales" required>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-12 col-md-6 input-group-vip">
-                            <label for="telefono_docente">Teléfono *</label>
-                            <div class="input-icon-wrapper">
-                                <i class="bi bi-telephone-fill icon-field"></i>
-                                <input type="tel" id="telefono_docente" name="telefono" class="form-control-vip" placeholder="Ej: 299 1234567" required>
+
+                            <div>
+                                <label class="form-label text-main fw-semibold small mb-1">Mensaje *</label>
+                                <textarea name="mensaje" rows="4" class="form-control contact-input-custom shadow-none ps-3" placeholder="Escribí tu consulta aquí..." required></textarea>
                             </div>
-                        </div>
+
+                            <button type="submit" class="btn btn-plataforma py-3 fw-bold mt-2 d-flex align-items-center justify-content-center gap-2">
+                                ENVIAR CONSULTA <i class="bi bi-send-fill"></i>
+                            </button>
+                        </form>
                     </div>
 
-                    <div class="input-group-vip">
-                        <label for="nivel_interes">Nivel Educativo de Interés *</label>
-                        <div class="input-icon-wrapper">
-                            <i class="bi bi-mortarboard-fill icon-field"></i>
-                            <select id="nivel_interes" name="asunto" class="form-control-vip" required>
-                                <option value="Postulación Docente - Nivel Inicial">Nivel Inicial</option>
-                                <option value="Postulación Docente - Nivel Primario">Nivel Primario</option>
-                                <option value="Postulación Docente - Nivel Secundario">Nivel Secundario</option>
-                                <option value="Postulación Docente - Áreas Especiales">Áreas Especiales (Inglés, Edu. Física, Artística)</option>
-                            </select>
-                        </div>
+                    <!-- Formulario B: Postulación Docente -->
+                    <div class="tab-pane fade" id="docente-form" role="tabpanel">
+                        <form method="post" action="{% url 'escuela:contacto' %}" enctype="multipart/form-data" class="d-flex flex-column gap-3">
+                            {% csrf_token %}
+                            <input type="hidden" name="tipo_form" value="docente">
+
+                            <div>
+                                <label class="form-label text-main fw-semibold small mb-1">Nombre Completo *</label>
+                                <div class="position-relative">
+                                    <i class="bi bi-person contact-input-icon"></i>
+                                    <input type="text" name="nombre" class="form-control contact-input-custom shadow-none" placeholder="Ej: María González" required>
+                                </div>
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label text-main fw-semibold small mb-1">Correo Electrónico *</label>
+                                    <div class="position-relative">
+                                        <i class="bi bi-envelope contact-input-icon"></i>
+                                        <input type="email" name="email" class="form-control contact-input-custom shadow-none" placeholder="ejemplo@correo.com" required>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label class="form-label text-main fw-semibold small mb-1">Teléfono *</label>
+                                    <div class="position-relative">
+                                        <i class="bi bi-telephone contact-input-icon"></i>
+                                        <input type="tel" name="telefono" class="form-control contact-input-custom shadow-none" placeholder="Ej: 299 1234567" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="form-label text-main fw-semibold small mb-1">Nivel / Especialidad *</label>
+                                <div class="position-relative">
+                                    <i class="bi bi-mortarboard contact-input-icon"></i>
+                                    <input type="text" name="especialidad" class="form-control contact-input-custom shadow-none" placeholder="Ej: Prof. Nivel Primario / Prof. Inglés / Música" required>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="form-label text-main fw-semibold small mb-1">Adjuntar Curriculum Vitae (PDF) *</label>
+                                <input type="file" name="cv" accept=".pdf,.doc,.docx" class="form-control contact-input-custom shadow-none ps-3" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-plataforma py-3 fw-bold mt-2 d-flex align-items-center justify-content-center gap-2">
+                                ENVIAR POSTULACIÓN <i class="bi bi-file-earmark-person-fill"></i>
+                            </button>
+                        </form>
                     </div>
 
-                    <div class="input-group-vip">
-                        <label for="mensaje_docente">Presentación / Breve Trayectoria *</label>
-                        <textarea id="mensaje_docente" name="mensaje" class="form-control-vip" rows="3" placeholder="Contanos tu formación y experiencia profesional..." required></textarea>
-                    </div>
+                </div> <!-- final tab-content -->
 
-                    <div class="input-group-vip">
-                        <label for="cv_docente">Adjuntar Curriculum Vitae (PDF / Word) *</label>
-                        <input type="file" id="cv_docente" name="cv" class="form-control-vip ps-3" accept=".pdf,.doc,.docx" required>
-                        <small class="text-muted mt-1 d-block fw-medium" style="font-size: 0.8rem;">Formatos aceptados: PDF, DOC o DOCX.</small>
-                    </div>
-
-                    <button type="submit" class="btn-submit-vip">
-                        POSTULARSE AHORA <i class="bi bi-file-earmark-arrow-up-fill fs-6"></i>
-                    </button>
-                </form>
-
-            </div>
+            </div> <!-- final card -->
         </div>
 
-        <!-- COLUMNA DERECHA: TARJETAS DE INFORMACIÓN Y MAPA (5 COLS) -->
-        <div class="col-12 col-lg-5">
+        <!-- ==========================================================================
+             3. COLUMNA DERECHA: INFORMACIÓN DIRECTA Y UBICACIÓN
+             ========================================================================== -->
+        <div class="col-12 col-lg-5 d-flex flex-column gap-4">
             
-            <!-- TARJETA 1: INFORMACIÓN DIRECTA -->
-            <div class="card-info-vip">
-                <h3 class="fw-bold fs-5 mb-1" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d);">
-                    Información Directa
-                </h3>
-                <p class="text-secondary small mb-4">Secretaría general e instalaciones del colegio.</p>
+            <!-- Tarjeta 1: Datos de Contacto Secretaría -->
+            <div class="card p-4 p-md-5 border border-subtle d-flex flex-column justify-content-between h-100">
+                
+                <div>
+                    <h2 class="font-titulo h4 fw-bold text-main mb-1">INFORMACIÓN DIRECTA</h2>
+                    <p class="text-muted-custom small mb-4">Secretaría general e instalaciones del colegio.</p>
 
-                <div class="d-flex flex-column gap-3">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="info-icon-box">
-                            <i class="bi bi-telephone-fill"></i>
+                    <div class="d-flex flex-column gap-4">
+                        
+                        <!-- Teléfono -->
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="bg-badge-custom border border-subtle p-3 rounded-3 text-acento fs-5">
+                                <i class="bi bi-telephone-fill"></i>
+                            </div>
+                            <div>
+                                <span class="d-block fw-bold text-main small">Teléfono Directo</span>
+                                <span class="text-muted-custom fs-6">{{ escuela_info.telefono|default:"0299 15-570-2824" }}</span>
+                            </div>
                         </div>
-                        <div>
-                            <strong class="d-block text-dark small">Teléfono Directo</strong>
-                            <span class="text-secondary fw-semibold small">{{ escuela_info.telefono|default:"0299 15-570-2824" }}</span>
-                        </div>
-                    </div>
 
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="info-icon-box">
-                            <i class="bi bi-envelope-fill"></i>
+                        <!-- Email -->
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="bg-badge-custom border border-subtle p-3 rounded-3 text-acento fs-5">
+                                <i class="bi bi-envelope-fill"></i>
+                            </div>
+                            <div>
+                                <span class="d-block fw-bold text-main small">Correo Electrónico</span>
+                                <span class="text-muted-custom fs-6">{{ escuela_info.email|default:"patagoniaescuelaprimaria@gmail.com" }}</span>
+                            </div>
                         </div>
-                        <div style="min-width: 0;">
-                            <strong class="d-block text-dark small">Correo Electrónico</strong>
-                            <span class="text-secondary fw-semibold small text-break d-block">{{ escuela_info.email|default:"patagoniaescuelaprimaria@gmail.com" }}</span>
-                        </div>
-                    </div>
 
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="info-icon-box">
-                            <i class="bi bi-clock-fill"></i>
-                        </div>
-                        <div>
-                            <strong class="d-block text-dark small">Horario de Atención</strong>
-                            <span class="text-secondary fw-semibold small">Lunes a Viernes de {{ escuela_info.horario|default:"07:00 a 19:00 hs" }}</span>
+                        <!-- Horarios -->
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="bg-badge-custom border border-subtle p-3 rounded-3 text-acento fs-5">
+                                <i class="bi bi-clock-fill"></i>
+                            </div>
+                            <div>
+                                <span class="d-block fw-bold text-main small">Horario de Atención</span>
+                                <span class="text-muted-custom fs-6">{{ escuela_info.horario_atencion|default:"Lunes a Viernes de 07:00 a 19:00 hs" }}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- TARJETA 2: UBICACIÓN Y MAPA EMBEBIDO -->
-            <div class="card-info-vip mb-0">
-                <h3 class="fw-bold fs-5 mb-1" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d);">
-                    Ubicación Establecimiento
-                </h3>
-                <p class="text-secondary small mb-3">
-                    <i class="bi bi-geo-alt-fill text-danger me-1"></i>
-                    <strong>{{ escuela_info.direccion|default:"Saavedra 750 (tira 1 B° 12 Sept.)" }}</strong> — Cipolletti, Río Negro
+                <!-- Canales Oficiales (Redes) -->
+                <div class="pt-4 border-top border-subtle mt-4">
+                    <span class="d-block text-muted-custom small mb-2 fw-semibold">Canales Oficiales</span>
+                    <div class="d-flex gap-2">
+                        {% if escuela_info.facebook %}
+                            <a href="{{ escuela_info.facebook }}" target="_blank" class="btn btn-red-social btn-sm"><i class="bi bi-facebook me-1"></i> Facebook</a>
+                        {% endif %}
+                        {% if escuela_info.instagram %}
+                            <a href="{{ escuela_info.instagram }}" target="_blank" class="btn btn-red-social btn-sm"><i class="bi bi-instagram me-1"></i> Instagram</a>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div> <!-- final card info -->
+
+            <!-- Tarjeta 2: Ubicación y Mapa -->
+            <div class="card p-4 h-100 border border-subtle">
+                <h3 class="font-titulo h5 fw-bold text-main mb-1">UBICACIÓN ESTABLECIMIENTO</h3>
+                <p class="text-muted-custom small mb-3">
+                    <i class="bi bi-geo-alt-fill text-acento me-1"></i>
+                    {{ escuela_info.direccion|default:"Saavedra 750 (tira 1 B° 12 Sept.)" }} — Cipolletti
                 </p>
 
-                <div class="map-frame-wrapper">
+                <!-- Contenedor Mapa Google -->
+                <div class="rounded-3 overflow-hidden border border-subtle">
                     <iframe 
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3102.53123456789!2d-67.9945!3d-38.9385!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x960a325000000000%3A0x0!2sSaavedra%20750%2C%20Cipolletti%2C%20R%C3%ADo%20Negro!5e0!3m2!1ses!2sar!4v1600000000000!5m2!1ses!2sar" 
                         width="100%" 
-                        height="215" 
+                        height="200" 
                         style="border:0; display: block;" 
                         allowfullscreen="" 
                         loading="lazy" 
                         referrerpolicy="no-referrer-when-downgrade">
                     </iframe>
                 </div>
-            </div>
+            </div> <!-- final card mapa -->
 
-        </div>
+        </div> <!-- final col-lg-5 -->
 
-    </div>
+    </div> <!-- final row -->
 
-</div>
-
-<!-- SCRIPT PESTAÑAS (TABS) CÁPSULA NEÓN -->
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const btnConsulta = document.getElementById('btn-consulta');
-        const btnDocente = document.getElementById('btn-docente');
-        const formConsulta = document.getElementById('form-consulta');
-        const formDocente = document.getElementById('form-docente');
-
-        const switchTab = (activeBtn, inactiveBtn, showForm, hideForm) => {
-            activeBtn.classList.add('active');
-            activeBtn.setAttribute('aria-selected', 'true');
-            inactiveBtn.classList.remove('active');
-            inactiveBtn.setAttribute('aria-selected', 'false');
-
-            showForm.classList.remove('form-oculto');
-            hideForm.classList.add('form-oculto');
-        };
-
-        if (btnConsulta && btnDocente) {
-            btnConsulta.addEventListener('click', () => switchTab(btnConsulta, btnDocente, formConsulta, formDocente));
-            btnDocente.addEventListener('click', () => switchTab(btnDocente, btnConsulta, formDocente, formConsulta));
-        }
-    });
-</script>
+</div> <!-- final container -->
 {% endblock %}

@@ -5,349 +5,91 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- TÍTULO DINÁMICO -->
-    <title>{% block title %}{% if escuela_info %}{{ escuela_info.nombre }}{% else %}Colegio Patagonia{% endif %}{% endblock %}</title>
+    <!-- Título Dinámico -->
+    <title>{% block title %}{{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}</title>
     
-    <!-- GOOGLE FONTS (Cinzel & Inter) -->
+    <!-- Meta Tags para SEO y Redes Sociales -->
+    <meta name="description" content="{{ escuela_info.descripcion|default:'Sitio web oficial de la institución educativa.' }}">
+    <meta property="og:title" content="{{ escuela_info.nombre|default:'Colegio Patagonia' }}">
+    <meta property="og:type" content="website">
+    {% if escuela_info.logo %}
+        <meta property="og:image" content="{{ escuela_info.logo.url }}">
+    {% endif %}
+
+    <!-- Favicon -->
+    {% if escuela_info.favicon %}
+        <link rel="shortcut icon" href="{{ escuela_info.favicon.url }}" type="image/x-icon">
+    {% endif %}
+
+    <!-- Fuentes Google (Cinzel + Inter) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- FRAMEWORK CSS: Bootstrap 5 (CDN) -->
+    <!-- Bootstrap 5 & Íconos -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- BOOTSTRAP ICONS (Vectoriales SVG) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <!-- ANIMACIONES AOS -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-
-    <!-- ESTILOS GLOBALES Y VARIABLES CSS INTEGRADAS -->
-    <style>
-        :root {
-            --primary-navy: #1b365d;       /* Azul marino institucional */
-            --primary-dark: #0b1526;       /* Azul noche ultra oscuro */
-            --brand-green: #1f7a3f;        /* Verde institucional */
-            --brand-green-hover: #165b2e;  /* Verde oscuro para hover */
-            --brand-green-neon: #4ade80;   /* Verde brillante */
-            --accent-gold: #d97706;        /* Dorado/Ámbar institucional */
-            --bg-light: #f1f5f9;           /* Fondo gris suave */
-            --text-dark: #0f172a;
-            --text-muted: #475569;
-            --font-titulo: 'Cinzel', serif;
-            --font-cuerpo: 'Inter', sans-serif;
-        }
-
-        html, body {
-            overflow-x: hidden !important;
-            width: 100%;
-        }
-
-        body {
-            font-family: var(--font-cuerpo);
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        main {
-            flex: 1;
-            width: 100%;
-            overflow-x: hidden;
-            padding-top: 130px; /* <--- Compensación amplia para que el logo flotante no pise nada */
-        }
-
-        /* NAVBAR FINO Y COMPACTO CON INTELIGENCIA DE SCROLL */
-        .navbar-vip {
-            background: rgba(11, 21, 38, 0.96) !important;
-            backdrop-filter: blur(14px) !important;
-            -webkit-backdrop-filter: blur(14px) !important;
-            border-bottom: 4px solid var(--brand-green);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
-            padding-top: 0.35rem !important;
-            padding-bottom: 0.35rem !important;
-            
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1030;
-            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        /* CLASE DINÁMICA QUE OCULTA EL HEADER AL BAJAR */
-        .navbar-vip.nav-hidden {
-            transform: translateY(-115%);
-        }
-
-        /* LOGO GIGANTE DE 90PX CON SOBRESALIDA / OVERLAPPING */
-        .brand-logo-img {
-            height: 90px !important;
-            max-height: 90px !important;
-            width: auto !important;
-            object-fit: contain !important;
-            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.6)) !important;
-            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
-            margin-top: -8px;
-            margin-bottom: -18px; /* Sobresale hacia abajo sin agrandar la barra */
-            position: relative;
-            z-index: 10;
-        }
-
-        .brand-logo-img:hover {
-            transform: scale(1.08) rotate(-1deg) !important;
-        }
-
-        .brand-title-compact {
-            font-family: var(--font-titulo, 'Cinzel', serif);
-            color: #ffffff !important;
-            letter-spacing: -0.4px;
-            line-height: 1.1;
-            font-size: 1.25rem;
-            font-weight: 800;
-        }
-
-        .nav-link {
-            color: #e2e8f0 !important;
-            font-weight: 700;
-            font-size: 0.94rem;
-            padding: 0.45rem 1.1rem !important;
-            border-radius: 50rem;
-            transition: all 0.25s ease;
-            letter-spacing: -0.2px;
-        }
-
-        .nav-link:hover {
-            color: #ffffff !important;
-            background: rgba(255, 255, 255, 0.16);
-            transform: translateY(-2px);
-        }
-
-        .btn-portal-vip {
-            background: linear-gradient(135deg, #1f7a3f 0%, #165b2e 100%);
-            color: #ffffff !important;
-            font-weight: 800;
-            font-size: 0.88rem;
-            border: 1px solid rgba(74, 222, 128, 0.3);
-            box-shadow: 0 6px 18px rgba(31, 122, 63, 0.45);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            letter-spacing: 0.02em;
-        }
-
-        .btn-portal-vip:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(31, 122, 63, 0.65);
-            background: linear-gradient(135deg, #166534 0%, #14532d 100%);
-        }
-
-        /* FOOTER PANORÁMICO POTENTE */
-        .site-footer {
-            background: linear-gradient(180deg, #0b1526 0%, #03070d 100%);
-            color: #cbd5e1;
-            padding: 4.5rem 0 0;
-            margin-top: 0 !important;
-            border-top: 5px solid var(--brand-green);
-            font-size: 0.92rem;
-        }
-
-        .footer-title {
-            font-family: var(--font-titulo);
-            color: #ffffff;
-            font-size: 1.3rem;
-            font-weight: 800;
-            margin-bottom: 1.35rem;
-            display: flex;
-            align-items: center;
-            gap: 0.7rem;
-            letter-spacing: -0.3px;
-        }
-
-        .footer-title::before {
-            content: '';
-            display: inline-block;
-            width: 5px;
-            height: 24px;
-            background-color: var(--brand-green);
-            border-radius: 999px;
-            box-shadow: 0 0 10px var(--brand-green-neon);
-        }
-
-        .footer-phrase {
-            font-style: italic;
-            color: #93c5fd;
-            font-size: 0.95rem;
-            line-height: 1.55;
-            font-weight: 500;
-        }
-
-        .footer-levels-list {
-            list-style: none;
-            padding-left: 0;
-            margin: 0;
-        }
-
-        .footer-levels-list li {
-            color: #e2e8f0;
-            font-size: 0.93rem;
-            margin-bottom: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 0.65rem;
-            font-weight: 500;
-        }
-
-        .footer-social-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.7rem;
-            margin-top: 1.4rem;
-        }
-
-        .social-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.55rem;
-            padding: 0.6rem 1.25rem;
-            border-radius: 50rem;
-            font-size: 0.88rem;
-            font-weight: 700;
-            text-decoration: none;
-            background-color: rgba(255, 255, 255, 0.08);
-            color: #ffffff !important;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            backdrop-filter: blur(8px);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .social-btn:hover {
-            background-color: rgba(255, 255, 255, 0.22);
-            border-color: rgba(255, 255, 255, 0.4);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
-        }
-
-        .footer-copyright {
-            background-color: rgba(0, 0, 0, 0.5);
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 1.35rem 0;
-            margin-top: 4rem;
-            color: #94a3b8;
-            font-size: 0.86rem;
-            font-weight: 500;
-        }
-
-        /* ==========================================
-           REGLAS RESPONSIVE GLOBALES (MÓVIL & TABLET)
-           ========================================== */
-        @media (max-width: 991px) {
-            .navbar-collapse {
-                background-color: #0b1526;
-                padding: 1.25rem;
-                border-radius: 20px;
-                margin-top: 0.75rem;
-                border: 1px solid rgba(255, 255, 255, 0.15);
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            }
-            .nav-link {
-                padding: 0.65rem 1rem !important;
-            }
-        }
-
-        @media (max-width: 768px) {
-            main {
-                padding-top: 95px; /* <--- Espacio justo y con aire para celulares */
-            }
-
-            .brand-logo-img {
-                height: 65px !important;
-                max-height: 65px !important;
-                margin-top: 0 !important;
-                margin-bottom: 0 !important;
-            }
-
-            .brand-title-compact {
-                font-size: 1.05rem !important;
-            }
-
-            .brand-phrase {
-                display: none !important;
-            }
-
-            h1, .display-4, .display-5 {
-                font-size: 1.85rem !important;
-            }
-
-            h2 {
-                font-size: 1.55rem !important;
-            }
-
-            .site-footer {
-                padding-top: 3rem;
-            }
-            
-            .footer-copyright {
-                margin-top: 2.5rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .btn-portal-vip {
-                width: 100%;
-                text-align: center;
-            }
-        }
-    </style>
-
-    <!-- ARCHIVO CSS ADICIONAL -->
+    <!-- CSS Institucional Único -->
     <link rel="stylesheet" href="{% static 'escuela/css/estilos.css' %}">
+    
+    {% block extra_css %}{% endblock %}
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 
-    <!-- NAVBAR HEADER COMPACTO CON INTELIGENCIA DE SCROLL -->
-    <header class="navbar navbar-expand-lg navbar-dark navbar-vip">
+    <!-- NAVBAR INSTITUCIONAL -->
+    <header class="navbar navbar-expand-lg header-navbar sticky-top py-2">
         <div class="container">
             
-            <!-- MARCA Y LOGO XXL -->
-            <a href="{% url 'escuela:home' %}" class="navbar-brand d-flex align-items-center gap-3 me-3">
+            <a href="{% url 'escuela:home' %}" class="navbar-brand d-flex align-items-center gap-3">
                 {% if escuela_info.logo %}
-                    <img src="{{ escuela_info.logo.url }}" 
-                         alt="Logo {{ escuela_info.nombre }}" 
-                         class="brand-logo-img">
+                    <img src="{{ escuela_info.logo.url }}" alt="Logo {{ escuela_info.nombre|default:'Colegio Patagonia' }}" class="brand-logo rounded p-1">
+                {% else %}
+                    <div class="bg-badge-custom p-2 rounded-3 border border-subtle text-acento">
+                        <i class="bi bi-building fs-3"></i>
+                    </div>
                 {% endif %}
-                <div class="brand-text">
-                    <span class="brand-title-compact d-block">
+                <div>
+                    <span class="fw-bold font-titulo fs-5 d-block text-main leading-tight">
                         {{ escuela_info.nombre|default:"Colegio Patagonia" }}
                     </span>
                     {% if escuela_info.frase %}
-                        <small class="brand-phrase d-block text-info fw-semibold" style="font-size: 0.75rem; letter-spacing: 0.02em;">{{ escuela_info.frase }}</small>
+                        <small class="d-block text-acento small fw-semibold">{{ escuela_info.frase }}</small>
                     {% endif %}
                 </div>
             </a>
 
-            <!-- BOTÓN MENÚ MÓVIL -->
-            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+            <button class="navbar-toggler border-0 text-main shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="bi bi-list fs-1 text-acento"></i>
             </button>
 
-            <!-- ENLACES DE NAVEGACIÓN -->
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav align-items-lg-center gap-1 mt-3 mt-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="{% url 'escuela:home' %}">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'escuela:requisitos' %}">Inscripción</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'escuela:docentes' %}">Autoridades</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'escuela:faq' %}">Consultas</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'escuela:contacto' %}">Contacto</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'escuela:home' %}">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 {% if request.resolver_match.url_name == 'requisitos' %}active{% endif %}" href="{% url 'escuela:requisitos' %}">Inscripción</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 {% if request.resolver_match.url_name == 'docentes' %}active{% endif %}" href="{% url 'escuela:docentes' %}">Autoridades</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 {% if request.resolver_match.url_name == 'faq' %}active{% endif %}" href="{% url 'escuela:faq' %}">Consultas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 {% if request.resolver_match.url_name == 'contacto' %}active{% endif %}" href="{% url 'escuela:contacto' %}">Contacto</a>
+                    </li>
                     
+                    <!-- BOTÓN PLATAFORMA / AULA VIRTUAL -->
                     <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
                         {% if user.is_authenticated %}
-                            <a href="{% url 'panel_inicio' %}" class="btn btn-portal-vip rounded-pill px-3.5 py-2">
-                                <i class="bi bi-speedometer2 me-1 fs-6"></i> Mi Plataforma
+                            <a href="{% url 'panel_inicio' %}" class="btn btn-plataforma">
+                                <i class="bi bi-speedometer2 me-1"></i> Mi Plataforma
                             </a>
                         {% else %}
-                            <a href="{% url 'panel_login' %}" class="btn btn-portal-vip rounded-pill px-3.5 py-2">
-                                <i class="bi bi-shield-lock-fill me-1 fs-6"></i> Plataforma
+                            <a href="{% url 'escuela:portal' %}" class="btn btn-plataforma">
+                                <i class="bi bi-shield-lock-fill me-1"></i> Plataforma
                             </a>
                         {% endif %}
                     </li>
@@ -356,82 +98,93 @@
         </div>
     </header>
 
-    <!-- CONTENIDO PRINCIPAL DINÁMICO -->
-    <main>
+    <!-- CONTENIDO PRINCIPAL ANIMADO -->
+    <main class="flex-grow-1 animate-fade-in py-4">
+        {% if messages %}
+            <div class="container mb-4">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show glass-panel border-0 shadow-lg" role="alert">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-info-circle-fill text-acento fs-5"></i>
+                            <div>{{ message }}</div>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         {% block content %}
         {% endblock %}
     </main>
 
-    <!-- FOOTER PIE DE PÁGINA -->
-    <footer class="site-footer">
+    <!-- FOOTER INSTITUCIONAL -->
+    <footer class="footer-section pt-5 mt-auto">
         <div class="container">
-            <div class="row g-4 align-items-start">
+            <div class="row g-4 align-items-start pb-4">
                 
-                <!-- COLUMNA 1: Marca, Frase e Horario -->
+                <!-- Columna 1: Nombre & Horario -->
                 <div class="col-12 col-md-4">
-                    <h4 class="footer-title">{{ escuela_info.nombre|default:"Colegio Patagonia" }}</h4>
+                    <h4 class="font-titulo text-main fs-5 fw-bold mb-3 border-start border-3 border-acento ps-2">
+                        {{ escuela_info.nombre|default:"Colegio Patagonia" }}
+                    </h4>
                     {% if escuela_info.frase %}
-                        <p class="footer-phrase mb-3">"{{ escuela_info.frase }}"</p>
+                        <p class="fst-italic text-acento small mb-3">"{{ escuela_info.frase }}"</p>
                     {% endif %}
                     {% if escuela_info.horario %}
-                        <div class="d-flex align-items-center gap-2 text-white-50 small mt-3">
-                            <i class="bi bi-clock-history text-warning fs-5"></i>
+                        <div class="d-flex align-items-center gap-2 small mt-3">
+                            <i class="bi bi-clock-history text-acento fs-5"></i>
                             <div>
-                                <strong class="d-block text-white">Horario de Atención:</strong>
-                                <span>{{ escuela_info.horario }}</span>
+                                <strong class="d-block text-main">Horario de Atención:</strong>
+                                <span class="text-muted-custom">{{ escuela_info.horario }}</span>
                             </div>
                         </div>
                     {% endif %}
                 </div>
 
-                <!-- COLUMNA 2: Niveles Educativos -->
+                <!-- Columna 2: Niveles Educativos -->
                 <div class="col-12 col-md-4">
-                    <h4 class="footer-title">Niveles Educativos</h4>
-                    <ul class="footer-levels-list">
-                        <li><i class="bi bi-check-circle-fill text-success fs-6"></i> Nivel Inicial (salas de 3, 4 y 5 años)</li>
-                        <li><i class="bi bi-check-circle-fill text-success fs-6"></i> Nivel Primario (1º a 7º grado)</li>
-                        <li><i class="bi bi-check-circle-fill text-success fs-6"></i> Nivel Medio (1º y 2º año)</li>
+                    <h4 class="font-titulo text-main fs-5 fw-bold mb-3 border-start border-3 border-acento ps-2">
+                        Niveles Educativos
+                    </h4>
+                    <ul class="list-unstyled d-flex flex-column gap-2 small text-muted-custom">
+                        <li><i class="bi bi-check-circle-fill text-acento me-2"></i> Nivel Inicial (salas de 3, 4 y 5 años)</li>
+                        <li><i class="bi bi-check-circle-fill text-acento me-2"></i> Nivel Primario (1º a 7º grado)</li>
+                        <li><i class="bi bi-check-circle-fill text-acento me-2"></i> Nivel Medio (1º y 2º año)</li>
                     </ul>
                 </div>
 
-                <!-- COLUMNA 3: Contacto Directo y Redes -->
+                <!-- Columna 3: Contacto & Redes -->
                 <div class="col-12 col-md-4">
-                    <h4 class="footer-title">Contacto Directo</h4>
-                    <div class="d-flex flex-column gap-2 text-white-50 small">
+                    <h4 class="font-titulo text-main fs-5 fw-bold mb-3 border-start border-3 border-acento ps-2">
+                        Contacto Directo
+                    </h4>
+                    <div class="d-flex flex-column gap-2 small mb-3 text-muted-custom">
                         {% if escuela_info.direccion %}
-                            <p class="mb-1 d-flex align-items-center gap-2">
-                                <i class="bi bi-geo-alt-fill text-warning fs-6"></i> {{ escuela_info.direccion }}
-                            </p>
+                            <p class="mb-0"><i class="bi bi-geo-alt-fill text-acento me-2"></i>{{ escuela_info.direccion }}</p>
                         {% endif %}
                         {% if escuela_info.telefono %}
-                            <p class="mb-1 d-flex align-items-center gap-2">
-                                <i class="bi bi-telephone-fill text-warning fs-6"></i> Tel: {{ escuela_info.telefono }}
-                            </p>
+                            <p class="mb-0"><i class="bi bi-telephone-fill text-acento me-2"></i>Tel: {{ escuela_info.telefono }}</p>
                         {% endif %}
                         {% if escuela_info.email %}
-                            <p class="mb-1 d-flex align-items-center gap-2">
-                                <i class="bi bi-envelope-fill text-warning fs-6"></i> {{ escuela_info.email }}
-                            </p>
+                            <p class="mb-0"><i class="bi bi-envelope-fill text-acento me-2"></i>{{ escuela_info.email }}</p>
                         {% endif %}
                     </div>
 
-                    <!-- REDES SOCIALES -->
-                    <div class="footer-social-links">
+                    <div class="d-flex flex-wrap gap-2 pt-1">
                         {% if escuela_info.whatsapp %}
-                            <a href="https://wa.me/{{ escuela_info.whatsapp }}" target="_blank" class="social-btn">
-                                <i class="bi bi-whatsapp text-success fs-6"></i> WhatsApp
+                            <a href="https://wa.me/{{ escuela_info.whatsapp }}" target="_blank" rel="noopener noreferrer" class="btn btn-red-social">
+                                <i class="bi bi-whatsapp text-acento me-1"></i> WhatsApp
                             </a>
                         {% endif %}
-
                         {% if escuela_info.instagram_url %}
-                            <a href="{{ escuela_info.instagram_url }}" target="_blank" class="social-btn">
-                                <i class="bi bi-instagram text-danger fs-6"></i> Instagram
+                            <a href="{{ escuela_info.instagram_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-red-social">
+                                <i class="bi bi-instagram text-acento me-1"></i> Instagram
                             </a>
                         {% endif %}
-
                         {% if escuela_info.facebook_url %}
-                            <a href="{{ escuela_info.facebook_url }}" target="_blank" class="social-btn">
-                                <i class="bi bi-facebook text-primary fs-6"></i> Facebook
+                            <a href="{{ escuela_info.facebook_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-red-social">
+                                <i class="bi bi-facebook text-acento me-1"></i> Facebook
                             </a>
                         {% endif %}
                     </div>
@@ -440,48 +193,16 @@
             </div>
         </div>
 
-        <!-- COPYRIGHT Y AÑO -->
-        <div class="footer-copyright text-center">
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3">
             <div class="container">
-                <small>&copy; {% now "Y" %} {{ escuela_info.nombre|default:"Colegio Patagonia" }}. Todos los derechos reservados.</small>
+                <small class="text-muted-custom">&copy; {% now "Y" %} {{ escuela_info.nombre|default:"Colegio Patagonia" }}. Todos los derechos reservados.</small>
             </div>
         </div>
     </footer>
 
-    <!-- SCRIPTS DE BOOTSTRAP Y ANIMACIONES AOS -->
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        AOS.init({ duration: 800, once: true });
-
-        // SCRIPT NAVBAR INTELIGENTE (SMART STICKY HEADER)
-        document.addEventListener('DOMContentLoaded', () => {
-            const navbar = document.querySelector('.navbar-vip');
-            const navbarCollapse = document.getElementById('navbarNav');
-            let lastScrollY = window.scrollY;
-
-            if (navbar) {
-                window.addEventListener('scroll', () => {
-                    if (navbarCollapse && navbarCollapse.classList.contains('show')) {
-                        return;
-                    }
-
-                    const currentScrollY = window.scrollY;
-
-                    if (currentScrollY > 120) {
-                        if (currentScrollY > lastScrollY) {
-                            navbar.classList.add('nav-hidden');
-                        } else {
-                            navbar.classList.remove('nav-hidden');
-                        }
-                    } else {
-                        navbar.classList.remove('nav-hidden');
-                    }
-
-                    lastScrollY = currentScrollY;
-                });
-            }
-        });
-    </script>
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

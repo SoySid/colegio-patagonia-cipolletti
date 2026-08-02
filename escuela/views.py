@@ -108,9 +108,9 @@ def contacto(request):
 
 def portal_login(request):
     """Acceso exclusivo para el personal del colegio (Staff)."""
-    # Si el usuario ya está autenticado, no pide clave de nuevo y lo manda directo al panel propio
+    # Si el usuario ya está autenticado, lo manda directo al panel nuevo
     if request.user.is_authenticated:
-        return redirect('escuela:dashboard')
+        return redirect('panel_inicio')
 
     if request.method == 'POST':
         usuario_input = request.POST.get('username')
@@ -120,17 +120,11 @@ def portal_login(request):
 
         if user is not None:
             login(request, user)  # Guarda la sesión firmada en las cookies
-            return redirect('escuela:dashboard')
+            return redirect('panel_inicio')  # Redirección al panel nuevo
         else:
             messages.error(request, 'Usuario o contraseña incorrectos.')
 
     return render(request, 'escuela/portal.html')
-
-
-@login_required(login_url='escuela:portal')
-def dashboard_view(request):
-    """Panel de Control para el Staff dentro del diseño de la misma web."""
-    return render(request, 'escuela/dashboard.html')
 
 
 def cerrar_sesion(request):

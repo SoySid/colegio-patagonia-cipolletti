@@ -3,45 +3,60 @@
 {% block titulo %}Carrusel de Portada{% endblock %}
 
 {% block contenido %}
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h3 style="margin: 0; font-size: 24px;">🖼️ Carrusel de Portada</h3>
-        <a href="{% url 'panel_carrusel_crear' %}" class="btn-accion btn-verde">+ AGREGAR IMAGEN</a>
+    <!-- Encabezado de la vista -->
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-subtle">
+        <h3 class="font-titulo text-main fw-bold mb-0 fs-4">
+            <i class="bi bi-images text-acento me-2"></i>Carrusel de Portada
+        </h3>
+        <a href="{% url 'panel_carrusel_crear' %}" class="btn btn-plataforma">
+            <i class="bi bi-plus-lg me-1"></i> AGREGAR IMAGEN
+        </a>
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Imagen</th>
-                <th>Título / Descripción</th>
-                <th style="width: 180px;">Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in carrusel %}
+    <!-- Tabla Adaptada al Tema Oscuro -->
+    <div class="table-responsive">
+        <table class="table table-dark table-hover align-middle mb-0">
+            <thead>
                 <tr>
-                    <td style="width: 100px;">
-                        {% if item.imagen %}
-                            <img src="{{ item.imagen.url }}" alt="Carrusel" style="width: 80px; height: 50px; object-fit: cover; border-radius: 4px;">
-                        {% else %}
-                            <span style="color: #a0aec0;">Sin imagen</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        <strong>{{ item.titulo|default:"Sin título" }}</strong>
-                        {% if item.subtitulo %}<br><small style="color: #718096;">{{ item.subtitulo }}</small>{% endif %}
-                    </td>
-                    <td>
-                        <a href="{% url 'panel_carrusel_editar' item.pk %}" class="btn-accion btn-azul" style="padding: 5px 10px; font-size: 14px;">Editar</a>
-                        <a href="{% url 'panel_carrusel_borrar' item.pk %}" class="btn-accion btn-rojo" style="padding: 5px 10px; font-size: 14px;">Eliminar</a>
-                    </td>
+                    <th scope="col" style="width: 120px;">Imagen</th>
+                    <th scope="col">Título / Descripción</th>
+                    <th scope="col" class="text-end" style="width: 180px;">Acciones</th>
                 </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="3" style="text-align: center; padding: 25px; color: #718096;">
-                        No hay imágenes cargadas para el carrusel todavía. ¡Tocá el botón verde para subir la primera!
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for item in carrusel %}
+                    <tr>
+                        <td>
+                            {% if item.imagen %}
+                                <img src="{{ item.imagen.url }}" alt="Carrusel" class="rounded border border-subtle" style="width: 90px; height: 55px; object-fit: cover;">
+                            {% else %}
+                                <span class="badge bg-badge-custom text-muted-custom">Sin imagen</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <strong class="text-main d-block">{{ item.titulo|default:"Sin título" }}</strong>
+                            {% if item.subtitulo %}
+                                <small class="text-muted-custom">{{ item.subtitulo }}</small>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            <a href="{% url 'panel_carrusel_editar' item.pk %}" class="btn btn-red-social btn-sm me-1">
+                                <i class="bi bi-pencil-fill"></i> Editar
+                            </a>
+                            <a href="{% url 'panel_carrusel_borrar' item.pk %}" class="btn btn-outline-danger btn-sm rounded-3">
+                                <i class="bi bi-trash-fill"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center py-5 text-muted-custom">
+                            <i class="bi bi-images fs-1 d-block text-acento mb-2"></i>
+                            No hay imágenes cargadas para el carrusel todavía. ¡Tocá el botón de arriba para subir la primera!
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

@@ -13,6 +13,5 @@ urlpatterns = [
     
     # Acceso Staff, Panel Interno y Sesión
     path('portal/', views.portal_login, name='portal'),
-    path('dashboard/', views.dashboard_view, name='dashboard'),
     path('logout/', views.cerrar_sesion, name='logout'),
 ]

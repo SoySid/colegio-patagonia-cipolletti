@@ -3,42 +3,61 @@
 {% block titulo %}Consultas Recibidas{% endblock %}
 
 {% block contenido %}
-    <div style="margin-bottom: 20px;">
-        <h3 style="margin: 0; font-size: 24px;">📬 Consultas Recibidas</h3>
-        <p style="color: #718096; margin-top: 5px;">Mensajes e inquietudes enviadas por los visitantes desde la página web.</p>
+    <!-- Encabezado de la vista -->
+    <div class="mb-4 pb-3 border-bottom border-subtle">
+        <h3 class="font-titulo text-main fw-bold mb-1 fs-4">
+            <i class="bi bi-envelope-paper text-acento me-2"></i>Consultas Recibidas
+        </h3>
+        <p class="text-muted-custom small mb-0">
+            Mensajes e inquietudes enviadas por los visitantes desde la página web.
+        </p>
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Fecha</th>
-                <th>Nombre</th>
-                <th>Contacto</th>
-                <th>Mensaje</th>
-                <th style="width: 100px;">Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for consulta in consultas %}
+    <!-- Tabla Adaptada a la Estética Oscura -->
+    <div class="table-responsive">
+        <table class="table table-dark table-hover align-middle mb-0">
+            <thead>
                 <tr>
-                    <td style="white-space: nowrap;">{{ consulta.fecha|date:"d/m/Y H:i"|default:consulta.fecha_creacion|date:"d/m/Y H:i" }}</td>
-                    <td><strong>{{ consulta.nombre }}</strong></td>
-                    <td>
-                        {{ consulta.email }}
-                        {% if consulta.telefono %}<br><small style="color: #718096;">{{ consulta.telefono }}</small>{% endif %}
-                    </td>
-                    <td>{{ consulta.mensaje|default:consulta.asunto }}</td>
-                    <td>
-                        <a href="{% url 'panel_consultas_borrar' consulta.pk %}" class="btn-accion btn-rojo" style="padding: 5px 10px; font-size: 14px;">Eliminar</a>
-                    </td>
+                    <th scope="col" style="width: 140px;">Fecha</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Contacto</th>
+                    <th scope="col">Mensaje / Asunto</th>
+                    <th scope="col" class="text-end" style="width: 100px;">Acciones</th>
                 </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="5" style="text-align: center; padding: 25px; color: #718096;">
-                        No hay consultas recibidas por el momento.
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for consulta in consultas %}
+                    <tr>
+                        <td class="text-muted-custom small text-nowrap">
+                            {{ consulta.fecha|date:"d/m/Y H:i"|default:consulta.fecha_creacion|date:"d/m/Y H:i" }}
+                        </td>
+                        <td>
+                            <strong class="text-main">{{ consulta.nombre }}</strong>
+                        </td>
+                        <td>
+                            <span class="d-block text-main">{{ consulta.email }}</span>
+                            {% if consulta.telefono %}
+                                <small class="text-muted-custom"><i class="bi bi-telephone me-1"></i>{{ consulta.telefono }}</small>
+                            {% endif %}
+                        </td>
+                        <td class="text-muted-custom">
+                            {{ consulta.mensaje|default:consulta.asunto }}
+                        </td>
+                        <td class="text-end">
+                            <a href="{% url 'panel_consultas_borrar' consulta.pk %}" class="btn btn-outline-danger btn-sm rounded-3">
+                                <i class="bi bi-trash-fill"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center py-5 text-muted-custom">
+                            <i class="bi bi-inbox fs-1 d-block text-acento mb-2"></i>
+                            No hay consultas recibidas por el momento.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

@@ -3,967 +3,334 @@
 {% block title %}Inicio - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
 
 {% block content %}
-<!-- ESTILOS CON ANIMACIONES SUAVES Y NATIVAS (SIN INTERRUMPIR EL SCROLL) -->
-<style>
-    /* KEYFRAMES NATIVOS DE ENTRADA SUAVE */
-    @keyframes fadeInSuave {
-        from {
-            opacity: 0;
-            transform: translateY(12px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
 
-    @keyframes pulseGlow {
-        0%, 100% {
-            box-shadow: 0 10px 28px rgba(15, 23, 42, 0.07);
-        }
-        50% {
-            box-shadow: 0 14px 35px rgba(31, 122, 63, 0.18);
-        }
-    }
-
-    /* 1. HERO CON GRADIENTE AZUL NOCHE */
-    .hero-vip {
-        background: linear-gradient(135deg, #0b1526 0%, #172a45 50%, #0b1526 100%);
-        color: #ffffff;
-        position: relative;
-        overflow: hidden;
-        border-bottom: 4px solid var(--brand-green);
-        padding-top: 3.5rem;
-        padding-bottom: 4rem;
-        margin: 0 !important;
-        animation: fadeInSuave 0.6s cubic-bezier(0.16, 1, 0.3, 1) ease-out;
-    }
-
-    .hero-vip::before {
-        content: '';
-        position: absolute;
-        top: -40%;
-        right: -10%;
-        width: 550px;
-        height: 550px;
-        background: radial-gradient(circle, rgba(31, 122, 63, 0.35) 0%, rgba(0, 0, 0, 0) 70%);
-        border-radius: 50%;
-        pointer-events: none;
-    }
-
-    .hero-title-cinzel {
-        font-family: var(--font-titulo, 'Cinzel', serif);
-        font-weight: 800;
-        letter-spacing: -0.5px;
-        line-height: 1.05;
-        color: #ffffff;
-    }
-
-    .hero-badge-vip {
-        background: rgba(255, 255, 255, 0.12);
-        backdrop-filter: blur(8px);
-        color: #4ade80;
-        font-weight: 700;
-        font-size: 0.82rem;
-        letter-spacing: 0.05em;
-        border: 1px solid rgba(74, 222, 128, 0.35);
-    }
-
-    .btn-pill-green {
-        background-color: var(--brand-green);
-        border: none;
-        color: #ffffff !important;
-        font-weight: 700;
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 0 6px 20px rgba(31, 122, 63, 0.45);
-    }
-
-    .btn-pill-green:hover {
-        background-color: #166534;
-        transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(31, 122, 63, 0.6);
-    }
-
-    .btn-pill-light {
-        background: rgba(255, 255, 255, 0.12);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        color: #ffffff !important;
-        font-weight: 700;
-        backdrop-filter: blur(8px);
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .btn-pill-light:hover {
-        background: rgba(255, 255, 255, 0.25);
-        transform: translateY(-2px);
-    }
-
-    /* 2. PILARES / POR QUÉ ELEGIRNOS */
-    .section-pilares-vip {
-        background-color: #ffffff !important;
-        padding-top: 4.5rem;
-        padding-bottom: 4.5rem;
-        border-bottom: 1px solid #cbd5e1;
-    }
-
-    .card-pilar-vip {
-        background: #f8fafc;
-        border: 2px solid #e2e8f0;
-        border-radius: 20px;
-        padding: 2rem 1.5rem;
-        height: 100%;
-        transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .card-pilar-vip:hover {
-        transform: translateY(-4px);
-        border-color: var(--brand-green);
-        background: #ffffff;
-        box-shadow: 0 12px 30px rgba(31, 122, 63, 0.12);
-    }
-
-    .icon-pilar-box {
-        width: 60px;
-        height: 60px;
-        border-radius: 18px;
-        background: linear-gradient(135deg, rgba(31, 122, 63, 0.15) 0%, rgba(31, 122, 63, 0.05) 100%);
-        color: var(--brand-green);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.6rem;
-        margin-bottom: 1.25rem;
-        transition: transform 0.3s ease;
-    }
-
-    .card-pilar-vip:hover .icon-pilar-box {
-        transform: scale(1.1) rotate(-3deg);
-    }
-
-    /* 3. NIVELES EDUCATIVOS (ANIMACIONES SUAVES) */
-    .section-niveles-vip {
-        background-color: #e2e8f0 !important;
-        border-bottom: 1px solid #cbd5e1;
-        padding-top: 4.5rem;
-        padding-bottom: 4.5rem;
-        margin: 0 !important;
-    }
-
-    .badge-kicker-vip {
-        background-color: rgba(31, 122, 63, 0.12);
-        color: var(--brand-green, #1f7a3f);
-        font-weight: 700;
-        font-size: 0.8rem;
-        letter-spacing: 0.08em;
-        border: 1px solid rgba(31, 122, 63, 0.25);
-    }
-
-    .card-nivel-vip {
-        background: #ffffff !important;
-        border: 2px solid #cbd5e1 !important;
-        border-radius: 24px !important;
-        box-shadow: 0 10px 28px rgba(15, 23, 42, 0.07) !important;
-        overflow: hidden;
-        position: relative;
-        will-change: transform, box-shadow;
-        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
-                    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
-                    border-color 0.4s ease !important;
-    }
-
-    .card-nivel-vip:hover {
-        transform: translateY(-8px) scale(1.01);
-        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12) !important;
-    }
-
-    .border-top-inicial { border-top: 6px solid var(--brand-green, #1f7a3f) !important; }
-    .border-top-primario { border-top: 6px solid var(--primary-navy, #1b365d) !important; }
-    .border-top-medio { border-top: 6px solid var(--accent-gold, #d97706) !important; }
-
-    .border-top-inicial:hover { border-color: #166534 !important; }
-    .border-top-primario:hover { border-color: #0f172a !important; }
-    .border-top-medio:hover { border-color: #b45309 !important; }
-
-    .icon-capsule-vip {
-        width: 52px;
-        height: 52px;
-        border-radius: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.35rem;
-        color: #ffffff;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-        flex-shrink: 0;
-        transition: transform 0.35s ease;
-    }
-
-    .card-nivel-vip:hover .icon-capsule-vip {
-        transform: scale(1.12);
-    }
-
-    .bg-icon-inicial { background: linear-gradient(135deg, #1f7a3f 0%, #165b2e 100%); }
-    .bg-icon-primario { background: linear-gradient(135deg, #1b365d 0%, #0f1e36 100%); }
-    .bg-icon-medio { background: linear-gradient(135deg, #d97706 0%, #b45309 100%); }
-
-    .badge-stage-vip {
-        background-color: #f1f5f9;
-        color: #334155;
-        font-weight: 700;
-        font-size: 0.78rem;
-        border: 1px solid #e2e8f0;
-    }
-
-    .btn-nivel-link {
-        color: var(--primary-navy, #1b365d);
-        font-weight: 700;
-        font-size: 0.88rem;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        transition: transform 0.25s ease, color 0.25s ease;
-    }
-
-    .btn-nivel-link:hover {
-        color: var(--brand-green, #1f7a3f);
-        transform: translateX(5px);
-    }
-
-    /* 4. SECCIÓN NOTICIAS */
-    .section-noticias-vip {
-        background-color: #f8fafc !important;
-        border-bottom: 1px solid #cbd5e1;
-        padding-top: 4.5rem;
-        padding-bottom: 4.5rem;
-        margin: 0 !important;
-    }
-
-    .badge-kicker-news {
-        background-color: rgba(31, 122, 63, 0.12);
-        color: var(--brand-green, #1f7a3f);
-        font-weight: 700;
-        font-size: 0.8rem;
-        letter-spacing: 0.08em;
-        border: 1px solid rgba(31, 122, 63, 0.25);
-    }
-
-    .slider-controls-capsule {
-        background: #ffffff;
-        border: 2px solid #cbd5e1;
-        border-radius: 50rem;
-        padding: 0.35rem 0.5rem;
-        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-    }
-
-    .btn-control-slider-vip {
-        background-color: transparent;
-        border: none;
-        color: var(--primary-navy, #1b365d);
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.25s ease;
-    }
-
-    .btn-control-slider-vip:hover {
-        background-color: var(--brand-green, #1f7a3f);
-        color: #ffffff !important;
-        transform: scale(1.05);
-    }
-
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-    .card-noticia-vip {
-        width: 340px;
-        background: #ffffff !important;
-        border: 2px solid #cbd5e1 !important;
-        border-radius: 24px !important;
-        box-shadow: 0 10px 28px rgba(15, 23, 42, 0.07) !important;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        align-self: flex-start;
-        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
-    }
-
-    .card-noticia-vip:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 16px 35px rgba(15, 23, 42, 0.12) !important;
-    }
-
-    .img-noticia-wrapper {
-        overflow: hidden;
-        height: 195px;
-        position: relative;
-        background-color: #e2e8f0;
-        flex-shrink: 0;
-    }
-
-    .img-noticia-wrapper img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.5s ease;
-    }
-
-    .card-noticia-vip:hover .img-noticia-wrapper img {
-        transform: scale(1.06);
-    }
-
-    .badge-categoria-vip {
-        background-color: var(--primary-navy, #1b365d) !important;
-        color: #ffffff !important;
-        font-size: 0.75rem;
-        font-weight: 700;
-        letter-spacing: 0.03em;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    /* OBLIGA A QUE TODOS LOS TÍTULOS RESERVEN EL ESPACIO DE 2 LÍNEAS */
-    .noticia-titulo {
-        font-family: var(--font-titulo, 'Cinzel', serif);
-        color: var(--primary-navy, #1b365d);
-        line-height: 1.35;
-        font-size: 1.15rem;
-        margin-bottom: 0.6rem;
-        min-height: 3.1rem;
-        display: flex;
-        align-items: flex-start;
-    }
-
-    /* TRUNCADO A 3 LÍNEAS LIMPIO SIN LINT WARNINGS */
-    .texto-resumen {
-        color: #64748b;
-        font-size: 0.88rem;
-        line-height: 1.6;
-        font-weight: 500;
-        margin-bottom: 0;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-
-    .texto-completo {
-        color: #334155;
-        font-size: 0.9rem;
-        line-height: 1.65;
-        font-weight: 500;
-        white-space: pre-line;
-        display: none;
-    }
-
-    .card-noticia-vip.expanded .texto-resumen { display: none; }
-    .card-noticia-vip.expanded .texto-completo { display: block; }
-
-    .btn-toggle-noticia {
-        background: transparent;
-        border: none;
-        color: var(--brand-green, #1f7a3f);
-        font-weight: 700;
-        font-size: 0.85rem;
-        padding: 0;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.3rem;
-    }
-
-    /* 5. GALERÍA PANORÁMICA */
-    .section-galeria-vip {
-        padding: 5rem 0;
-        background: linear-gradient(180deg, #0b1526 0%, #050a12 100%);
-        position: relative;
-        overflow: hidden;
-        border-top: 4px solid var(--brand-green, #1f7a3f);
-        border-bottom: 4px solid var(--brand-green, #1f7a3f);
-    }
-
-    .badge-kicker-galeria {
-        background-color: rgba(74, 222, 128, 0.12);
-        color: #4ade80;
-        font-weight: 700;
-        font-size: 0.8rem;
-        letter-spacing: 0.08em;
-        border: 1px solid rgba(74, 222, 128, 0.25);
-    }
-
-    .galeria-controls-capsule {
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        backdrop-filter: blur(10px);
-        border-radius: 50rem;
-        padding: 0.35rem 0.5rem;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-    }
-
-    .btn-control-galeria-vip {
-        background-color: transparent;
-        border: none;
-        color: #ffffff;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.25s ease;
-    }
-
-    .btn-control-galeria-vip:hover {
-        background-color: var(--brand-green, #1f7a3f);
-        transform: scale(1.08);
-    }
-
-    .card-galeria-item {
-        width: 360px;
-        height: 240px;
-        border-radius: 22px !important;
-        border: 2px solid rgba(255, 255, 255, 0.15) !important;
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5) !important;
-        overflow: hidden;
-        position: relative;
-        cursor: pointer;
-        background-color: #000000;
-        will-change: transform, border-color, box-shadow;
-        transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
-                    border-color 0.45s ease, 
-                    box-shadow 0.45s ease !important;
-    }
-
-    .card-galeria-item:hover {
-        transform: translateY(-6px) scale(1.02);
-        border-color: #4ade80 !important;
-        box-shadow: 0 20px 40px rgba(31, 122, 63, 0.35) !important;
-    }
-
-    .card-galeria-item img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .card-galeria-item:hover img {
-        transform: scale(1.08);
-    }
-
-    .galeria-overlay {
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(5, 10, 18, 0.75) 100%);
-        opacity: 0.6;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-        padding: 1rem;
-        transition: opacity 0.35s ease;
-    }
-
-    .card-galeria-item:hover .galeria-overlay {
-        opacity: 0.95;
-    }
-
-    .galeria-zoom-icon {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) scale(0.6);
-        width: 52px;
-        height: 52px;
-        background: rgba(31, 122, 63, 0.88);
-        border: 1px solid rgba(74, 222, 128, 0.5);
-        color: #ffffff;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.35rem;
-        opacity: 0;
-        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-    }
-
-    .card-galeria-item:hover .galeria-zoom-icon {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-    }
-
-    .lightbox-modal-content {
-        background-color: rgba(5, 10, 18, 0.95) !important;
-        border: 2px solid rgba(255, 255, 255, 0.15) !important;
-        border-radius: 28px !important;
-        backdrop-filter: blur(16px);
-        overflow: hidden;
-    }
-
-    .lightbox-img-full {
-        max-height: 75vh;
-        width: 100%;
-        object-fit: contain;
-    }
-
-    @media (max-width: 576px) {
-        .card-noticia-vip, .card-galeria-item {
-            width: 82vw !important;
-            max-width: 320px !important;
-        }
-    }
-</style>
-
-<!-- ==========================================
-     1. HERO PRINCIPAL
-     ========================================== -->
-<section class="hero-vip">
-    <div class="container position-relative z-1">
+<!-- ==========================================================================
+     1. HERO PRINCIPAL (ENCABEZADO DE IMPACTO)
+     ========================================================================== -->
+<section class="py-5 position-relative">
+    <div class="container py-4">
         <div class="row align-items-center g-5">
+            
+            <!-- Columna Izquierda: Mensaje Principal y Botones de Acción -->
             <div class="col-12 col-lg-7">
-                <span class="badge hero-badge-vip rounded-pill px-3 py-2 mb-3 d-inline-flex align-items-center gap-2">
-                    <i class="bi bi-award-fill"></i>{{ escuela_info.hero_tag|default:"EDUCACIÓN INSTITUCIONAL" }}
+                <span class="badge mb-3 px-3 py-2 rounded-pill bg-badge-custom border border-acento text-acento">
+                    <i class="bi bi-award-fill me-1"></i>{{ escuela_info.hero_tag|default:"EDUCACIÓN INSTITUCIONAL" }}
                 </span>
                 
-                <h1 class="display-3 mb-3 hero-title-cinzel">
-                    COLEGIO<br><span style="color: #4ade80;">PATAGONIA</span>
+                <h1 class="display-3 font-titulo fw-bold mb-3 text-main">
+                    COLEGIO <span class="text-acento">PATAGONIA</span>
                 </h1>
                 
-                <p class="text-white-50 fs-5 mb-4 fw-normal" style="max-width: 520px; line-height: 1.6;">
+                <p class="lead mb-4 fs-4 text-muted-custom">
                     {{ escuela_info.hero_subtitulo|default:"Educación para ser, pensar y convivir" }}
                 </p>
                 
-                <div class="d-flex flex-wrap gap-3 align-items-center">
-                    <a href="{% if escuela_info.hero_boton_principal_url %}{{ escuela_info.hero_boton_principal_url }}{% else %}{% url 'escuela:requisitos' %}{% endif %}" class="btn btn-pill-green rounded-pill px-4 py-3 d-inline-flex align-items-center gap-2" style="font-size: 0.98rem;">
-                        {{ escuela_info.hero_boton_principal_text|default:"Proceso de Admisión" }} <i class="bi bi-arrow-right-short fs-5"></i>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="{% if escuela_info.hero_boton_principal_url %}{{ escuela_info.hero_boton_principal_url }}{% else %}{% url 'escuela:requisitos' %}{% endif %}" class="btn btn-plataforma btn-lg px-4">
+                        {{ escuela_info.hero_boton_principal_text|default:"Proceso de Admisión" }} <i class="bi bi-arrow-right ms-1"></i>
                     </a>
                     
-                    <a href="{% if escuela_info.hero_boton_secundario_url %}{{ escuela_info.hero_boton_secundario_url }}{% else %}{% url 'escuela:contacto' %}{% endif %}" class="btn btn-pill-light rounded-pill px-4 py-3" style="font-size: 0.98rem;">
+                    <a href="{% if escuela_info.hero_boton_secundario_url %}{{ escuela_info.hero_boton_secundario_url }}{% else %}{% url 'escuela:contacto' %}{% endif %}" class="btn btn-red-social btn-lg px-4 d-flex align-items-center">
                         {{ escuela_info.hero_boton_secundario_text|default:"Contactar" }}
                     </a>
                 </div>
             </div>
             
+            <!-- Columna Derecha: Imagen del Frente o Escudo Backup -->
             <div class="col-12 col-lg-5 text-center">
                 {% if escuela_info.hero_imagen %}
-                    <img src="{{ escuela_info.hero_imagen.url }}" alt="{{ escuela_info.nombre|default:'Colegio Patagonia' }}" class="img-fluid rounded-4 shadow-lg border border-4 border-white" loading="lazy">
+                    <img src="{{ escuela_info.hero_imagen.url }}" alt="{{ escuela_info.nombre|default:'Colegio Patagonia' }}" class="img-fluid rounded-4 glow-effect" loading="lazy">
                 {% else %}
-                    <div class="p-5 bg-white rounded-4 shadow-lg text-muted border border-4 border-white">
-                        <i class="bi bi-building fs-1 d-block mb-2 text-success"></i>
-                        <span class="fw-bold text-dark">Instalaciones del Colegio</span>
+                    <div class="p-5 glass-panel text-center">
+                        {% if escuela_info.logo %}
+                            <img src="{{ escuela_info.logo.url }}" alt="Escudo" class="img-fluid brand-logo-hero">
+                        {% else %}
+                            <i class="bi bi-building display-1 d-block mb-2 text-acento"></i>
+                            <span class="fw-bold text-main">Instalaciones del Colegio</span>
+                        {% endif %}
                     </div>
                 {% endif %}
             </div>
+
         </div>
     </div>
 </section>
 
-<!-- ==========================================
-     2. PILARES INSTITUCIONALES
-     ========================================== -->
-<section class="section-pilares-vip">
+
+<!-- ==========================================================================
+     2. PILARES INSTITUCIONALES (VALORES Y PROPUESTA)
+     ========================================================================== -->
+<section class="py-5">
     <div class="container">
+        
         <div class="text-center mb-5">
-            <span class="badge badge-kicker-vip rounded-pill px-3 py-2 mb-3 d-inline-flex align-items-center gap-2">
-                <i class="bi bi-star-fill"></i> NUESTRA PROPUESTA
+            <span class="badge mb-2 px-3 py-2 rounded-pill bg-badge-custom border border-acento text-acento">
+                NUESTRA PROPUESTA
             </span>
-            <h2 class="fw-bold mb-2" style="font-family: var(--font-titulo, 'Cinzel', serif); font-size: 2.2rem; color: var(--primary-navy, #1b365d); letter-spacing: -0.5px;">
-                ¿Por qué elegir Colegio Patagonia?
-            </h2>
-            <p class="text-secondary fs-6 mb-0 fw-medium mx-auto" style="max-width: 580px;">
-                Brindamos una formación integral sustentada en la excelencia académica y valores humanos.
-            </p>
+            <h2 class="font-titulo fw-bold display-6 text-main">¿Por qué elegir Colegio Patagonia?</h2>
+            <p class="text-muted-custom">Brindamos una formación integral sustentada en la excelencia académica y valores humanos.</p>
         </div>
 
         <div class="row g-4">
+            <!-- Pilar 1 -->
             <div class="col-12 col-md-4">
-                <article class="card-pilar-vip">
-                    <div class="icon-pilar-box">
-                        <i class="bi bi-lightbulb-fill"></i>
-                    </div>
-                    <h3 class="fw-bold fs-5 mb-2" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d);">
-                        Pensamiento Crítico
-                    </h3>
-                    <p class="text-secondary small mb-0" style="line-height: 1.6;">
-                        Estimulamos la curiosidad intelectual, el razonamiento autónomo y la resolución creativa de problemas desde edades tempranas.
-                    </p>
-                </article>
+                <div class="card h-100 p-4">
+                    <div class="fs-1 mb-3 text-acento"><i class="bi bi-lightbulb-fill"></i></div>
+                    <h3 class="font-titulo h5 fw-bold text-main">Pensamiento Crítico</h3>
+                    <p class="text-muted-custom small mb-0">Estimulamos la curiosidad intelectual, el razonamiento autónomo y la resolución creativa de problemas.</p>
+                </div>
             </div>
 
+            <!-- Pilar 2 -->
             <div class="col-12 col-md-4">
-                <article class="card-pilar-vip">
-                    <div class="icon-pilar-box">
-                        <i class="bi bi-heart-pulse-fill"></i>
-                    </div>
-                    <h3 class="fw-bold fs-5 mb-2" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d);">
-                        Formación Humana
-                    </h3>
-                    <p class="text-secondary small mb-0" style="line-height: 1.6;">
-                        Promovemos la empatía, el respeto mutuo y la convivencia armónica a través de proyectos solidarios y contención personal.
-                    </p>
-                </article>
+                <div class="card h-100 p-4">
+                    <div class="fs-1 mb-3 text-acento"><i class="bi bi-heart-pulse-fill"></i></div>
+                    <h3 class="font-titulo h5 fw-bold text-main">Formación Humana</h3>
+                    <p class="text-muted-custom small mb-0">Promovemos la empatía, el respeto mutuo y la convivencia armónica a través de proyectos solidarios.</p>
+                </div>
             </div>
 
+            <!-- Pilar 3 -->
             <div class="col-12 col-md-4">
-                <article class="card-pilar-vip">
-                    <div class="icon-pilar-box">
-                        <i class="bi bi-laptop-fill"></i>
-                    </div>
-                    <h3 class="fw-bold fs-5 mb-2" style="font-family: var(--font-titulo, 'Cinzel', serif); color: var(--primary-navy, #1b365d);">
-                        Idiomas y Tecnología
-                    </h3>
-                    <p class="text-secondary small mb-0" style="line-height: 1.6;">
-                        Integración de inglés intensivo y recursos digitales interactivos para preparar a los estudiantes para los desafíos globales.
-                    </p>
-                </article>
+                <div class="card h-100 p-4">
+                    <div class="fs-1 mb-3 text-acento"><i class="bi bi-laptop-fill"></i></div>
+                    <h3 class="font-titulo h5 fw-bold text-main">Idiomas y Tecnología</h3>
+                    <p class="text-muted-custom small mb-0">Integración de inglés intensivo y recursos digitales interactivos para los desafíos globales.</p>
+                </div>
             </div>
         </div>
+
     </div>
 </section>
 
-<!-- ==========================================
-     3. NIVELES EDUCATIVOS
-     ========================================== -->
-<section class="section-niveles-vip">
+
+<!-- ==========================================================================
+     3. NIVELES EDUCATIVOS (TRAYECTORIA ACADÉMICA)
+     ========================================================================== -->
+<section class="py-5">
     <div class="container">
+        
         <div class="text-center mb-5">
-            <span class="badge badge-kicker-vip rounded-pill px-3 py-2 mb-3 d-inline-flex align-items-center gap-2">
-                <i class="bi bi-diagram-3-fill"></i> TRAYECTORIA EDUCATIVA
+            <span class="badge mb-2 px-3 py-2 rounded-pill bg-badge-custom border border-acento text-acento">
+                TRAYECTORIA EDUCATIVA
             </span>
-            <h2 class="fw-bold mb-2" style="font-family: var(--font-titulo, 'Cinzel', serif); font-size: 2.2rem; color: var(--primary-navy, #1b365d); letter-spacing: -0.5px;">
-                Niveles Educativos
-            </h2>
-            <p class="text-secondary fs-6 mb-0 fw-medium mx-auto" style="max-width: 580px;">
-                Propuesta pedagógica integral adaptada a cada etapa del desarrollo académico y personal.
-            </p>
+            <h2 class="font-titulo fw-bold display-6 text-main">Niveles Educativos</h2>
         </div>
 
         <div class="row g-4 justify-content-center">
+            
+            <!-- Nivel Inicial -->
             <div class="col-12 col-md-4">
-                <article class="card card-nivel-vip border-top-inicial h-100 p-4 d-flex flex-column justify-content-between">
+                <div class="card h-100 p-4 d-flex flex-column justify-content-between">
                     <div>
-                        <div class="d-flex align-items-center justify-content-between mb-3">
-                            <div class="icon-capsule-vip bg-icon-inicial">
-                                <i class="bi bi-palette-fill"></i>
-                            </div>
-                            <span class="badge badge-stage-vip rounded-pill px-3 py-1.5">
-                                Salas de 3, 4 y 5 años
-                            </span>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <i class="bi bi-palette-fill fs-2 text-acento"></i>
+                            <span class="badge bg-badge-custom border border-subtle text-muted-custom">Salas de 3, 4 y 5 años</span>
                         </div>
-                        <h3 class="card-title fw-bold mb-2" style="font-family: var(--font-titulo, 'Cinzel', serif); font-size: 1.35rem; color: var(--primary-navy, #1b365d);">
-                            Nivel Inicial
-                        </h3>
-                        <p class="card-text text-secondary small mb-4" style="line-height: 1.65; font-weight: 500;">
-                            Estimulación temprana, aprendizaje basado en el juego, socialización, hábitos de convivencia y desarrollo de la expresión artística.
-                        </p>
+                        <h3 class="font-titulo h4 fw-bold mb-2 text-main">Nivel Inicial</h3>
+                        <p class="text-muted-custom small">Estimulación temprana, aprendizaje basado en el juego, socialización y expresión artística.</p>
                     </div>
-                    <div class="pt-3 border-top">
-                        <a href="{% url 'escuela:requisitos' %}" class="btn-nivel-link">
-                            Ver requisitos de ingreso <i class="bi bi-arrow-right-short fs-5"></i>
+                    <div class="pt-3 border-top border-subtle">
+                        <a href="{% url 'escuela:requisitos' %}" class="fw-bold text-decoration-none text-acento">
+                            Ver requisitos <i class="bi bi-arrow-right"></i>
                         </a>
                     </div>
-                </article>
+                </div>
             </div>
 
+            <!-- Nivel Primario -->
             <div class="col-12 col-md-4">
-                <article class="card card-nivel-vip border-top-primario h-100 p-4 d-flex flex-column justify-content-between">
+                <div class="card h-100 p-4 d-flex flex-column justify-content-between">
                     <div>
-                        <div class="d-flex align-items-center justify-content-between mb-3">
-                            <div class="icon-capsule-vip bg-icon-primario">
-                                <i class="bi bi-book-fill"></i>
-                            </div>
-                            <span class="badge badge-stage-vip rounded-pill px-3 py-1.5">
-                                1º a 7º grado
-                            </span>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <i class="bi bi-book-fill fs-2 text-acento"></i>
+                            <span class="badge bg-badge-custom border border-subtle text-muted-custom">1º a 7º grado</span>
                         </div>
-                        <h3 class="card-title fw-bold mb-2" style="font-family: var(--font-titulo, 'Cinzel', serif); font-size: 1.35rem; color: var(--primary-navy, #1b365d);">
-                            Nivel Primario
-                        </h3>
-                        <p class="card-text text-secondary small mb-4" style="line-height: 1.65; font-weight: 500;">
-                            Consolidación del pensamiento lógico-matemático, lectocomprensión intensiva, idioma inglés y formación en valores ciudadanos.
-                        </p>
+                        <h3 class="font-titulo h4 fw-bold mb-2 text-main">Nivel Primario</h3>
+                        <p class="text-muted-custom small">Pensamiento lógico-matemático, lectocomprensión intensiva, inglés y valores ciudadanos.</p>
                     </div>
-                    <div class="pt-3 border-top">
-                        <a href="{% url 'escuela:requisitos' %}" class="btn-nivel-link">
-                            Ver requisitos de ingreso <i class="bi bi-arrow-right-short fs-5"></i>
+                    <div class="pt-3 border-top border-subtle">
+                        <a href="{% url 'escuela:requisitos' %}" class="fw-bold text-decoration-none text-acento">
+                            Ver requisitos <i class="bi bi-arrow-right"></i>
                         </a>
                     </div>
-                </article>
+                </div>
             </div>
 
+            <!-- Nivel Medio -->
             <div class="col-12 col-md-4">
-                <article class="card card-nivel-vip border-top-medio h-100 p-4 d-flex flex-column justify-content-between">
+                <div class="card h-100 p-4 d-flex flex-column justify-content-between">
                     <div>
-                        <div class="d-flex align-items-center justify-content-between mb-3">
-                            <div class="icon-capsule-vip bg-icon-medio">
-                                <i class="bi bi-mortarboard-fill"></i>
-                            </div>
-                            <span class="badge badge-stage-vip rounded-pill px-3 py-1.5">
-                                1º y 2º año
-                            </span>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <i class="bi bi-mortarboard-fill fs-2 text-acento"></i>
+                            <span class="badge bg-badge-custom border border-subtle text-muted-custom">1º y 2º año</span>
                         </div>
-                        <h3 class="card-title fw-bold mb-2" style="font-family: var(--font-titulo, 'Cinzel', serif); font-size: 1.35rem; color: var(--primary-navy, #1b365d);">
-                            Nivel Medio
-                        </h3>
-                        <p class="card-text text-secondary small mb-4" style="line-height: 1.65; font-weight: 500;">
-                            Formación integral con orientación metodológica, autonomía de estudio, pensamiento crítico y proyectos pedagógicos grupales.
-                        </p>
+                        <h3 class="font-titulo h4 fw-bold mb-2 text-main">Nivel Medio</h3>
+                        <p class="text-muted-custom small">Formación integral con orientación metodológica, autonomía de estudio y proyectos pedagógicos.</p>
                     </div>
-                    <div class="pt-3 border-top">
-                        <a href="{% url 'escuela:requisitos' %}" class="btn-nivel-link">
-                            Ver requisitos de ingreso <i class="bi bi-arrow-right-short fs-5"></i>
+                    <div class="pt-3 border-top border-subtle">
+                        <a href="{% url 'escuela:requisitos' %}" class="fw-bold text-decoration-none text-acento">
+                            Ver requisitos <i class="bi bi-arrow-right"></i>
                         </a>
                     </div>
-                </article>
+                </div>
             </div>
+
         </div>
     </div>
 </section>
 
-<!-- ==========================================
-     4. NOTICIAS RECIENTES
-     ========================================== -->
-<section class="section-noticias-vip">
+
+<!-- ==========================================================================
+     4. NOTICIAS RECIENTES (GRILLA LIMPIA Y DIRECTA)
+     ========================================================================== -->
+<section class="py-5">
     <div class="container">
-        <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
-            <div>
-                <span class="badge badge-kicker-news rounded-pill px-3 py-2 mb-2 d-inline-flex align-items-center gap-2">
-                    <i class="bi bi-newspaper"></i> COMUNIDAD EN ACCIÓN
-                </span>
-                <h2 class="fw-bold mb-1" style="font-family: var(--font-titulo, 'Cinzel', serif); font-size: 2.2rem; color: var(--primary-navy, #1b365d); letter-spacing: -0.5px;">
-                    Noticias Recientes
-                </h2>
-                <p class="text-secondary fs-6 mb-0 fw-medium">Novedades, eventos y comunicados de nuestra institución</p>
-            </div>
-            
-            <div class="slider-controls-capsule">
-                <button id="slide-left" type="button" aria-label="Noticia anterior" class="btn-control-slider-vip">
-                    <i class="bi bi-arrow-left fs-5"></i>
-                </button>
-                <div style="width: 1px; height: 20px; background-color: #cbd5e1;"></div>
-                <button id="slide-right" type="button" aria-label="Siguiente noticia" class="btn-control-slider-vip">
-                    <i class="bi bi-arrow-right fs-5"></i>
-                </button>
-            </div>
+        
+        <!-- Encabezado de Sección Limpio (Sin botón a páginas inexistentes) -->
+        <div class="mb-4 text-center text-md-start">
+            <span class="badge mb-2 px-3 py-2 rounded-pill bg-badge-custom border border-acento text-acento">
+                COMUNIDAD EN ACCIÓN
+            </span>
+            <h2 class="font-titulo fw-bold display-6 mb-0 text-main">Noticias Recientes</h2>
         </div>
         
+        <!-- Tarjetas de Noticias (Máximo 3 Noticias de Portada) -->
         {% if noticias %}
-            <div class="d-flex gap-4 overflow-x-auto pb-4 pt-2 no-scrollbar align-items-start" id="news-slider" style="scroll-behavior: smooth;">
-                {% for noticia in noticias %}
-                    <article class="card card-noticia-vip flex-shrink-0">
-                        <div class="img-noticia-wrapper">
+            <div class="row g-4">
+                {% for noticia in noticias|slice:":3" %}
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card h-100 p-0 overflow-hidden card-noticia-item">
                             {% if noticia.imagen %}
-                                <img src="{{ noticia.imagen.url }}" alt="{{ noticia.titulo }}" loading="lazy">
-                            {% else %}
-                                <div class="w-100 h-100 d-flex align-items-center justify-content-center text-secondary">
-                                    <i class="bi bi-newspaper display-4 opacity-50"></i>
-                                </div>
+                                <img src="{{ noticia.imagen.url }}" class="card-img-top card-noticia-img" alt="{{ noticia.titulo }}" loading="lazy">
                             {% endif %}
-                        </div>
-
-                        <div class="card-body p-4 d-flex flex-column justify-content-between flex-grow-1">
-                            <div>
-                                <span class="badge badge-categoria-vip rounded-pill px-3 py-1.5 mb-3 d-inline-flex align-items-center gap-1">
-                                    <i class="bi bi-tag-fill text-warning"></i>{{ noticia.categoria }}
-                                </span>
-                                
-                                <h3 class="fw-bold noticia-titulo">
-                                    {{ noticia.titulo }}
-                                </h3>
-
-                                <p class="texto-resumen">
-                                    {{ noticia.descripcion|striptags }}
-                                </p>
-
-                                <div class="texto-completo">
-                                    {{ noticia.descripcion|striptags }}
+                            <div class="card-body p-4 d-flex flex-column justify-content-between">
+                                <div>
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="badge bg-badge-custom border border-acento text-acento">{{ noticia.categoria }}</span>
+                                        <span class="text-muted-custom small"><i class="bi bi-calendar3 me-1 text-acento"></i>{{ noticia.fecha_creacion|date:"d/m/Y" }}</span>
+                                    </div>
+                                    <h3 class="font-titulo h5 fw-bold mb-2 text-main">{{ noticia.titulo }}</h3>
+                                    <p class="text-muted-custom small line-clamp-3 mb-3">{{ noticia.descripcion|striptags }}</p>
+                                </div>
+                                <div class="pt-3 border-top border-subtle mt-auto">
+                                    <button type="button" class="btn btn-red-social text-acento w-100 btn-sm fw-bold btn-read-news" 
+                                            data-title="{{ noticia.titulo }}" 
+                                            data-category="{{ noticia.categoria }}"
+                                            data-date="{{ noticia.fecha_creacion|date:'d/m/Y' }}"
+                                            data-img="{% if noticia.imagen %}{{ noticia.imagen.url }}{% endif %}"
+                                            data-content="{{ noticia.descripcion|linebreaksbr }}">
+                                        LEER NOTICIA COMPLETA <i class="bi bi-arrow-right ms-1"></i>
+                                    </button>
                                 </div>
                             </div>
-
-                            <div class="pt-3 mt-4 border-top text-muted small fw-semibold d-flex align-items-center justify-content-between">
-                                <span><i class="bi bi-calendar3 me-1 text-success"></i>{{ noticia.fecha_creacion|date:"d/m/Y" }}</span>
-                                
-                                <button type="button" class="btn-toggle-noticia">
-                                    <span class="btn-text">Seguir leyendo</span>
-                                    <i class="bi bi-chevron-down icon-arrow"></i>
-                                </button>
-                            </div>
                         </div>
-                    </article>
+                    </div>
                 {% endfor %}
             </div>
         {% else %}
-            <div class="bg-white p-5 rounded-4 border border-2 text-center my-3">
-                <i class="bi bi-inbox-fill text-secondary opacity-50 display-4 mb-3 d-block"></i>
-                <p class="text-muted fw-semibold mb-0">No hay novedades publicadas por el momento.</p>
+            <div class="p-5 glass-panel text-center my-3">
+                <p class="text-muted-custom mb-0">No hay novedades publicadas por el momento.</p>
             </div>
         {% endif %}
+
     </div>
 </section>
 
-<!-- ==========================================
-     5. GALERÍA DE LA ESCUELA
-     ========================================== -->
+<!-- ==========================================================================
+     5. GALERÍA DE FOTOS (CARRUSEL PANORÁMICO LIMPIO)
+     ========================================================================== -->
 {% if carrusel %}
-<section class="section-galeria-vip">
-    <div class="container position-relative z-1">
-        <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
-            <div>
-                <span class="badge badge-kicker-galeria rounded-pill px-3 py-2 mb-2 d-inline-flex align-items-center gap-2">
-                    <i class="bi bi-camera-fill"></i> NUESTRAS INSTALACIONES
-                </span>
-                <h2 class="fw-bold mb-1 text-white" style="font-family: var(--font-titulo, 'Cinzel', serif); font-size: 2.2rem; letter-spacing: -0.5px;">
-                    Galería de la Escuela
-                </h2>
-                <p class="text-white-50 fs-6 mb-0 fw-medium">Un recorrido visual por nuestra infraestructura, espacios y vida institucional</p>
-            </div>
-            
-            <div class="galeria-controls-capsule">
-                <button id="carrusel-left" type="button" aria-label="Foto anterior" class="btn-control-galeria-vip">
-                    <i class="bi bi-arrow-left fs-5"></i>
-                </button>
-                <div style="width: 1px; height: 20px; background-color: rgba(255, 255, 255, 0.2);"></div>
-                <button id="carrusel-right" type="button" aria-label="Siguiente foto" class="btn-control-galeria-vip">
-                    <i class="bi bi-arrow-right fs-5"></i>
-                </button>
-            </div>
+<section class="py-5">
+    <div class="container">
+        
+        <div class="mb-4 text-center text-md-start">
+            <span class="badge mb-2 px-3 py-2 rounded-pill bg-badge-custom border border-acento text-acento">
+                NUESTROS ESPACIOS Y EVENTOS
+            </span>
+            <h2 class="font-titulo fw-bold display-6 mb-0 text-main">Galería de la Escuela</h2>
         </div>
 
-        <div class="d-flex gap-4 overflow-x-auto pb-4 pt-2 no-scrollbar" id="carousel-slider" style="scroll-behavior: smooth;">
+        <div class="d-flex gap-3 overflow-x-auto pb-2 scroll-smooth gallery-container">
             {% for item in carrusel %}
-                <article class="card-galeria-item flex-shrink-0 btn-open-lightbox" 
-                         data-img-url="{% if item.imagen %}{{ item.imagen.url }}{% endif %}">
-                    {% if item.imagen %}
-                        <img src="{{ item.imagen.url }}" alt="Galería Institucional" loading="lazy">
-                    {% endif %}
-                    
-                    <div class="galeria-zoom-icon">
-                        <i class="bi bi-zoom-in"></i>
+                {% if item.imagen %}
+                    <div class="flex-shrink-0 gallery-item-wrapper">
+                        <img src="{{ item.imagen.url }}" 
+                             class="rounded-3 btn-open-lightbox gallery-img-item" 
+                             data-img-url="{{ item.imagen.url }}" 
+                             alt="Galería {{ escuela_info.nombre|default:'Colegio Patagonia' }}" 
+                             loading="lazy">
                     </div>
-
-                    <div class="galeria-overlay">
-                        <small class="text-white-50 fw-semibold" style="font-size: 0.8rem;">
-                            <i class="bi bi-geo-alt-fill text-success me-1"></i>Campus Escolar
-                        </small>
-                    </div>
-                </article>
+                {% endif %}
             {% endfor %}
         </div>
+
     </div>
 </section>
 
-<!-- MODAL LIGHTBOX -->
+<!-- MODAL LIGHTBOX PARA AMPLIACIÓN DE FOTOS -->
 <div class="modal fade" id="lightboxModalVIP" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content lightbox-modal-content text-white">
-            <div class="modal-header border-0 pb-0 justify-content-between align-items-center">
-                <h5 class="modal-title fw-bold text-white-50 fs-6" style="font-family: var(--font-titulo, 'Cinzel', serif);">
-                    <i class="bi bi-building me-2 text-success"></i>Instalaciones - Colegio Patagonia
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        <div class="modal-content glass-panel border border-subtle p-0 overflow-hidden">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
-            <div class="modal-body text-center p-3 p-md-4">
-                <img src="" id="lightboxImg" class="lightbox-img-full rounded-4 shadow-lg" alt="Foto ampliada">
+            <div class="modal-body text-center p-3">
+                <img src="" id="lightboxImg" class="img-fluid rounded-3" alt="Foto ampliada">
             </div>
         </div>
     </div>
 </div>
 {% endif %}
 
-<!-- SCRIPT UNIFICADO Y OPTIMIZADO -->
+{% endblock %}
+
+
+<!-- ==========================================================================
+     SCRIPTS DE CONTROL DE INTERACCIÓN
+     ========================================================================== -->
+{% block extra_js %}
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // 1. SLIDER NOTICIAS
-        const newsSlider = document.getElementById('news-slider');
-        const newsLeft = document.getElementById('slide-left');
-        const newsRight = document.getElementById('slide-right');
 
-        if (newsSlider && newsLeft && newsRight) {
-            newsLeft.addEventListener('click', () => newsSlider.scrollBy({ left: -364, behavior: 'smooth' }));
-            newsRight.addEventListener('click', () => newsSlider.scrollBy({ left: 364, behavior: 'smooth' }));
-        }
+        // Control de Modal de Noticias (Al hacer clic en "Leer Noticia Completa")
+        const newsBtns = document.querySelectorAll('.btn-read-news');
+        const newsModalElem = document.getElementById('newsReadModalVIP');
+        if (newsBtns.length && newsModalElem) {
+            const bsNewsModal = new bootstrap.Modal(newsModalElem);
+            const modalImg = document.getElementById('newsModalImg');
+            const modalBadge = document.getElementById('newsModalBadge');
+            const modalDate = document.getElementById('newsModalDate');
+            const modalTitle = document.getElementById('newsModalTitle');
+            const modalBody = document.getElementById('newsModalBody');
 
-        // 2. EXPANSIÓN DE NOTICIAS
-        const toggleButtons = document.querySelectorAll('.btn-toggle-noticia');
-        if (toggleButtons) {
-            toggleButtons.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const card = btn.closest('.card-noticia-vip');
-                    const btnText = btn.querySelector('.btn-text');
-                    const iconArrow = btn.querySelector('.icon-arrow');
-
-                    card.classList.toggle('expanded');
-
-                    if (card.classList.contains('expanded')) {
-                        btnText.textContent = 'Mostrar menos';
-                        iconArrow.className = 'bi bi-chevron-up icon-arrow';
+            newsBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const imgUrl = btn.getAttribute('data-img');
+                    if (imgUrl) {
+                        modalImg.src = imgUrl;
+                        modalImg.classList.remove('d-none');
                     } else {
-                        btnText.textContent = 'Seguir leyendo';
-                        iconArrow.className = 'bi bi-chevron-down icon-arrow';
+                        modalImg.classList.add('d-none');
                     }
+                    modalBadge.textContent = btn.getAttribute('data-category');
+                    modalDate.textContent = btn.getAttribute('data-date');
+                    modalTitle.textContent = btn.getAttribute('data-title');
+                    modalBody.innerHTML = btn.getAttribute('data-content');
+                    bsNewsModal.show();
                 });
             });
         }
 
-        // 3. CARRUSEL GALERÍA CON AUTOPLAY INTELIGENTE
-        const carousel = document.getElementById('carousel-slider');
-        const carruselLeft = document.getElementById('carrusel-left');
-        const carruselRight = document.getElementById('carrusel-right');
-
-        if (carousel) {
-            const scrollStep = 384;
-
-            const nextSlide = () => {
-                const maxScroll = carousel.scrollWidth - carousel.clientWidth;
-                if (Math.ceil(carousel.scrollLeft) >= maxScroll - 5) {
-                    carousel.scrollTo({ left: 0, behavior: 'smooth' });
-                } else {
-                    carousel.scrollBy({ left: scrollStep, behavior: 'smooth' });
-                }
-            };
-
-            const prevSlide = () => {
-                if (carousel.scrollLeft <= 5) {
-                    carousel.scrollTo({ left: carousel.scrollWidth, behavior: 'smooth' });
-                } else {
-                    carousel.scrollBy({ left: -scrollStep, behavior: 'smooth' });
-                }
-            };
-
-            if (carruselLeft) carruselLeft.addEventListener('click', prevSlide);
-            if (carruselRight) carruselRight.addEventListener('click', nextSlide);
-
-            let autoPlayInterval = setInterval(nextSlide, 3500);
-            carousel.addEventListener('mouseenter', () => clearInterval(autoPlayInterval));
-            carousel.addEventListener('mouseleave', () => autoPlayInterval = setInterval(nextSlide, 3500));
-        }
-
-        // 4. APERTURA DE FOTOS EN MODAL LIGHTBOX
+        // Control de Modal Lightbox para imágenes de la galería
         const lightboxBtns = document.querySelectorAll('.btn-open-lightbox');
         const lightboxModalElem = document.getElementById('lightboxModalVIP');
-
-        if (lightboxBtns && lightboxModalElem) {
+        if (lightboxBtns.length && lightboxModalElem) {
             const bsLightbox = new bootstrap.Modal(lightboxModalElem);
-
             lightboxBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
-                    const imgUrl = btn.getAttribute('data-img-url');
-
-                    if (imgUrl) {
-                        document.getElementById('lightboxImg').src = imgUrl;
-                        bsLightbox.show();
-                    }
+                    document.getElementById('lightboxImg').src = btn.getAttribute('data-img-url');
+                    bsLightbox.show();
                 });
             });
         }
