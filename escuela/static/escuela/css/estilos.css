@@ -28,9 +28,24 @@
     --neon-glow-strong: 0 0 25px rgba(52, 211, 153, 0.6);
 }
 
+
 /* ==========================================================================
-   1. ESTRUCTURA BASE Y SEPARADORES DE SECCIÓN
+   1. ESTRUCTURA BASE Y RESETS GLOBALES
+   - Bloqueo de desborde horizontal para celulares y tipografía base.
    ========================================================================== */
+
+/* Bloqueo estricto de scroll horizontal para móviles */
+html, body {
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    position: relative;
+}
+
+/* Evitar que imágenes o videos sobrepasen su contenedor */
+img, video, iframe {
+    max-width: 100%;
+}
+
 body {
     background-color: var(--bg-body);
     color: var(--text-main);
@@ -38,7 +53,6 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    overflow-x: hidden;
 }
 
 main {
@@ -50,7 +64,7 @@ h1, h2, h3, h4, h5, h6, .font-titulo {
     color: var(--text-main);
 }
 
-/* Línea separadora Neón sutil entre secciones (Excepto la última antes del footer) */
+/* Línea separadora Neón sutil entre secciones */
 section {
     position: relative;
 }
@@ -75,8 +89,10 @@ hr, .section-divider {
     opacity: 0.7;
 }
 
+
 /* ==========================================================================
-   2. NAVBAR Y LOGO (ENCABEZADO COMPACTO Y ELEGANTE)
+   2. NAVEGACIÓN Y ENCABEZADO (NAVBAR & LOGO)
+   - Barra translúcida con efecto Blur y escala de marca.
    ========================================================================== */
 .header-navbar {
     background: var(--bg-navbar) !important;
@@ -95,7 +111,6 @@ hr, .section-divider {
     align-items: center;
 }
 
-/* Tamaño de logo controlado para no deformar la barra */
 .brand-logo {
     height: 65px !important;
     max-height: 65px !important;
@@ -129,10 +144,11 @@ hr, .section-divider {
     text-shadow: 0 0 10px rgba(52, 211, 153, 0.35);
 }
 
+
 /* ==========================================================================
-   3. COMPONENTES Y TARJETAS
+   3. TARJETAS GENERALES Y NOTICIAS
+   - Estilos para paneles, tarjetas generales y fijación de alto para noticias.
    ========================================================================== */
-/* Tarjetas Generales y Paneles */
 .card, .glass-panel {
     background-color: var(--bg-card);
     border: 1px solid var(--border-subtle);
@@ -156,7 +172,7 @@ hr, .section-divider {
     color: var(--brand-green-neon);
 }
 
-/* Tarjetas de Noticias */
+/* Tarjetas de Noticias (Sección 4) */
 .card-noticia-item {
     height: 440px !important;
     display: flex;
@@ -173,6 +189,7 @@ hr, .section-divider {
 .card-noticia-item h3 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     white-space: normal !important;
@@ -183,23 +200,50 @@ hr, .section-divider {
 .line-clamp-3 {
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
     min-height: 4.2em;
 }
 
-/* Galería de Fotos (Slider Panorámico Horizontal) */
-.gallery-container {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+
+/* ==========================================================================
+   4. CARRUSELES Y SLIDERS HORIZONTALES (GALERÍA Y NOTICIAS)
+   - Scroll con efecto imán, cursor agarrable y OCULTAMIENTO DE BARRAS FEAS.
+   ========================================================================== */
+
+/* Contenedores con desplazamiento suave (Aplica a Noticias y a la Galería) */
+.gallery-container,
+.news-container-slider {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    cursor: grab;
+    user-select: none;
+    padding-bottom: 0.5rem;
+    
+    /* Oculta la barra de scroll nativa blanca en todos los navegadores */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE / Edge */
 }
 
-.gallery-container::-webkit-scrollbar {
-    display: none;
+.gallery-container::-webkit-scrollbar,
+.news-container-slider::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Brave */
 }
 
+.gallery-container:active,
+.news-container-slider:active {
+    cursor: grabbing;
+}
+
+/* Tarjetas de la Galería de Fotos (Sección 5) */
 .gallery-item-wrapper {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
     overflow: hidden;
     border-radius: 16px;
     border: 1px solid var(--border-subtle);
@@ -213,20 +257,23 @@ hr, .section-divider {
 }
 
 .gallery-img-item {
-    height: 320px !important;
-    width: 450px !important;
+    height: 280px !important;
+    width: 380px !important;
+    max-width: 80vw !important;
     object-fit: cover;
     cursor: pointer;
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     display: block;
+    pointer-events: none;
 }
 
 .gallery-img-item:hover {
     transform: scale(1.05);
 }
 
+
 /* ==========================================================================
-   CONSULTAS FRECUENTES (FAQ) & BUSCADOR DEDICADO
+   5. CONSULTAS FRECUENTES (FAQ) & FORMULARIO DE CONTACTO
    ========================================================================== */
 .faq-search-wrapper {
     position: relative;
@@ -244,7 +291,6 @@ hr, .section-divider {
     transition: all 0.3s ease;
 }
 
-/* Placeholder claro y visible (Gris Slate 400) */
 .faq-search-input::placeholder {
     color: #94A3B8 !important;
     opacity: 1 !important;
@@ -283,7 +329,6 @@ hr, .section-divider {
     transform: translateY(-2px);
 }
 
-/* Botón de la Pregunta / Acordeón */
 .faq-question-btn,
 .accordion-button {
     background-color: transparent !important;
@@ -302,14 +347,12 @@ hr, .section-divider {
     border-bottom: 1px solid var(--border-subtle);
 }
 
-/* Flechita del Acordeón con Tono Menta */
 .accordion-button::after {
     filter: invert(68%) sepia(58%) saturate(485%) hue-rotate(113deg) brightness(98%) contrast(92%) !important;
     opacity: 0.9;
     transition: transform 0.3s ease;
 }
 
-/* Respuesta desplegada (Alto Contraste) */
 .faq-answer-body,
 .accordion-body {
     padding: 1.4rem 1.5rem;
@@ -319,28 +362,50 @@ hr, .section-divider {
     background-color: rgba(15, 23, 42, 0.4);
 }
 
-/* Formulario de Contacto y Búsqueda Laboral */
+/* Formulario de Contacto (Íconos e Inputs) */
+.contact-input-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--brand-green-neon);
+    font-size: 1.1rem;
+    pointer-events: none;
+    z-index: 5;
+}
+
 .contact-input-custom {
     background-color: var(--bg-body) !important;
     border: 1px solid var(--border-subtle) !important;
     color: #FFFFFF !important;
     border-radius: 8px;
-    padding: 0.65rem 0.9rem 0.65rem 2.6rem !important;
+    padding: 0.75rem 0.9rem 0.75rem 2.8rem !important;
     font-size: 0.95rem;
     transition: all 0.3s ease;
 }
 
-.contact-input-custom:focus {
+.contact-textarea-custom {
+    background-color: var(--bg-body) !important;
+    border: 1px solid var(--border-subtle) !important;
+    color: #FFFFFF !important;
+    border-radius: 8px;
+    padding: 0.8rem 1rem !important;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.contact-input-custom:focus,
+.contact-textarea-custom:focus {
     border-color: var(--primary) !important;
     box-shadow: var(--neon-glow) !important;
 }
 
-.contact-input-custom::placeholder {
+.contact-input-custom::placeholder,
+.contact-textarea-custom::placeholder {
     color: #94A3B8 !important;
     opacity: 1 !important;
 }
 
-/* Solapas / Nav Pills */
 .nav-pills-custom .nav-link {
     background-color: transparent;
     color: var(--text-muted);
@@ -363,7 +428,7 @@ hr, .section-divider {
 }
 
 /* ==========================================================================
-   4. BOTONES
+   6. BOTONES Y ACCIONES
    ========================================================================== */
 .btn-plataforma {
     background-color: var(--primary);
@@ -399,8 +464,22 @@ hr, .section-divider {
     box-shadow: var(--neon-glow);
 }
 
+
 /* ==========================================================================
-   5. UTILIDADES DE TEXTO Y BORDES
+   7. MODALES Y VENTANAS EMERGENTES (PREVENCIÓN DE DOBLE SCROLL)
+   ========================================================================== */
+
+/* Traba el scroll del body sin modificar el alto ni reiniciar la posición */
+body.modal-open {
+    overflow: hidden !important;
+}
+
+.modal {
+    overflow-y: auto !important;
+}
+
+/* ==========================================================================
+   8. UTILIDADES Y FOOTER
    ========================================================================== */
 .text-main {
     color: var(--text-main) !important;
@@ -423,9 +502,6 @@ hr, .section-divider {
     border-color: var(--border-subtle) !important;
 }
 
-/* ==========================================================================
-   6. FOOTER Y COPYRIGHT
-   ========================================================================== */
 .footer-section {
     background-color: var(--bg-footer) !important;
     border-top: 2px solid var(--border-subtle) !important;
@@ -438,8 +514,9 @@ hr, .section-divider {
     color: var(--text-muted);
 }
 
+
 /* ==========================================================================
-   7. ESTILOS GENERALES DEL PANEL DE GESTIÓN (DASHBOARD)
+   9. PANEL DE GESTIÓN (DASHBOARD)
    ========================================================================== */
 body.body-panel {
     background-color: var(--bg-body) !important;
@@ -477,4 +554,17 @@ body.body-panel {
     letter-spacing: 0.05em;
     color: var(--text-muted);
     border-bottom: 2px solid var(--border-subtle);
+}
+
+
+/* ==========================================================================
+   10. MEDIA QUERIES (ADAPTABILIDAD RESPONSIVE)
+   - Se ubican al final para que pisen los valores por defecto sin romperse.
+   ========================================================================== */
+@media (min-width: 768px) {
+    .gallery-img-item {
+        height: 320px !important;
+        width: 450px !important;
+        max-width: none !important;
+    }
 }

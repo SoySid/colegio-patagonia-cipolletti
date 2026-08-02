@@ -8,7 +8,7 @@
         <div class="col-12 col-md-8 col-lg-5">
             
             <!-- TARJETA PRINCIPAL LOGIN -->
-            <div class="card p-4 p-md-5 border border-subtle shadow-lg text-center position-relative overflow-hidden">
+            <div class="card p-4 p-md-5 border border-subtle shadow-lg text-center position-relative overflow-hidden bg-card-custom rounded-4">
                 
                 <!-- Badge Estado Sistema -->
                 <div class="mb-4">
@@ -32,6 +32,26 @@
                     Acceso exclusivo para el equipo directivo, docente y administrativo.
                 </p>
 
+                <!-- CAJITA INFORMATIVA: AULA VIRTUAL -->
+                <div class="p-3 mb-4 rounded-3 text-start border border-subtle bg-badge-custom d-flex align-items-start gap-3">
+                    <i class="bi bi-rocket-takeoff-fill text-acento fs-4 flex-shrink-0 mt-1"></i>
+                    <div class="small">
+                        <strong class="text-main d-block mb-1">Próximamente</strong>
+                        <span class="text-muted-custom">
+                            Implementaremos el Aula Virtual para padres y tutores, facilitando el acceso al material de estudio y a las actividades de cada espacio curricular.
+                        </span>
+                    </div>
+                </div>
+
+                <!-- BLOQUE DE ERRORES -->
+                {% if form.errors %}
+                    <div class="alert alert-danger border-2 border-danger alert-dismissible fade show rounded-3 text-start mb-4" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2 align-middle"></i>
+                        <span class="small fw-bold align-middle">Usuario o contraseña incorrectos.</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endif %}
+
                 <!-- FORMULARIO DE INGRESO -->
                 <form method="POST" action="{% url 'escuela:portal' %}" class="text-start d-flex flex-column gap-3">
                     {% csrf_token %}
@@ -41,7 +61,7 @@
                         <label for="username" class="form-label text-main fw-semibold small mb-1">Usuario Institucional *</label>
                         <div class="position-relative">
                             <i class="bi bi-person-fill contact-input-icon"></i>
-                            <input type="text" id="username" name="username" class="form-control contact-input-custom shadow-none" placeholder="Ej: jperez" required autofocus>
+                            <input type="text" id="username" name="username" class="form-control contact-input-custom shadow-none" placeholder="Ej: jperez" required autofocus autocomplete="username">
                         </div>
                     </div>
 
@@ -50,8 +70,8 @@
                         <label for="password" class="form-label text-main fw-semibold small mb-1">Contraseña *</label>
                         <div class="position-relative">
                             <i class="bi bi-key-fill contact-input-icon"></i>
-                            <input type="password" id="password" name="password" class="form-control contact-input-custom shadow-none" placeholder="••••••••" required>
-                            <button type="button" class="btn border-0 text-muted-custom position-absolute end-0 top-50 translate-middle-y me-2 p-1" id="togglePassword" aria-label="Mostrar contraseña">
+                            <input type="password" id="password" name="password" class="form-control contact-input-custom shadow-none" placeholder="••••••••" required autocomplete="current-password">
+                            <button type="button" class="btn border-0 text-muted-custom position-absolute end-0 top-50 translate-middle-y me-2 p-1" id="togglePassword" aria-label="Mostrar u ocultar contraseña">
                                 <i class="bi bi-eye-slash-fill" id="toggleIcon"></i>
                             </button>
                         </div>
@@ -65,7 +85,7 @@
 
                 <!-- Pie de Tarjeta / Información de Seguridad -->
                 <div class="pt-4 border-top border-subtle mt-4 d-flex flex-column gap-2 small text-muted-custom">
-                    <div class="d-flex justify-content-center gap-3">
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
                         <span><i class="bi bi-shield-check text-acento me-1"></i> Datos Protegidos</span>
                         <span><i class="bi bi-lock-fill text-acento me-1"></i> Sesión Encriptada</span>
                     </div>
@@ -83,7 +103,6 @@
 {% endblock %}
 
 {% block extra_js %}
-<!-- SCRIPT MOSTRAR / OCULTAR CONTRASEÑA -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const toggleBtn = document.getElementById('togglePassword');

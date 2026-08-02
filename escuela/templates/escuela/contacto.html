@@ -97,7 +97,9 @@
 
                             <div>
                                 <label class="form-label text-main fw-semibold small mb-1">Mensaje *</label>
-                                <textarea name="mensaje" rows="4" class="form-control contact-input-custom shadow-none ps-3" placeholder="Escribí tu consulta aquí..." required></textarea>
+                                <div class="position-relative">
+                                    <textarea name="mensaje" rows="4" class="form-control contact-textarea-custom shadow-none" placeholder="Escribí tu consulta aquí..." required></textarea>
+                                </div>
                             </div>
 
                             <button type="submit" class="btn btn-plataforma py-3 fw-bold mt-2 d-flex align-items-center justify-content-center gap-2">
@@ -156,9 +158,9 @@
                         </form>
                     </div>
 
-                </div> <!-- final tab-content -->
+                </div>
 
-            </div> <!-- final card -->
+            </div>
         </div>
 
         <!-- ==========================================================================
@@ -168,16 +170,14 @@
             
             <!-- Tarjeta 1: Datos de Contacto Secretaría -->
             <div class="card p-4 p-md-5 border border-subtle d-flex flex-column justify-content-between h-100">
-                
                 <div>
                     <h2 class="font-titulo h4 fw-bold text-main mb-1">INFORMACIÓN DIRECTA</h2>
                     <p class="text-muted-custom small mb-4">Secretaría general e instalaciones del colegio.</p>
 
                     <div class="d-flex flex-column gap-4">
-                        
                         <!-- Teléfono -->
-                        <div class="d-flex align-items-start gap-3">
-                            <div class="bg-badge-custom border border-subtle p-3 rounded-3 text-acento fs-5">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="bg-badge-custom border border-subtle p-3 rounded-3 text-acento fs-5 flex-shrink-0">
                                 <i class="bi bi-telephone-fill"></i>
                             </div>
                             <div>
@@ -187,19 +187,19 @@
                         </div>
 
                         <!-- Email -->
-                        <div class="d-flex align-items-start gap-3">
-                            <div class="bg-badge-custom border border-subtle p-3 rounded-3 text-acento fs-5">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="bg-badge-custom border border-subtle p-3 rounded-3 text-acento fs-5 flex-shrink-0">
                                 <i class="bi bi-envelope-fill"></i>
                             </div>
                             <div>
                                 <span class="d-block fw-bold text-main small">Correo Electrónico</span>
-                                <span class="text-muted-custom fs-6">{{ escuela_info.email|default:"patagoniaescuelaprimaria@gmail.com" }}</span>
+                                <span class="text-muted-custom fs-6 text-break">{{ escuela_info.email|default:"patagoniaescuelaprimaria@gmail.com" }}</span>
                             </div>
                         </div>
 
                         <!-- Horarios -->
-                        <div class="d-flex align-items-start gap-3">
-                            <div class="bg-badge-custom border border-subtle p-3 rounded-3 text-acento fs-5">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="bg-badge-custom border border-subtle p-3 rounded-3 text-acento fs-5 flex-shrink-0">
                                 <i class="bi bi-clock-fill"></i>
                             </div>
                             <div>
@@ -223,7 +223,7 @@
                     </div>
                 </div>
 
-            </div> <!-- final card info -->
+            </div>
 
             <!-- Tarjeta 2: Ubicación y Mapa -->
             <div class="card p-4 h-100 border border-subtle">
@@ -245,11 +245,11 @@
                         referrerpolicy="no-referrer-when-downgrade">
                     </iframe>
                 </div>
-            </div> <!-- final card mapa -->
+            </div>
 
-        </div> <!-- final col-lg-5 -->
+        </div>
 
-    </div> <!-- final row -->
+    </div>
 
-</div> <!-- final container -->
+</div>
 {% endblock %}

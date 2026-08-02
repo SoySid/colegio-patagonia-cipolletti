@@ -19,10 +19,10 @@
             <thead>
                 <tr>
                     <th scope="col" style="width: 140px;">Fecha</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Contacto</th>
+                    <th scope="col" style="width: 180px;">Nombre</th>
+                    <th scope="col" style="width: 220px;">Contacto</th>
                     <th scope="col">Mensaje / Asunto</th>
-                    <th scope="col" class="text-end" style="width: 100px;">Acciones</th>
+                    <th scope="col" class="text-end" style="width: 90px;">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,19 +32,21 @@
                             {{ consulta.fecha|date:"d/m/Y H:i"|default:consulta.fecha_creacion|date:"d/m/Y H:i" }}
                         </td>
                         <td>
-                            <strong class="text-main">{{ consulta.nombre }}</strong>
+                            <strong class="text-main d-block">{{ consulta.nombre }}</strong>
                         </td>
                         <td>
-                            <span class="d-block text-main">{{ consulta.email }}</span>
+                            <span class="d-block text-main small">{{ consulta.email }}</span>
                             {% if consulta.telefono %}
                                 <small class="text-muted-custom"><i class="bi bi-telephone me-1"></i>{{ consulta.telefono }}</small>
                             {% endif %}
                         </td>
-                        <td class="text-muted-custom">
-                            {{ consulta.mensaje|default:consulta.asunto }}
+                        <td class="text-muted-custom small">
+                            <div class="text-truncate-2">
+                                {{ consulta.mensaje|default:consulta.asunto }}
+                            </div>
                         </td>
                         <td class="text-end">
-                            <a href="{% url 'panel_consultas_borrar' consulta.pk %}" class="btn btn-outline-danger btn-sm rounded-3">
+                            <a href="{% url 'panel_consultas_borrar' consulta.pk %}" class="btn btn-outline-danger btn-sm rounded-3" title="Eliminar consulta">
                                 <i class="bi bi-trash-fill"></i>
                             </a>
                         </td>

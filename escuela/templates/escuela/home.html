@@ -5,13 +5,14 @@
 {% block content %}
 
 <!-- ==========================================================================
-     1. HERO PRINCIPAL (ENCABEZADO DE IMPACTO)
+     [SECCIÓN 1] HERO PRINCIPAL (ENCABEZADO DE IMPACTO)
+     - Bienvenida VIP, título dinámico y botones principales.
      ========================================================================== -->
 <section class="py-5 position-relative">
     <div class="container py-4">
         <div class="row align-items-center g-5">
             
-            <!-- Columna Izquierda: Mensaje Principal y Botones de Acción -->
+            <!-- Columna Texto Info -->
             <div class="col-12 col-lg-7">
                 <span class="badge mb-3 px-3 py-2 rounded-pill bg-badge-custom border border-acento text-acento">
                     <i class="bi bi-award-fill me-1"></i>{{ escuela_info.hero_tag|default:"EDUCACIÓN INSTITUCIONAL" }}
@@ -36,11 +37,12 @@
                 </div>
             </div>
             
-            <!-- Columna Derecha: Imagen del Frente o Escudo Backup -->
+            <!-- Columna Imagen Hero -->
             <div class="col-12 col-lg-5 text-center">
                 {% if escuela_info.hero_imagen %}
                     <img src="{{ escuela_info.hero_imagen.url }}" alt="{{ escuela_info.nombre|default:'Colegio Patagonia' }}" class="img-fluid rounded-4 glow-effect" loading="lazy">
                 {% else %}
+                    <!-- Fallback: Muestra Escudo si no hay hero_imagen cargada -->
                     <div class="p-5 glass-panel text-center">
                         {% if escuela_info.logo %}
                             <img src="{{ escuela_info.logo.url }}" alt="Escudo" class="img-fluid brand-logo-hero">
@@ -58,7 +60,8 @@
 
 
 <!-- ==========================================================================
-     2. PILARES INSTITUCIONALES (VALORES Y PROPUESTA)
+     [SECCIÓN 2] PILARES INSTITUCIONALES (VALORES Y PROPUESTA)
+     - Grilla VIP de 3 tarjetas destacando los valores clave.
      ========================================================================== -->
 <section class="py-5">
     <div class="container">
@@ -72,7 +75,6 @@
         </div>
 
         <div class="row g-4">
-            <!-- Pilar 1 -->
             <div class="col-12 col-md-4">
                 <div class="card h-100 p-4">
                     <div class="fs-1 mb-3 text-acento"><i class="bi bi-lightbulb-fill"></i></div>
@@ -81,7 +83,6 @@
                 </div>
             </div>
 
-            <!-- Pilar 2 -->
             <div class="col-12 col-md-4">
                 <div class="card h-100 p-4">
                     <div class="fs-1 mb-3 text-acento"><i class="bi bi-heart-pulse-fill"></i></div>
@@ -90,7 +91,6 @@
                 </div>
             </div>
 
-            <!-- Pilar 3 -->
             <div class="col-12 col-md-4">
                 <div class="card h-100 p-4">
                     <div class="fs-1 mb-3 text-acento"><i class="bi bi-laptop-fill"></i></div>
@@ -105,7 +105,8 @@
 
 
 <!-- ==========================================================================
-     3. NIVELES EDUCATIVOS (TRAYECTORIA ACADÉMICA)
+     [SECCIÓN 3] NIVELES EDUCATIVOS (TRAYECTORIA ACADÉMICA)
+     - Grilla de tarjetas con la oferta académica.
      ========================================================================== -->
 <section class="py-5">
     <div class="container">
@@ -182,12 +183,14 @@
 
 
 <!-- ==========================================================================
-     4. NOTICIAS RECIENTES (GRILLA LIMPIA Y DIRECTA)
+     [SECCIÓN 4] NOTICIAS RECIENTES (CARRUSEL SLIDER)
+     - Sección VIP: Scrolleable horizontalmente. Muestra TODAS las noticias.
+     - Botón "Leer noticia completa" dispara el Modal VIP.
      ========================================================================== -->
 <section class="py-5">
     <div class="container">
         
-        <!-- Encabezado de Sección Limpio (Sin botón a páginas inexistentes) -->
+        <!-- Encabezado de Sección -->
         <div class="mb-4 text-center text-md-start">
             <span class="badge mb-2 px-3 py-2 rounded-pill bg-badge-custom border border-acento text-acento">
                 COMUNIDAD EN ACCIÓN
@@ -195,17 +198,18 @@
             <h2 class="font-titulo fw-bold display-6 mb-0 text-main">Noticias Recientes</h2>
         </div>
         
-        <!-- Tarjetas de Noticias (Máximo 3 Noticias de Portada) -->
         {% if noticias %}
-            <div class="row g-4">
-                {% for noticia in noticias|slice:":3" %}
-                    <div class="col-12 col-md-6 col-lg-4">
+            <!-- Carrusel deslizable (news-container-slider activado en extra_js) -->
+            <div class="d-flex gap-4 overflow-x-auto pb-3 news-container-slider">
+                {% for noticia in noticias %}
+                    <div class="flex-shrink-0" style="width: 350px; max-width: 85vw;">
                         <div class="card h-100 p-0 overflow-hidden card-noticia-item">
                             {% if noticia.imagen %}
                                 <img src="{{ noticia.imagen.url }}" class="card-img-top card-noticia-img" alt="{{ noticia.titulo }}" loading="lazy">
                             {% endif %}
                             <div class="card-body p-4 d-flex flex-column justify-content-between">
                                 <div>
+                                    <!-- Meta-info de Noticia -->
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <span class="badge bg-badge-custom border border-acento text-acento">{{ noticia.categoria }}</span>
                                         <span class="text-muted-custom small"><i class="bi bi-calendar3 me-1 text-acento"></i>{{ noticia.fecha_creacion|date:"d/m/Y" }}</span>
@@ -214,12 +218,10 @@
                                     <p class="text-muted-custom small line-clamp-3 mb-3">{{ noticia.descripcion|striptags }}</p>
                                 </div>
                                 <div class="pt-3 border-top border-subtle mt-auto">
-                                    <button type="button" class="btn btn-red-social text-acento w-100 btn-sm fw-bold btn-read-news" 
-                                            data-title="{{ noticia.titulo }}" 
-                                            data-category="{{ noticia.categoria }}"
-                                            data-date="{{ noticia.fecha_creacion|date:'d/m/Y' }}"
-                                            data-img="{% if noticia.imagen %}{{ noticia.imagen.url }}{% endif %}"
-                                            data-content="{{ noticia.descripcion|linebreaksbr }}">
+                                    <!-- Botón con llamado directo a función JS abrirModalNoticia (VIP) -->
+                                    <button type="button" 
+                                            class="btn btn-red-social text-acento w-100 btn-sm fw-bold"
+                                            onclick="abrirModalNoticia('{{ noticia.titulo|escapejs }}', '{{ noticia.categoria|escapejs }}', '{{ noticia.fecha_creacion|date:'d/m/Y' }}', '{% if noticia.imagen %}{{ noticia.imagen.url }}{% endif %}', '{{ noticia.descripcion|linebreaksbr|escapejs }}')">
                                         LEER NOTICIA COMPLETA <i class="bi bi-arrow-right ms-1"></i>
                                     </button>
                                 </div>
@@ -229,6 +231,7 @@
                 {% endfor %}
             </div>
         {% else %}
+            <!-- Mensaje si no hay noticias cargadas -->
             <div class="p-5 glass-panel text-center my-3">
                 <p class="text-muted-custom mb-0">No hay novedades publicadas por el momento.</p>
             </div>
@@ -237,8 +240,37 @@
     </div>
 </section>
 
+<!-- [MODAL] LECTURA COMPLETA DE NOTICIA VIP
+     - Este modal se llena dinámicamente mediante JS.
+     ========================================================================== -->
+<div class="modal fade" id="newsReadModalVIP" tabindex="-1" aria-hidden="true" style="background: rgba(0,0,0,0.7);">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content glass-panel border border-subtle p-0 overflow-hidden">
+            <div class="position-relative">
+                <!-- Imagen cabecera modal -->
+                <img id="newsModalImg" src="" class="w-100 d-none" alt="Imagen noticia" style="max-height: 320px; object-fit: cover;">
+                <!-- Botón cerrar VIP -->
+                <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3 p-2 bg-dark bg-opacity-75 rounded-circle" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="p-4 p-md-5">
+                <!-- Meta-info modal -->
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <span id="newsModalBadge" class="badge bg-badge-custom border border-acento text-acento"></span>
+                    <span id="newsModalDate" class="text-muted-custom small"></span>
+                </div>
+                <!-- Título y Cuerpo modal -->
+                <h2 id="newsModalTitle" class="font-titulo fw-bold text-main mb-4 display-6"></h2>
+                <div id="newsModalBody" class="text-muted-custom fs-6" style="white-space: pre-line; line-height: 1.7;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!-- ==========================================================================
-     5. GALERÍA DE FOTOS (CARRUSEL PANORÁMICO LIMPIO)
+     [SECCIÓN 5] GALERÍA DE FOTOS (CARRUSEL SLIDER PANORÁMICO)
+     - Sección VIP: Scrolleable horizontalmente. Muestra imágenes del Carrusel.
+     - Cada imagen abre un Modal Lightbox VIP.
      ========================================================================== -->
 {% if carrusel %}
 <section class="py-5">
@@ -251,13 +283,14 @@
             <h2 class="font-titulo fw-bold display-6 mb-0 text-main">Galería de la Escuela</h2>
         </div>
 
+        <!-- Contenedor Carrusel Horizontal (gallery-container activado en extra_js) -->
         <div class="d-flex gap-3 overflow-x-auto pb-2 scroll-smooth gallery-container">
             {% for item in carrusel %}
                 {% if item.imagen %}
-                    <div class="flex-shrink-0 gallery-item-wrapper">
+                    <!-- Item individual: botón abre Lightbox VIP con data-img-url -->
+                    <div class="flex-shrink-0 gallery-item-wrapper btn-open-lightbox" data-img-url="{{ item.imagen.url }}">
                         <img src="{{ item.imagen.url }}" 
-                             class="rounded-3 btn-open-lightbox gallery-img-item" 
-                             data-img-url="{{ item.imagen.url }}" 
+                             class="rounded-3 gallery-img-item" 
                              alt="Galería {{ escuela_info.nombre|default:'Colegio Patagonia' }}" 
                              loading="lazy">
                     </div>
@@ -268,15 +301,19 @@
     </div>
 </section>
 
-<!-- MODAL LIGHTBOX PARA AMPLIACIÓN DE FOTOS -->
-<div class="modal fade" id="lightboxModalVIP" tabindex="-1" aria-hidden="true">
+<!-- [MODAL] LIGHTBOX VIP PARA AMPLIACIÓN DE FOTOS
+     - Este modal muestra la foto en tamaño completo. Llenado dinámicamente por JS.
+     ========================================================================== -->
+<div class="modal fade" id="lightboxModalVIP" tabindex="-1" aria-hidden="true" style="background: rgba(0,0,0,0.8);">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content glass-panel border border-subtle p-0 overflow-hidden">
             <div class="modal-header border-0 pb-0">
+                <!-- Botón cerrar VIP -->
                 <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
-            <div class="modal-body text-center p-3">
-                <img src="" id="lightboxImg" class="img-fluid rounded-3" alt="Foto ampliada">
+            <div class="modal-body text-center p-3 p-md-4">
+                <!-- Imagen ampliada (llenada por JS) -->
+                <img src="" id="lightboxImg" class="img-fluid rounded-3 glow-effect" alt="Foto ampliada VIP">
             </div>
         </div>
     </div>
@@ -287,53 +324,137 @@
 
 
 <!-- ==========================================================================
-     SCRIPTS DE CONTROL DE INTERACCIÓN
+     BLOQUE EXTRA_JS (INTERACCIONES COMPLEJAS)
      ========================================================================== -->
 {% block extra_js %}
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    // 1. FUNCIÓN GLOBAL PARA ABRIR NOTICIAS
+    function abrirModalNoticia(titulo, categoria, fecha, imgUrl, contenido) {
+        const modalElem = document.getElementById('newsReadModalVIP');
+        const modalImg = document.getElementById('newsModalImg');
 
-        // Control de Modal de Noticias (Al hacer clic en "Leer Noticia Completa")
-        const newsBtns = document.querySelectorAll('.btn-read-news');
-        const newsModalElem = document.getElementById('newsReadModalVIP');
-        if (newsBtns.length && newsModalElem) {
-            const bsNewsModal = new bootstrap.Modal(newsModalElem);
-            const modalImg = document.getElementById('newsModalImg');
-            const modalBadge = document.getElementById('newsModalBadge');
-            const modalDate = document.getElementById('newsModalDate');
-            const modalTitle = document.getElementById('newsModalTitle');
-            const modalBody = document.getElementById('newsModalBody');
+        if (!modalElem) return;
 
-            newsBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const imgUrl = btn.getAttribute('data-img');
-                    if (imgUrl) {
-                        modalImg.src = imgUrl;
-                        modalImg.classList.remove('d-none');
-                    } else {
-                        modalImg.classList.add('d-none');
-                    }
-                    modalBadge.textContent = btn.getAttribute('data-category');
-                    modalDate.textContent = btn.getAttribute('data-date');
-                    modalTitle.textContent = btn.getAttribute('data-title');
-                    modalBody.innerHTML = btn.getAttribute('data-content');
-                    bsNewsModal.show();
-                });
-            });
+        // Carga de datos dinámicos
+        if (imgUrl && imgUrl.trim() !== '') {
+            modalImg.src = imgUrl;
+            modalImg.classList.remove('d-none');
+        } else {
+            modalImg.classList.add('d-none');
         }
 
-        // Control de Modal Lightbox para imágenes de la galería
+        document.getElementById('newsModalBadge').textContent = categoria;
+        document.getElementById('newsModalDate').textContent = fecha;
+        document.getElementById('newsModalTitle').textContent = titulo;
+        document.getElementById('newsModalBody').innerHTML = contenido;
+
+        // Abrir modal mediante Bootstrap (o fallback manual sin tocar html)
+        if (window.bootstrap && window.bootstrap.Modal) {
+            const bsModal = bootstrap.Modal.getInstance(modalElem) || new bootstrap.Modal(modalElem);
+            bsModal.show();
+        } else {
+            document.body.classList.add('modal-open');
+            modalElem.classList.add('show');
+            modalElem.style.display = 'block';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // Limpieza de clases al cerrar en modo fallback
+        const restaurarScroll = () => {
+            document.body.classList.remove('modal-open');
+        };
+
+        document.getElementById('btnCloseNewsModal')?.addEventListener('click', restaurarScroll);
+        document.getElementById('btnCloseLightbox')?.addEventListener('click', restaurarScroll);
+
+        // 2. CONTROL LIGHTBOX PARA LA GALERÍA
         const lightboxBtns = document.querySelectorAll('.btn-open-lightbox');
-        const lightboxModalElem = document.getElementById('lightboxModalVIP');
-        if (lightboxBtns.length && lightboxModalElem) {
-            const bsLightbox = new bootstrap.Modal(lightboxModalElem);
+        const lightboxModal = document.getElementById('lightboxModalVIP');
+
+        if (lightboxBtns.length && lightboxModal) {
             lightboxBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
                     document.getElementById('lightboxImg').src = btn.getAttribute('data-img-url');
-                    bsLightbox.show();
+
+                    if (window.bootstrap && window.bootstrap.Modal) {
+                        const bsLightbox = bootstrap.Modal.getInstance(lightboxModal) || new bootstrap.Modal(lightboxModal);
+                        bsLightbox.show();
+                    } else {
+                        document.body.classList.add('modal-open');
+                        lightboxModal.classList.add('show');
+                        lightboxModal.style.display = 'block';
+                    }
                 });
             });
         }
+
+        // 3. CARRUSEL CON AUTOPLAY + DRAG MANUAL
+        const setupCarruselAutoplay = (containerSelector) => {
+            const slider = document.querySelector(containerSelector);
+            if (!slider) return;
+
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+            let autoplayTimer = null;
+
+            // Lógica para avanzar solo automáticamente
+            const startAutoplay = () => {
+                if (autoplayTimer) return;
+                autoplayTimer = setInterval(() => {
+                    const firstCard = slider.children[0];
+                    const itemWidth = firstCard ? firstCard.offsetWidth + 16 : 350;
+                    const maxScroll = slider.scrollWidth - slider.clientWidth;
+
+                    if (slider.scrollLeft >= maxScroll - 10) {
+                        slider.scrollTo({ left: 0, behavior: 'smooth' });
+                    } else {
+                        slider.scrollBy({ left: itemWidth, behavior: 'smooth' });
+                    }
+                }, 3200); // Avanza cada 3.2 segundos
+            };
+
+            const stopAutoplay = () => {
+                clearInterval(autoplayTimer);
+                autoplayTimer = null;
+            };
+
+            // Arranca el ciclo de autoplay
+            startAutoplay();
+
+            // Pausas al interactuar con el mouse
+            slider.addEventListener('mouseenter', stopAutoplay);
+            slider.addEventListener('mouseleave', () => { if (!isDown) startAutoplay(); });
+
+            slider.addEventListener('mousedown', (e) => {
+                stopAutoplay();
+                isDown = true;
+                startX = e.pageX - slider.offsetLeft;
+                scrollLeft = slider.scrollLeft;
+            });
+
+            slider.addEventListener('mouseleave', () => { isDown = false; });
+            slider.addEventListener('mouseup', () => {
+                isDown = false;
+                startAutoplay();
+            });
+
+            slider.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                const x = e.pageX - slider.offsetLeft;
+                const walk = (x - startX) * 2;
+                if (Math.abs(x - startX) > 5) {
+                    e.preventDefault();
+                    slider.scrollLeft = scrollLeft - walk;
+                }
+            });
+        };
+
+        // Activación en ambos carruseles
+        setupCarruselAutoplay('.news-container-slider');
+        setupCarruselAutoplay('.gallery-container');
     });
 </script>
 {% endblock %}

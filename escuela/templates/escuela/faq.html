@@ -54,10 +54,63 @@
                         </div>
                     {% endfor %}
 
+                    <!-- Mensaje Dinámico cuando la Búsqueda no da Coincidencias -->
+                    <div id="noResultsMessage" class="p-5 glass-panel text-center d-none">
+                        <i class="bi bi-search fs-1 text-acento d-block mb-3"></i>
+                        <h5 class="text-main fw-bold mb-1">No se encontraron resultados</h5>
+                        <p class="text-muted-custom small mb-0">Probá buscando con otra palabra o revisá si está bien escrita.</p>
+                    </div>
+
                 </div>
             </div>
         </div>
 
     </div>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('faqSearchInput');
+        const faqItems = document.querySelectorAll('.faq-item-card');
+        const noResultsMessage = document.getElementById('noResultsMessage');
+
+        // Normaliza texto: Pasa a minúsculas y elimina acentos/tildes (NFD)
+        const cleanText = (str) => {
+            return str
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .trim();
+        };
+
+        if (searchInput && faqItems.length > 0) {
+            searchInput.addEventListener('input', (e) => {
+                const query = cleanText(e.target.value);
+                let matchesCount = 0;
+
+                faqItems.forEach(item => {
+                    const itemText = cleanText(item.textContent);
+                    
+                    if (itemText.includes(query)) {
+                        item.classList.remove('d-none');
+                        matchesCount++;
+                    } else {
+                        item.classList.add('d-none');
+                    }
+                });
+
+                // Muestra u oculta el cartel de "Sin resultados"
+                if (noResultsMessage) {
+                    if (matchesCount === 0) {
+                        noResultsMessage.classList.remove('d-none');
+                    } else {
+                        noResultsMessage.classList.add('d-none');
+                    }
+                }
+            });
+        }
+    });
+</script>
 {% endblock %}

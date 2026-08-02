@@ -19,22 +19,32 @@
             <thead>
                 <tr>
                     <th scope="col">Título</th>
-                    <th scope="col">Categoría</th>
-                    <th scope="col">Fecha</th>
+                    <th scope="col" style="width: 160px;">Categoría</th>
+                    <th scope="col" style="width: 150px;">Fecha</th>
                     <th scope="col" class="text-end" style="width: 180px;">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 {% for noticia in noticias %}
                     <tr>
-                        <td><strong class="text-main">{{ noticia.titulo }}</strong></td>
-                        <td><span class="badge bg-badge-custom border border-subtle text-muted-custom">{{ noticia.categoria }}</span></td>
-                        <td class="text-muted-custom small">{{ noticia.fecha_creacion|date:"d/m/Y H:i" }}</td>
-                        <td class="text-end">
+                        <td>
+                            <strong class="text-main d-block">{{ noticia.titulo }}</strong>
+                        </td>
+                        <td>
+                            {% if noticia.categoria %}
+                                <span class="badge bg-badge-custom border border-subtle text-muted-custom">{{ noticia.categoria }}</span>
+                            {% else %}
+                                <span class="text-muted-custom small">-</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-muted-custom small text-nowrap">
+                            {{ noticia.fecha_creacion|date:"d/m/Y H:i" }}
+                        </td>
+                        <td class="text-end text-nowrap">
                             <a href="{% url 'panel_noticias_editar' noticia.pk %}" class="btn btn-red-social btn-sm me-1">
                                 <i class="bi bi-pencil-fill"></i> Editar
                             </a>
-                            <a href="{% url 'panel_noticias_borrar' noticia.pk %}" class="btn btn-outline-danger btn-sm rounded-3">
+                            <a href="{% url 'panel_noticias_borrar' noticia.pk %}" class="btn btn-outline-danger btn-sm rounded-3" title="Eliminar noticia">
                                 <i class="bi bi-trash-fill"></i>
                             </a>
                         </td>

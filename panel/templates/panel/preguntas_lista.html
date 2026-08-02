@@ -22,16 +22,16 @@
     {% if preguntas %}
         <div class="d-flex flex-column gap-3">
             {% for item in preguntas %}
-                <div class="card p-3 border border-subtle bg-dark-custom rounded-3 d-flex flex-row justify-content-between align-items-center gap-3">
+                <div class="card p-3 border border-subtle bg-dark-custom rounded-3 d-flex flex-row flex-wrap justify-content-between align-items-center gap-3">
                     <div class="flex-grow-1">
                         <h5 class="text-main fw-bold fs-6 mb-1">{{ item.pregunta }}</h5>
                         <p class="text-muted-custom small mb-0">{{ item.respuesta|truncatewords:25 }}</p>
                     </div>
-                    <div class="d-flex gap-2 flex-shrink-0">
+                    <div class="d-flex gap-2 flex-shrink-0 ms-auto">
                         <a href="{% url 'panel_preguntas_editar' item.pk %}" class="btn btn-red-social btn-sm">
                             <i class="bi bi-pencil-square me-1"></i> Editar
                         </a>
-                        <a href="{% url 'panel_preguntas_borrar' item.pk %}" class="btn btn-outline-danger btn-sm rounded-3">
+                        <a href="{% url 'panel_preguntas_borrar' item.pk %}" class="btn btn-outline-danger btn-sm rounded-3" title="Eliminar pregunta">
                             <i class="bi bi-trash-fill"></i>
                         </a>
                     </div>

@@ -22,7 +22,7 @@
                     <th scope="col">Nombre</th>
                     <th scope="col">Contacto</th>
                     <th scope="col">CV / Archivo</th>
-                    <th scope="col" class="text-end" style="width: 100px;">Acciones</th>
+                    <th scope="col" class="text-end" style="width: 90px;">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,15 +32,15 @@
                             {{ post.fecha|date:"d/m/Y H:i"|default:post.fecha_creacion|date:"d/m/Y H:i" }}
                         </td>
                         <td>
-                            <strong class="text-main">{{ post.nombre }}</strong>
+                            <strong class="text-main d-block">{{ post.nombre }}</strong>
                         </td>
-                        <td>
-                            <span class="d-block text-main">{{ post.email }}</span>
+                        <td class="text-nowrap">
+                            <span class="d-block text-main small">{{ post.email }}</span>
                             {% if post.telefono %}
                                 <small class="text-muted-custom"><i class="bi bi-telephone me-1"></i>{{ post.telefono }}</small>
                             {% endif %}
                         </td>
-                        <td>
+                        <td class="text-nowrap">
                             {% if post.archivo_cv or post.cv %}
                                 <a href="{{ post.archivo_cv.url|default:post.cv.url }}" target="_blank" rel="noopener noreferrer" class="btn btn-red-social btn-sm">
                                     <i class="bi bi-file-earmark-pdf me-1 text-acento"></i> Ver / Descargar CV
@@ -50,7 +50,7 @@
                             {% endif %}
                         </td>
                         <td class="text-end">
-                            <a href="{% url 'panel_postulaciones_borrar' post.pk %}" class="btn btn-outline-danger btn-sm rounded-3">
+                            <a href="{% url 'panel_postulaciones_borrar' post.pk %}" class="btn btn-outline-danger btn-sm rounded-3" title="Eliminar postulación">
                                 <i class="bi bi-trash-fill"></i>
                             </a>
                         </td>

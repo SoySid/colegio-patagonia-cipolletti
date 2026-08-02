@@ -18,6 +18,9 @@
     <!-- CSS INSTITUCIONAL -->
     <link rel="stylesheet" href="{% static 'escuela/css/estilos.css' %}">
 
+    <!-- CSS EXCLUSIVO DEL PANEL DE GESTIÓN -->
+    <link rel="stylesheet" href="{% static 'escuela/css/panel.css' %}">
+
     {% block extra_css %}{% endblock %}
 </head>
 <body class="body-panel d-flex flex-column min-vh-100">
@@ -41,33 +44,35 @@
                 </div>
             </a>
 
-            <!-- Navegación Derecha -->
+            <!-- Navegación Derecha Unificada -->
             <div class="d-flex align-items-center gap-2">
                 {% if request.resolver_match.url_name == 'panel_inicio' %}
-                    <a href="{% url 'escuela:home' %}" class="btn btn-red-social btn-sm px-3 rounded-pill d-inline-flex align-items-center gap-2 fw-semibold">
-                        <i class="bi bi-box-arrow-up-right text-acento"></i>
+                    <a href="{% url 'escuela:home' %}" class="btn-panel-nav">
+                        <i class="bi bi-box-arrow-up-right text-primary"></i>
                         <span>Sitio Web</span>
                     </a>
                 {% else %}
-                    <a href="javascript:history.back()" class="btn btn-red-social btn-sm px-3 rounded-pill d-inline-flex align-items-center gap-1 fw-semibold">
-                        <i class="bi bi-arrow-left"></i> Atrás
+                    <a href="javascript:history.back()" class="btn-panel-nav">
+                        <i class="bi bi-arrow-left"></i>
+                        <span>Atrás</span>
                     </a>
-                    <a href="{% url 'panel_inicio' %}" class="btn btn-plataforma btn-sm px-3 rounded-pill d-inline-flex align-items-center gap-2 fw-bold">
+                    <a href="{% url 'panel_inicio' %}" class="btn-panel-nav">
                         <i class="bi bi-grid-fill"></i>
                         <span>Menú Principal</span>
                     </a>
-                    <a href="{% url 'escuela:home' %}" class="btn btn-red-social btn-sm px-3 rounded-pill d-inline-flex align-items-center gap-1 fw-semibold">
+                    <a href="{% url 'escuela:home' %}" class="btn-panel-nav btn-panel-nav-icon" title="Ir al Sitio Web">
                         <i class="bi bi-house"></i>
                     </a>
                 {% endif %}
                 
-                <div class="vr mx-1 bg-secondary opacity-50" style="height: 24px;"></div>
+                <div class="vr mx-1 bg-secondary opacity-25" style="height: 20px;"></div>
 
                 <!-- Botón Cerrar Sesión -->
                 <form action="{% url 'panel_logout' %}" method="post" class="d-inline-flex m-0">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-bold d-inline-flex align-items-center gap-1" title="Cerrar Sesión">
-                        <i class="bi bi-box-arrow-right"></i> Salir
+                    <button type="submit" class="btn-panel-nav btn-panel-nav-danger" title="Cerrar Sesión">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Salir</span>
                     </button>
                 </form>
             </div>

@@ -4,7 +4,7 @@
 
 {% block contenido %}
     <!-- Encabezado de la vista -->
-    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-subtle">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-subtle flex-wrap gap-2">
         <h3 class="font-titulo text-main fw-bold mb-0 fs-4">
             <i class="bi bi-card-checklist text-acento me-2"></i>Listado de Requisitos
         </h3>
@@ -26,13 +26,13 @@
                 {% for requisito in requisitos %}
                     <tr>
                         <td>
-                            <strong class="text-main">{{ requisito }}</strong>
+                            <strong class="text-main d-block">{{ requisito }}</strong>
                         </td>
-                        <td class="text-end">
+                        <td class="text-end text-nowrap">
                             <a href="{% url 'panel_requisitos_editar' requisito.pk %}" class="btn btn-red-social btn-sm me-1">
                                 <i class="bi bi-pencil-fill"></i> Editar
                             </a>
-                            <a href="{% url 'panel_requisitos_borrar' requisito.pk %}" class="btn btn-outline-danger btn-sm rounded-3">
+                            <a href="{% url 'panel_requisitos_borrar' requisito.pk %}" class="btn btn-outline-danger btn-sm rounded-3" title="Eliminar requisito">
                                 <i class="bi bi-trash-fill"></i>
                             </a>
                         </td>
