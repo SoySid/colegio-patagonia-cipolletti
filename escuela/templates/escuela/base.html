@@ -62,7 +62,7 @@
         }
 
         .glass-header {
-            background: rgba(15, 23, 42, 0.85) !important;
+            background: rgba(15, 23, 42, 0.9) !important;
             backdrop-filter: blur(16px) !important;
             border-bottom: 1px solid rgba(52, 211, 153, 0.2) !important;
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
@@ -102,6 +102,7 @@
             box-shadow: 0 0 15px rgba(16, 185, 129, 0.35) !important;
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 0.5rem;
         }
         .btn-plataforma-vip:hover {
@@ -115,49 +116,39 @@
 </head>
 <body class="bg-background text-slate-100 font-sans antialiased min-h-screen flex flex-col justify-between overflow-x-hidden">
 
-    <!-- NAVBAR HEADER -->
+    <!-- NAVBAR HEADER RESPONSIVE -->
     <header x-data="{ openMenu: false }" class="glass-header sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
+            <div class="flex items-center justify-between h-16 sm:h-20">
                 
-                <a href="{% url 'escuela:home' %}" class="flex items-center gap-3.5 group">
+                <a href="{% url 'escuela:home' %}" class="flex items-center gap-2.5 sm:gap-3.5 group max-w-[80%] sm:max-w-none">
                     {% if escuela_info.logo %}
-                        <img src="{{ escuela_info.logo.url }}" alt="Logo {{ escuela_info.nombre|default:'Colegio Patagonia' }}" class="h-11 w-auto object-contain rounded-xl p-1 bg-slate-950 border border-slate-800 group-hover:border-emerald-500/50 transition-colors shadow-md">
+                        <img src="{{ escuela_info.logo.url }}" alt="Logo {{ escuela_info.nombre|default:'Colegio Patagonia' }}" class="h-9 sm:h-11 w-auto object-contain rounded-xl p-1 bg-slate-950 border border-slate-800 group-hover:border-emerald-500/50 transition-colors shadow-md flex-shrink-0">
                     {% else %}
-                        <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800 text-[#34d399] group-hover:border-emerald-500/50 group-hover:shadow-[0_0_15px_rgba(52,211,153,0.3)] transition-all">
-                            <i class="bi bi-building text-2xl"></i>
+                        <div class="bg-slate-900 p-2 sm:p-2.5 rounded-xl border border-slate-800 text-[#34d399] group-hover:border-emerald-500/50 group-hover:shadow-[0_0_15px_rgba(52,211,153,0.3)] transition-all flex-shrink-0">
+                            <i class="bi bi-building text-xl sm:text-2xl"></i>
                         </div>
                     {% endif %}
-                    <div>
-                        <span class="font-titulo font-extrabold text-base md:text-lg text-white leading-tight block group-hover:text-[#34d399] transition-colors tracking-wide">
+                    <div class="truncate">
+                        <span class="font-titulo font-extrabold text-xs sm:text-base md:text-lg text-white leading-tight block group-hover:text-[#34d399] transition-colors tracking-wide truncate">
                             {{ escuela_info.nombre|default:"COLEGIO PATAGONIA" }}
                         </span>
                         {% if escuela_info.frase %}
-                            <small class="block text-[#34d399] text-[11px] font-semibold tracking-wider opacity-90">{{ escuela_info.frase }}</small>
+                            <small class="hidden sm:block text-[#34d399] text-[11px] font-semibold tracking-wider opacity-90 truncate">{{ escuela_info.frase }}</small>
                         {% endif %}
                     </div>
                 </a>
 
-                <button @click="openMenu = !openMenu" class="lg:hidden p-2.5 rounded-xl border border-slate-800 text-[#34d399] hover:bg-slate-900 focus:outline-none">
-                    <i class="bi" :class="openMenu ? 'bi-x-lg' : 'bi-list'" class="text-2xl"></i>
+                <button @click="openMenu = !openMenu" class="lg:hidden p-2 rounded-xl border border-slate-800 text-[#34d399] hover:bg-slate-900 focus:outline-none flex-shrink-0">
+                    <i class="bi text-xl" :class="openMenu ? 'bi-x-lg' : 'bi-list'"></i>
                 </button>
 
                 <nav class="hidden lg:flex items-center gap-1.5">
-                    <a class="nav-item-link {% if request.resolver_match.url_name == 'home' %}active-link{% endif %}" href="{% url 'escuela:home' %}">
-                        Inicio
-                    </a>
-                    <a class="nav-item-link {% if request.resolver_match.url_name == 'requisitos' %}active-link{% endif %}" href="{% url 'escuela:requisitos' %}">
-                        Inscripción
-                    </a>
-                    <a class="nav-item-link {% if request.resolver_match.url_name == 'docentes' %}active-link{% endif %}" href="{% url 'escuela:docentes' %}">
-                        Autoridades
-                    </a>
-                    <a class="nav-item-link {% if request.resolver_match.url_name == 'faq' %}active-link{% endif %}" href="{% url 'escuela:faq' %}">
-                        Consultas
-                    </a>
-                    <a class="nav-item-link {% if request.resolver_match.url_name == 'contacto' %}active-link{% endif %}" href="{% url 'escuela:contacto' %}">
-                        Contacto
-                    </a>
+                    <a class="nav-item-link {% if request.resolver_match.url_name == 'home' %}active-link{% endif %}" href="{% url 'escuela:home' %}">Inicio</a>
+                    <a class="nav-item-link {% if request.resolver_match.url_name == 'requisitos' %}active-link{% endif %}" href="{% url 'escuela:requisitos' %}">Inscripción</a>
+                    <a class="nav-item-link {% if request.resolver_match.url_name == 'docentes' %}active-link{% endif %}" href="{% url 'escuela:docentes' %}">Autoridades</a>
+                    <a class="nav-item-link {% if request.resolver_match.url_name == 'faq' %}active-link{% endif %}" href="{% url 'escuela:faq' %}">Consultas</a>
+                    <a class="nav-item-link {% if request.resolver_match.url_name == 'contacto' %}active-link{% endif %}" href="{% url 'escuela:contacto' %}">Contacto</a>
                     
                     <div class="h-6 w-[1px] bg-slate-800 mx-2"></div>
 
@@ -176,6 +167,7 @@
 
             </div>
 
+            <!-- DESPLEGABLE MÓVIL/TABLET -->
             <div x-show="openMenu" x-cloak class="lg:hidden py-4 border-t border-slate-800/80 flex flex-col gap-2">
                 <a class="nav-item-link {% if request.resolver_match.url_name == 'home' %}active-link{% endif %}" href="{% url 'escuela:home' %}">Inicio</a>
                 <a class="nav-item-link {% if request.resolver_match.url_name == 'requisitos' %}active-link{% endif %}" href="{% url 'escuela:requisitos' %}">Inscripción</a>
@@ -200,12 +192,12 @@
 
     <main class="flex-grow">
         {% if messages %}
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
                 {% for message in messages %}
-                    <div x-data="{ show: true }" x-show="show" class="bg-slate-900 border border-emerald-500/40 text-slate-100 p-4 rounded-xl shadow-[0_0_15px_rgba(16,185,129,0.2)] flex items-center justify-between mb-4">
+                    <div x-data="{ show: true }" x-show="show" class="bg-slate-900 border border-emerald-500/40 text-slate-100 p-3 sm:p-4 rounded-xl shadow-[0_0_15px_rgba(16,185,129,0.2)] flex items-center justify-between mb-4">
                         <div class="flex items-center gap-3">
-                            <i class="bi bi-info-circle-fill text-[#34d399] text-xl"></i>
-                            <div class="text-sm font-medium">{{ message }}</div>
+                            <i class="bi bi-info-circle-fill text-[#34d399] text-lg sm:text-xl"></i>
+                            <div class="text-xs sm:text-sm font-medium">{{ message }}</div>
                         </div>
                         <button @click="show = false" class="text-slate-400 hover:text-white p-1">✕</button>
                     </div>
@@ -217,14 +209,12 @@
         {% endblock %}
     </main>
 
-    <!-- FOOTER INSTITUCIONAL CON BORDE DE DIVISIÓN MARCADO -->
-    <footer class="mt-20 border-t-2 border-emerald-500/40 bg-slate-950 pt-12 pb-8 relative shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
-        
-        <!-- Línea Neón Resplandeciente de División Superior -->
+    <!-- FOOTER RESPONSIVE -->
+    <footer class="mt-12 sm:mt-20 border-t-2 border-emerald-500/40 bg-slate-950 pt-8 sm:pt-12 pb-8 relative shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
         <div class="absolute -top-[2px] left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#34d399] to-transparent shadow-[0_0_15px_#34d399]"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 pb-12 border-b border-slate-800/80">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 pb-8 sm:pb-12 border-b border-slate-800/80">
                 
                 <div>
                     <div class="flex items-center gap-3 mb-3">
@@ -248,8 +238,8 @@
                 </div>
 
                 <div>
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4 border-s-2 border-[#10b981] ps-2.5">Navegación</h4>
-                    <ul class="space-y-2.5 text-xs text-slate-400">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-200 mb-3 sm:mb-4 border-s-2 border-[#10b981] ps-2.5">Navegación</h4>
+                    <ul class="space-y-2 text-xs text-slate-400">
                         <li><a href="{% url 'escuela:home' %}" class="hover:text-[#34d399] transition-colors">Inicio</a></li>
                         <li><a href="{% url 'escuela:requisitos' %}" class="hover:text-[#34d399] transition-colors">Proceso de Inscripción</a></li>
                         <li><a href="{% url 'escuela:docentes' %}" class="hover:text-[#34d399] transition-colors">Autoridades y Equipo</a></li>
@@ -259,8 +249,8 @@
                 </div>
 
                 <div>
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4 border-s-2 border-[#10b981] ps-2.5">Niveles Educativos</h4>
-                    <ul class="space-y-2.5 text-xs text-slate-400">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-200 mb-3 sm:mb-4 border-s-2 border-[#10b981] ps-2.5">Niveles Educativos</h4>
+                    <ul class="space-y-2 text-xs text-slate-400">
                         <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#34d399]"></span> Nivel Inicial (3, 4 y 5 años)</li>
                         <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#34d399]"></span> Nivel Primario (1º a 7º grado)</li>
                         <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#34d399]"></span> Nivel Medio (1º y 2º año)</li>
@@ -268,8 +258,8 @@
                 </div>
 
                 <div>
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4 border-s-2 border-[#10b981] ps-2.5">Contacto</h4>
-                    <div class="space-y-2.5 text-xs text-slate-400 mb-4">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-200 mb-3 sm:mb-4 border-s-2 border-[#10b981] ps-2.5">Contacto</h4>
+                    <div class="space-y-2 text-xs text-slate-400 mb-4">
                         {% if escuela_info.direccion %}
                             <p class="flex items-center gap-2"><i class="bi bi-geo-alt text-[#34d399]"></i> {{ escuela_info.direccion }}</p>
                         {% endif %}
@@ -281,7 +271,7 @@
                         {% endif %}
                     </div>
 
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-2 flex-wrap">
                         {% if escuela_info.facebook_url %}
                             <a href="{{ escuela_info.facebook_url }}" target="_blank" rel="noopener noreferrer" 
                                class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-[#34d399] hover:border-[#34d399]/50 text-xs font-semibold inline-flex items-center gap-1.5 transition-all">
@@ -299,7 +289,7 @@
 
             </div>
 
-            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400 font-medium">
+            <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400 font-medium text-center sm:text-left">
                 <p>&copy; {% now "Y" %} {{ escuela_info.nombre|default:"Colegio Patagonia" }}. Todos los derechos reservados.</p>
                 <div class="flex items-center gap-6">
                     <a href="{% url 'escuela:faq' %}" class="hover:text-[#34d399] transition-colors">Términos</a>
