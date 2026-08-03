@@ -1,63 +1,290 @@
 {% extends 'panel/base.html' %}
+{% load static %}
 
 {% block titulo %}Noticias{% endblock %}
 
 {% block contenido %}
-    <!-- Encabezado de la vista -->
-    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-subtle">
-        <h3 class="font-titulo text-main fw-bold mb-0 fs-4">
-            <i class="bi bi-newspaper text-acento me-2"></i>Listado de Noticias
-        </h3>
-        <a href="{% url 'panel_noticias_crear' %}" class="btn btn-plataforma">
-            <i class="bi bi-plus-lg me-1"></i> CREAR NUEVA NOTICIA
-        </a>
+
+<div class="max-w-7xl mx-auto" 
+     x-data="{ 
+        // Modales
+        deleteModal: false, 
+        createModal: false,
+        
+        // Datos Borrar
+        deleteUrl: '', 
+        deleteTitle: '',
+        rowToDelete: null,
+        
+        // Datos Crear
+        errorMessage: '',
+        isSubmitting: false,
+
+        // Borrar por AJAX
+        confirmDelete() {
+            let formData = new FormData();
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+            
+            fetch(this.deleteUrl, {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }).then(response => {
+                if (response.ok || response.redirected) {
+                    this.deleteModal = false;
+                    if (this.rowToDelete) {
+                        this.rowToDelete.remove();
+                    } else {
+                        window.location.reload();
+                    }
+                }
+            });
+        },
+
+        // Crear por AJAX (Mantiene la URL limpia y fuerza refresco sin caché)
+        submitCreate(event) {
+            this.isSubmitting = true;
+            this.errorMessage = '';
+            let form = event.target;
+            let formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(response => {
+                if (response.ok) {
+                    this.createModal = false;
+                    window.location.href = window.location.pathname;
+                } else {
+                    return response.json().then(data => {
+                        throw new Error(data.message || 'Error al validar el formulario. Revisá los campos.');
+                    });
+                }
+            })
+            .catch(error => {
+                this.errorMessage = error.message;
+            })
+            .finally(() => {
+                this.isSubmitting = false;
+            });
+        }
+     }">
+    
+    <!-- ENCABEZADO -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-8 border-b border-slate-800/80">
+        <div>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 border border-emerald-500/30 text-[#34d399] mb-2">
+                <i class="bi bi-newspaper"></i> NOVEDADES Y COMUNICACIÓN
+            </span>
+            <h1 class="font-titulo text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2.5">
+                Listado de Noticias
+            </h1>
+            <p class="text-slate-400 text-xs sm:text-sm font-light mt-1">
+                Publicá y administrá las noticias que se mostrarán en la portada del colegio.
+            </p>
+        </div>
+
+        <button type="button" @click="createModal = true; errorMessage = '';" class="btn-plataforma-vip whitespace-nowrap self-start sm:self-center cursor-pointer">
+            <i class="bi bi-plus-lg"></i> CREAR NUEVA NOTICIA
+        </button>
     </div>
 
-    <!-- Tabla Adaptada a la Estética Oscura -->
-    <div class="table-responsive">
-        <table class="table table-dark table-hover align-middle mb-0">
-            <thead>
-                <tr>
-                    <th scope="col">Título</th>
-                    <th scope="col" style="width: 160px;">Categoría</th>
-                    <th scope="col" style="width: 150px;">Fecha</th>
-                    <th scope="col" class="text-end" style="width: 180px;">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for noticia in noticias %}
-                    <tr>
-                        <td>
-                            <strong class="text-main d-block">{{ noticia.titulo }}</strong>
-                        </td>
-                        <td>
-                            {% if noticia.categoria %}
-                                <span class="badge bg-badge-custom border border-subtle text-muted-custom">{{ noticia.categoria }}</span>
-                            {% else %}
-                                <span class="text-muted-custom small">-</span>
-                            {% endif %}
-                        </td>
-                        <td class="text-muted-custom small text-nowrap">
-                            {{ noticia.fecha_creacion|date:"d/m/Y H:i" }}
-                        </td>
-                        <td class="text-end text-nowrap">
-                            <a href="{% url 'panel_noticias_editar' noticia.pk %}" class="btn btn-red-social btn-sm me-1">
-                                <i class="bi bi-pencil-fill"></i> Editar
-                            </a>
-                            <a href="{% url 'panel_noticias_borrar' noticia.pk %}" class="btn btn-outline-danger btn-sm rounded-3" title="Eliminar noticia">
-                                <i class="bi bi-trash-fill"></i>
-                            </a>
-                        </td>
+    <!-- TABLA DE NOTICIAS -->
+    <div class="glass-card rounded-3xl border border-slate-800 overflow-hidden shadow-2xl">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-950/80 border-b border-slate-800/80 text-slate-400 text-xs uppercase font-bold tracking-wider">
+                        <th scope="col" class="py-4 px-6">Título</th>
+                        <th scope="col" class="py-4 px-6 w-44">Categoría</th>
+                        <th scope="col" class="py-4 px-6 w-40">Fecha</th>
+                        <th scope="col" class="py-4 px-6 text-right w-44">Acciones</th>
                     </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="4" class="text-center py-5 text-muted-custom">
-                            <i class="bi bi-inbox fs-1 d-block text-acento mb-2"></i>
-                            No hay noticias publicadas todavía. ¡Tocá el botón de arriba para cargar la primera!
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody class="divide-y divide-slate-800/60 text-xs sm:text-sm">
+                    {% for noticia in noticias %}
+                        <tr class="hover:bg-slate-900/40 transition-colors group">
+                            <td class="py-4 px-6">
+                                <div class="flex items-center gap-3.5">
+                                    {% if noticia.imagen %}
+                                        <div class="w-12 h-10 rounded-xl overflow-hidden border border-slate-800 group-hover:border-[#34d399]/50 transition-colors flex-shrink-0 bg-slate-950">
+                                            <img src="{{ noticia.imagen.url }}" alt="{{ noticia.titulo }}" class="w-full h-full object-cover">
+                                        </div>
+                                    {% endif %}
+                                    <div>
+                                        <strong class="text-white font-bold block text-sm group-hover:text-[#34d399] transition-colors leading-snug">
+                                            {{ noticia.titulo }}
+                                        </strong>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td class="py-4 px-6">
+                                {% if noticia.categoria %}
+                                    <span class="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-[#34d399] text-xs font-semibold uppercase tracking-wider inline-block">
+                                        {{ noticia.categoria }}
+                                    </span>
+                                {% else %}
+                                    <span class="text-slate-500 text-xs italic">-</span>
+                                {% endif %}
+                            </td>
+
+                            <td class="py-4 px-6 text-slate-400 text-xs font-mono whitespace-nowrap">
+                                {{ noticia.fecha_creacion|date:"d/m/Y H:i" }}
+                            </td>
+
+                            <td class="py-4 px-6 text-right whitespace-nowrap">
+                                <div class="flex items-center justify-end gap-2">
+                                    <a href="{% url 'panel_noticias_editar' noticia.pk %}" 
+                                       class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-[#34d399] hover:border-[#34d399]/40 text-xs font-semibold inline-flex items-center gap-1.5 transition-all">
+                                        <i class="bi bi-pencil-fill text-xs"></i> Editar
+                                    </a>
+                                    
+                                    <button type="button"
+                                            @click="deleteUrl = '{% url 'panel_noticias_borrar' noticia.pk %}'; deleteTitle = '{{ noticia.titulo|escapejs }}'; rowToDelete = $el.closest('tr'); deleteModal = true;"
+                                            class="p-1.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 hover:bg-rose-500 hover:text-white text-xs transition-all shadow-sm"
+                                            title="Eliminar noticia">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="4" class="py-12 px-6 text-center text-slate-500">
+                                <i class="bi bi-inbox text-4xl text-slate-600 block mb-3"></i>
+                                <span class="text-sm font-medium block text-slate-400">No hay noticias publicadas todavía.</span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
+
+    <!-- 1. MODAL DE ELIMINACIÓN -->
+    <template x-teleport="body">
+        <div x-show="deleteModal" 
+             x-cloak 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 backdrop-blur-none"
+             x-transition:enter-end="opacity-100 backdrop-blur-md"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 backdrop-blur-md"
+             x-transition:leave-end="opacity-0 backdrop-blur-none"
+             class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+            
+            <div @click.away="deleteModal = false" 
+                 x-transition:enter="transition ease-out duration-300 transform"
+                 x-transition:enter-start="opacity-0 scale-90"
+                 x-transition:enter-end="opacity-100 scale-100"
+                 x-transition:leave="transition ease-in duration-200 transform"
+                 x-transition:leave-start="opacity-100 scale-100"
+                 x-transition:leave-end="opacity-0 scale-90"
+                 class="glass-card max-w-md w-full rounded-3xl p-6 sm:p-8 border border-rose-500/30 shadow-[0_0_30px_rgba(225,29,72,0.15)] text-center relative overflow-hidden">
+                
+                <div class="mb-4 flex justify-center">
+                    <div class="w-14 h-14 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-2xl text-rose-400 shadow-[0_0_20px_rgba(225,29,72,0.25)] animate-pulse">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                    </div>
+                </div>
+
+                <h3 class="font-titulo text-lg font-bold text-white mb-2">
+                    ¿Estás seguro de eliminar este registro?
+                </h3>
+
+                <div class="p-3 mb-4 rounded-xl bg-slate-950/80 border border-slate-800 text-slate-200 font-medium text-xs italic shadow-inner line-clamp-2" x-text="deleteTitle"></div>
+
+                <p class="text-rose-300 text-xs font-light mb-6">
+                    Esta acción no se puede deshacer.
+                </p>
+
+                <div class="flex items-center justify-center gap-3">
+                    <button type="button" @click="deleteModal = false" class="px-5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 hover:text-white font-bold text-xs uppercase tracking-wider transition-all">
+                        Cancelar
+                    </button>
+                    <button type="button" @click="confirmDelete()" class="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(225,29,72,0.4)]">
+                        Sí, Eliminar
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </template>
+
+    <!-- 2. MODAL DE CREACIÓN AJAX -->
+    <template x-teleport="body">
+        <div x-show="createModal" 
+             x-cloak 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 backdrop-blur-none"
+             x-transition:enter-end="opacity-100 backdrop-blur-md"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 backdrop-blur-md"
+             x-transition:leave-end="opacity-0 backdrop-blur-none"
+             class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto">
+            
+            <div @click.away="createModal = false" 
+                 x-transition:enter="transition ease-out duration-300 transform"
+                 x-transition:enter-start="opacity-0 scale-90"
+                 x-transition:enter-end="opacity-100 scale-100"
+                 x-transition:leave="transition ease-in duration-200 transform"
+                 x-transition:leave-start="opacity-100 scale-100"
+                 x-transition:leave-end="opacity-0 scale-90"
+                 class="glass-card max-w-2xl w-full rounded-3xl p-6 sm:p-8 border border-emerald-500/30 shadow-[0_0_30px_rgba(16,185,129,0.15)] relative overflow-hidden my-8">
+                
+                <div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-800">
+                    <h3 class="font-titulo text-xl font-bold text-white flex items-center gap-2">
+                        <i class="bi bi-newspaper text-[#34d399]"></i> Crear Nueva Noticia
+                    </h3>
+                    <button type="button" @click="createModal = false" class="text-slate-400 hover:text-white text-xl">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+
+                <!-- AVISO DE ERROR -->
+                <div x-show="errorMessage" class="mb-4 p-3 rounded-xl border border-rose-500/40 bg-rose-500/10 text-rose-300 text-xs font-semibold flex items-center gap-2" x-text="errorMessage"></div>
+
+                <form action="{% url 'panel_noticias_crear' %}" @submit.prevent="submitCreate($event)" method="POST" enctype="multipart/form-data" class="space-y-4 text-left">
+                    {% csrf_token %}
+                    
+                    <div>
+                        <label class="block text-slate-300 text-xs font-bold uppercase mb-1">Título de la Noticia *</label>
+                        <input type="text" name="titulo" required class="w-full bg-slate-950/80 border border-slate-800 text-white text-sm rounded-xl p-3 focus:border-[#34d399] outline-none">
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-slate-300 text-xs font-bold uppercase mb-1">Categoría</label>
+                            <input type="text" name="categoria" class="w-full bg-slate-950/80 border border-slate-800 text-white text-sm rounded-xl p-3 focus:border-[#34d399] outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-slate-300 text-xs font-bold uppercase mb-1">Imagen Ilustrativa</label>
+                            <input type="file" name="imagen" class="w-full bg-slate-950/80 border border-slate-800 text-slate-400 text-xs rounded-xl p-2.5">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-300 text-xs font-bold uppercase mb-1">Descripción / Contenido *</label>
+                        <textarea name="descripcion" rows="4" required class="w-full bg-slate-950/80 border border-slate-800 text-white text-sm rounded-xl p-3 focus:border-[#34d399] outline-none"></textarea>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-800 flex items-center justify-end gap-3">
+                        <button type="button" @click="createModal = false" class="px-5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 hover:text-white font-bold text-xs uppercase">
+                            Cancelar
+                        </button>
+                        <button type="submit" :disabled="isSubmitting" class="btn-plataforma-vip">
+                            <i class="bi bi-check-circle-fill"></i> 
+                            <span x-text="isSubmitting ? 'Guardando...' : 'Guardar Noticia'"></span>
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </template>
+
+</div>
 {% endblock %}

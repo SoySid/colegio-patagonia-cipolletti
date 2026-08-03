@@ -1,224 +1,242 @@
 {% extends 'escuela/base.html' %}
+{% load static %}
 
 {% block title %}Contacto y Búsqueda Laboral - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
 
 {% block content %}
-<div class="container py-5">
 
-    <!-- ==========================================================================
-         1. ENCABEZADO PRINCIPAL DE LA SECCIÓN
-         ========================================================================== -->
-    <div class="text-center mb-5">
-        <span class="badge bg-badge-custom border border-acento text-acento rounded-pill px-3 py-2 mb-3 d-inline-flex align-items-center gap-2">
+<!-- ANIMACIONES & ESTILOS GLASS-CARD -->
+<style>
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-down { animation: fadeInDown 0.8s ease-out forwards; }
+    .animate-fade-up { animation: fadeInUp 0.8s ease-out forwards; }
+    
+    .glass-card {
+        background: rgba(15, 23, 42, 0.75);
+        backdrop-filter: blur(14px);
+        border: 1px solid rgba(30, 41, 59, 0.8);
+    }
+</style>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+
+    <!-- 1. ENCABEZADO PRINCIPAL DE LA SECCIÓN -->
+    <div class="text-center mb-12 flex flex-col items-center">
+        <span class="animate-fade-down inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold bg-emerald-500/10 border border-emerald-500/40 text-[#34d399] mb-4 shadow-[0_0_15px_rgba(52,211,153,0.2)]">
+            <span class="w-2 h-2 rounded-full bg-[#34d399] animate-pulse"></span>
             <i class="bi bi-headset"></i> ATENCIÓN DIRECTA Y POSTULACIONES
         </span>
-        <h1 class="display-4 font-titulo fw-bold text-main mb-3">
-            CONTACTO Y BÚSQUEDA LABORAL
+        
+        <h1 class="animate-fade-up text-3xl sm:text-5xl md:text-6xl font-titulo font-black text-white uppercase tracking-tight mb-4 drop-shadow-md">
+            Contacto y <span class="text-[#34d399] drop-shadow-[0_0_25px_rgba(52,211,153,0.3)]">Búsqueda Laboral</span>
         </h1>
-        <p class="text-muted-custom fs-5 mb-0 mx-auto" style="max-width: 680px;">
+        
+        <p class="animate-fade-up text-slate-400 text-sm sm:text-base max-w-2xl leading-relaxed font-light">
             Ponete en contacto para coordinar entrevistas, resolver dudas sobre admisión o sumarte a nuestro equipo docente.
         </p>
     </div>
 
-    <!-- Mensajes de Feedback de Django (Alertas) -->
+    <!-- Mensajes de Feedback de Django (Alertas Neón) -->
     {% if messages %}
         {% for message in messages %}
-            <div class="alert alert-success alert-dismissible fade show rounded-3 mb-4 border border-acento bg-badge-custom text-main" role="alert">
-                <i class="bi bi-check-circle-fill me-2 fs-5 align-middle text-acento"></i>
-                <span class="align-middle fw-bold">{{ message }}</span>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+            <div x-data="{ show: true }" x-show="show" class="mb-8 glass-card border border-emerald-500/50 bg-emerald-500/10 text-slate-100 p-4 rounded-2xl flex items-center justify-between shadow-[0_0_20px_rgba(52,211,153,0.2)]">
+                <div class="flex items-center gap-3">
+                    <i class="bi bi-check-circle-fill text-[#34d399] text-xl"></i>
+                    <span class="text-xs sm:text-sm font-semibold">{{ message }}</span>
+                </div>
+                <button @click="show = false" class="text-slate-400 hover:text-white p-1">✕</button>
             </div>
         {% endfor %}
     {% endif %}
 
-    <div class="row g-4 align-items-start mb-5">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-12" x-data="{ tab: 'general' }">
         
-        <!-- ==========================================================================
-             2. COLUMNA IZQUIERDA: FORMULARIO INTERACTIVO (CONSULTA / DOCENTE)
-             ========================================================================== -->
-        <div class="col-12 col-lg-7">
-            <div class="card p-4 p-md-5 h-100 border border-subtle">
+        <!-- 2. COLUMNA IZQUIERDA: FORMULARIO INTERACTIVO (CONSULTA / DOCENTE) -->
+        <div class="lg:col-span-7">
+            <div class="glass-card rounded-3xl p-6 sm:p-10 border border-slate-800 shadow-2xl">
                 
-                <!-- Selector de Solapas (Pills) -->
-                <ul class="nav nav-pills nav-pills-custom nav-justified gap-2 mb-4" id="contactTabs" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active py-2.5 px-3" id="general-tab" data-bs-toggle="pill" data-bs-target="#general-form" type="button" role="tab">
-                            <i class="bi bi-chat-left-dots-fill me-2"></i>Consulta General
+                <!-- Selector de Solapas (Pills Alpine.js) -->
+                <div class="flex bg-slate-950/80 p-1.5 rounded-2xl border border-slate-800 mb-8 gap-1.5">
+                    <button @click="tab = 'general'" 
+                            :class="tab === 'general' ? 'bg-[#34d399] text-slate-950 font-bold shadow-[0_0_15px_rgba(52,211,153,0.35)]' : 'text-slate-400 hover:text-white'"
+                            class="flex-1 py-3 px-4 rounded-xl text-xs uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2">
+                        <i class="bi bi-chat-left-dots-fill text-sm"></i> Consulta General
+                    </button>
+                    <button @click="tab = 'docente'" 
+                            :class="tab === 'docente' ? 'bg-[#34d399] text-slate-950 font-bold shadow-[0_0_15px_rgba(52,211,153,0.35)]' : 'text-slate-400 hover:text-white'"
+                            class="flex-1 py-3 px-4 rounded-xl text-xs uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2">
+                        <i class="bi bi-person-badge-fill text-sm"></i> Sumate como Docente
+                    </button>
+                </div>
+
+                <!-- Formulario A: Consulta General -->
+                <div x-show="tab === 'general'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100">
+                    <form method="post" action="{% url 'escuela:contacto' %}" class="flex flex-col gap-5">
+                        {% csrf_token %}
+                        <input type="hidden" name="tipo_form" value="general">
+                        
+                        <div>
+                            <label class="block text-slate-200 text-xs font-semibold uppercase tracking-wider mb-2">Nombre Completo *</label>
+                            <div class="relative">
+                                <i class="bi bi-person absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-base"></i>
+                                <input type="text" name="nombre" class="w-full bg-slate-950/80 border border-slate-800 text-slate-100 text-xs sm:text-sm rounded-xl pl-11 pr-4 py-3.5 focus:outline-none focus:border-[#34d399] focus:ring-1 focus:ring-[#34d399] transition-all" placeholder="Ej: Juan Pérez" required>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-slate-200 text-xs font-semibold uppercase tracking-wider mb-2">Correo Electrónico *</label>
+                                <div class="relative">
+                                    <i class="bi bi-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-base"></i>
+                                    <input type="email" name="email" class="w-full bg-slate-950/80 border border-slate-800 text-slate-100 text-xs sm:text-sm rounded-xl pl-11 pr-4 py-3.5 focus:outline-none focus:border-[#34d399] focus:ring-1 focus:ring-[#34d399] transition-all" placeholder="ejemplo@correo.com" required>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-slate-200 text-xs font-semibold uppercase tracking-wider mb-2">Teléfono</label>
+                                <div class="relative">
+                                    <i class="bi bi-telephone absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-base"></i>
+                                    <input type="tel" name="telefono" class="w-full bg-slate-950/80 border border-slate-800 text-slate-100 text-xs sm:text-sm rounded-xl pl-11 pr-4 py-3.5 focus:outline-none focus:border-[#34d399] focus:ring-1 focus:ring-[#34d399] transition-all" placeholder="Ej: 299 1234567">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-slate-200 text-xs font-semibold uppercase tracking-wider mb-2">Asunto *</label>
+                            <div class="relative">
+                                <i class="bi bi-bookmark absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-base"></i>
+                                <input type="text" name="asunto" class="w-full bg-slate-950/80 border border-slate-800 text-slate-100 text-xs sm:text-sm rounded-xl pl-11 pr-4 py-3.5 focus:outline-none focus:border-[#34d399] focus:ring-1 focus:ring-[#34d399] transition-all" placeholder="Ej: Inscripciones 2026 / Consultas generales" required>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-slate-200 text-xs font-semibold uppercase tracking-wider mb-2">Mensaje *</label>
+                            <textarea name="mensaje" rows="4" class="w-full bg-slate-950/80 border border-slate-800 text-slate-100 text-xs sm:text-sm rounded-xl p-4 focus:outline-none focus:border-[#34d399] focus:ring-1 focus:ring-[#34d399] transition-all" placeholder="Escribí tu consulta aquí..." required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-plataforma-vip w-full justify-center py-4 mt-2">
+                            ENVIAR CONSULTA <i class="bi bi-send-fill"></i>
                         </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link py-2.5 px-3" id="docente-tab" data-bs-toggle="pill" data-bs-target="#docente-form" type="button" role="tab">
-                            <i class="bi bi-person-badge-fill me-2"></i>Sumate como Docente
+                    </form>
+                </div>
+
+                <!-- Formulario B: Postulación Docente -->
+                <div x-show="tab === 'docente'" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100">
+                    <form method="post" action="{% url 'escuela:contacto' %}" enctype="multipart/form-data" class="flex flex-col gap-5">
+                        {% csrf_token %}
+                        <input type="hidden" name="tipo_form" value="docente">
+
+                        <div>
+                            <label class="block text-slate-200 text-xs font-semibold uppercase tracking-wider mb-2">Nombre Completo *</label>
+                            <div class="relative">
+                                <i class="bi bi-person absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-base"></i>
+                                <input type="text" name="nombre" class="w-full bg-slate-950/80 border border-slate-800 text-slate-100 text-xs sm:text-sm rounded-xl pl-11 pr-4 py-3.5 focus:outline-none focus:border-[#34d399] focus:ring-1 focus:ring-[#34d399] transition-all" placeholder="Ej: María González" required>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-slate-200 text-xs font-semibold uppercase tracking-wider mb-2">Correo Electrónico *</label>
+                                <div class="relative">
+                                    <i class="bi bi-envelope absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-base"></i>
+                                    <input type="email" name="email" class="w-full bg-slate-950/80 border border-slate-800 text-slate-100 text-xs sm:text-sm rounded-xl pl-11 pr-4 py-3.5 focus:outline-none focus:border-[#34d399] focus:ring-1 focus:ring-[#34d399] transition-all" placeholder="ejemplo@correo.com" required>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-slate-200 text-xs font-semibold uppercase tracking-wider mb-2">Teléfono *</label>
+                                <div class="relative">
+                                    <i class="bi bi-telephone absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-base"></i>
+                                    <input type="tel" name="telefono" class="w-full bg-slate-950/80 border border-slate-800 text-slate-100 text-xs sm:text-sm rounded-xl pl-11 pr-4 py-3.5 focus:outline-none focus:border-[#34d399] focus:ring-1 focus:ring-[#34d399] transition-all" placeholder="Ej: 299 1234567" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-slate-200 text-xs font-semibold uppercase tracking-wider mb-2">Nivel / Especialidad *</label>
+                            <div class="relative">
+                                <i class="bi bi-mortarboard absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-base"></i>
+                                <input type="text" name="especialidad" class="w-full bg-slate-950/80 border border-slate-800 text-slate-100 text-xs sm:text-sm rounded-xl pl-11 pr-4 py-3.5 focus:outline-none focus:border-[#34d399] focus:ring-1 focus:ring-[#34d399] transition-all" placeholder="Ej: Prof. Nivel Primario / Prof. Inglés / Música" required>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-slate-200 text-xs font-semibold uppercase tracking-wider mb-2">Adjuntar Curriculum Vitae (PDF) *</label>
+                            <input type="file" name="cv" accept=".pdf,.doc,.docx" class="w-full bg-slate-950/80 border border-slate-800 text-slate-300 text-xs rounded-xl p-3 focus:outline-none focus:border-[#34d399] transition-all file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-500/20 file:text-[#34d399] hover:file:bg-emerald-500/30" required>
+                        </div>
+
+                        <button type="submit" class="btn-plataforma-vip w-full justify-center py-4 mt-2">
+                            ENVIAR POSTULACIÓN <i class="bi bi-file-earmark-person-fill"></i>
                         </button>
-                    </li>
-                </ul>
-
-                <!-- Contenido de Solapas -->
-                <div class="tab-content" id="contactTabsContent">
-                    
-                    <!-- Formulario A: Consulta General -->
-                    <div class="tab-pane fade show active" id="general-form" role="tabpanel">
-                        <form method="post" action="{% url 'escuela:contacto' %}" class="d-flex flex-column gap-3">
-                            {% csrf_token %}
-                            <input type="hidden" name="tipo_form" value="general">
-                            
-                            <div>
-                                <label class="form-label text-main fw-semibold small mb-1">Nombre Completo *</label>
-                                <div class="position-relative">
-                                    <i class="bi bi-person contact-input-icon"></i>
-                                    <input type="text" name="nombre" class="form-control contact-input-custom shadow-none" placeholder="Ej: Juan Pérez" required>
-                                </div>
-                            </div>
-
-                            <div class="row g-3">
-                                <div class="col-12 col-md-6">
-                                    <label class="form-label text-main fw-semibold small mb-1">Correo Electrónico *</label>
-                                    <div class="position-relative">
-                                        <i class="bi bi-envelope contact-input-icon"></i>
-                                        <input type="email" name="email" class="form-control contact-input-custom shadow-none" placeholder="ejemplo@correo.com" required>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <label class="form-label text-main fw-semibold small mb-1">Teléfono</label>
-                                    <div class="position-relative">
-                                        <i class="bi bi-telephone contact-input-icon"></i>
-                                        <input type="tel" name="telefono" class="form-control contact-input-custom shadow-none" placeholder="Ej: 299 1234567">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="form-label text-main fw-semibold small mb-1">Asunto *</label>
-                                <div class="position-relative">
-                                    <i class="bi bi-bookmark contact-input-icon"></i>
-                                    <input type="text" name="asunto" class="form-control contact-input-custom shadow-none" placeholder="Ej: Inscripciones 2026 / Consultas generales" required>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="form-label text-main fw-semibold small mb-1">Mensaje *</label>
-                                <div class="position-relative">
-                                    <textarea name="mensaje" rows="4" class="form-control contact-textarea-custom shadow-none" placeholder="Escribí tu consulta aquí..." required></textarea>
-                                </div>
-                            </div>
-
-                            <button type="submit" class="btn btn-plataforma py-3 fw-bold mt-2 d-flex align-items-center justify-content-center gap-2">
-                                ENVIAR CONSULTA <i class="bi bi-send-fill"></i>
-                            </button>
-                        </form>
-                    </div>
-
-                    <!-- Formulario B: Postulación Docente -->
-                    <div class="tab-pane fade" id="docente-form" role="tabpanel">
-                        <form method="post" action="{% url 'escuela:contacto' %}" enctype="multipart/form-data" class="d-flex flex-column gap-3">
-                            {% csrf_token %}
-                            <input type="hidden" name="tipo_form" value="docente">
-
-                            <div>
-                                <label class="form-label text-main fw-semibold small mb-1">Nombre Completo *</label>
-                                <div class="position-relative">
-                                    <i class="bi bi-person contact-input-icon"></i>
-                                    <input type="text" name="nombre" class="form-control contact-input-custom shadow-none" placeholder="Ej: María González" required>
-                                </div>
-                            </div>
-
-                            <div class="row g-3">
-                                <div class="col-12 col-md-6">
-                                    <label class="form-label text-main fw-semibold small mb-1">Correo Electrónico *</label>
-                                    <div class="position-relative">
-                                        <i class="bi bi-envelope contact-input-icon"></i>
-                                        <input type="email" name="email" class="form-control contact-input-custom shadow-none" placeholder="ejemplo@correo.com" required>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <label class="form-label text-main fw-semibold small mb-1">Teléfono *</label>
-                                    <div class="position-relative">
-                                        <i class="bi bi-telephone contact-input-icon"></i>
-                                        <input type="tel" name="telefono" class="form-control contact-input-custom shadow-none" placeholder="Ej: 299 1234567" required>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="form-label text-main fw-semibold small mb-1">Nivel / Especialidad *</label>
-                                <div class="position-relative">
-                                    <i class="bi bi-mortarboard contact-input-icon"></i>
-                                    <input type="text" name="especialidad" class="form-control contact-input-custom shadow-none" placeholder="Ej: Prof. Nivel Primario / Prof. Inglés / Música" required>
-                                </div>
-                            </div>
-
-                            <div>
-                                <label class="form-label text-main fw-semibold small mb-1">Adjuntar Curriculum Vitae (PDF) *</label>
-                                <input type="file" name="cv" accept=".pdf,.doc,.docx" class="form-control contact-input-custom shadow-none ps-3" required>
-                            </div>
-
-                            <button type="submit" class="btn btn-plataforma py-3 fw-bold mt-2 d-flex align-items-center justify-content-center gap-2">
-                                ENVIAR POSTULACIÓN <i class="bi bi-file-earmark-person-fill"></i>
-                            </button>
-                        </form>
-                    </div>
-
+                    </form>
                 </div>
 
             </div>
         </div>
 
-        <!-- ==========================================================================
-             3. COLUMNA DERECHA: INFORMACIÓN DIRECTA Y UBICACIÓN
-             ========================================================================== -->
-        <div class="col-12 col-lg-5 d-flex flex-column gap-4">
+        <!-- 3. COLUMNA DERECHA: INFORMACIÓN DIRECTA Y UBICACIÓN -->
+        <div class="lg:col-span-5 flex flex-col gap-6">
             
             <!-- Tarjeta 1: Datos de Contacto Secretaría -->
-            <div class="card p-4 p-md-5 border border-subtle d-flex flex-column justify-content-between h-100">
+            <div class="glass-card rounded-3xl p-6 sm:p-8 border border-slate-800 shadow-xl flex flex-col justify-between">
                 <div>
-                    <h2 class="font-titulo h4 fw-bold text-main mb-1">INFORMACIÓN DIRECTA</h2>
-                    <p class="text-muted-custom small mb-4">Secretaría general e instalaciones del colegio.</p>
+                    <h2 class="font-titulo text-xl font-bold text-white mb-1 uppercase tracking-tight">Información Directa</h2>
+                    <p class="text-slate-400 text-xs mb-6 font-light">Secretaría general e instalaciones del colegio.</p>
 
-                    <div class="d-flex flex-column gap-4">
+                    <div class="flex flex-col gap-5">
                         <!-- Teléfono -->
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="bg-badge-custom border border-subtle p-3 rounded-3 text-acento fs-5 flex-shrink-0">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-800 text-[#34d399] flex items-center justify-center text-xl flex-shrink-0 shadow-inner">
                                 <i class="bi bi-telephone-fill"></i>
                             </div>
                             <div>
-                                <span class="d-block fw-bold text-main small">Teléfono Directo</span>
-                                <span class="text-muted-custom fs-6">{{ escuela_info.telefono|default:"0299 15-570-2824" }}</span>
+                                <span class="block font-bold text-white text-xs uppercase tracking-wider">Teléfono Directo</span>
+                                <span class="text-slate-300 text-xs sm:text-sm">{{ escuela_info.telefono|default:"0299 15-570-2824" }}</span>
                             </div>
                         </div>
 
                         <!-- Email -->
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="bg-badge-custom border border-subtle p-3 rounded-3 text-acento fs-5 flex-shrink-0">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-800 text-[#34d399] flex items-center justify-center text-xl flex-shrink-0 shadow-inner">
                                 <i class="bi bi-envelope-fill"></i>
                             </div>
                             <div>
-                                <span class="d-block fw-bold text-main small">Correo Electrónico</span>
-                                <span class="text-muted-custom fs-6 text-break">{{ escuela_info.email|default:"patagoniaescuelaprimaria@gmail.com" }}</span>
+                                <span class="block font-bold text-white text-xs uppercase tracking-wider">Correo Electrónico</span>
+                                <span class="text-slate-300 text-xs sm:text-sm truncate block max-w-[220px] sm:max-w-none">{{ escuela_info.email|default:"patagoniaescuelaprimaria@gmail.com" }}</span>
                             </div>
                         </div>
 
                         <!-- Horarios -->
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="bg-badge-custom border border-subtle p-3 rounded-3 text-acento fs-5 flex-shrink-0">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-800 text-[#34d399] flex items-center justify-center text-xl flex-shrink-0 shadow-inner">
                                 <i class="bi bi-clock-fill"></i>
                             </div>
                             <div>
-                                <span class="d-block fw-bold text-main small">Horario de Atención</span>
-                                <span class="text-muted-custom fs-6">{{ escuela_info.horario_atencion|default:"Lunes a Viernes de 07:00 a 19:00 hs" }}</span>
+                                <span class="block font-bold text-white text-xs uppercase tracking-wider">Horario de Atención</span>
+                                <span class="text-slate-300 text-xs sm:text-sm">{{ escuela_info.horario_atencion|default:"Lunes a Viernes de 07:00 a 19:00 hs" }}</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Canales Oficiales (Redes) -->
-                <div class="pt-4 border-top border-subtle mt-4">
-                    <span class="d-block text-muted-custom small mb-2 fw-semibold">Canales Oficiales</span>
-                    <div class="d-flex gap-2">
+                <div class="pt-6 border-t border-slate-800/80 mt-6">
+                    <span class="block text-slate-400 text-xs mb-3 font-semibold uppercase tracking-wider">Canales Oficiales</span>
+                    <div class="flex flex-wrap gap-2.5">
                         {% if escuela_info.facebook %}
-                            <a href="{{ escuela_info.facebook }}" target="_blank" class="btn btn-red-social btn-sm"><i class="bi bi-facebook me-1"></i> Facebook</a>
+                            <a href="{{ escuela_info.facebook }}" target="_blank" rel="noopener noreferrer" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-[#34d399] hover:border-[#34d399]/50 text-xs font-semibold inline-flex items-center gap-2 transition-all">
+                                <i class="bi bi-facebook text-[#34d399]"></i> Facebook
+                            </a>
                         {% endif %}
                         {% if escuela_info.instagram %}
-                            <a href="{{ escuela_info.instagram }}" target="_blank" class="btn btn-red-social btn-sm"><i class="bi bi-instagram me-1"></i> Instagram</a>
+                            <a href="{{ escuela_info.instagram }}" target="_blank" rel="noopener noreferrer" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-[#34d399] hover:border-[#34d399]/50 text-xs font-semibold inline-flex items-center gap-2 transition-all">
+                                <i class="bi bi-instagram text-[#34d399]"></i> Instagram
+                            </a>
                         {% endif %}
                     </div>
                 </div>
@@ -226,15 +244,15 @@
             </div>
 
             <!-- Tarjeta 2: Ubicación y Mapa -->
-            <div class="card p-4 h-100 border border-subtle">
-                <h3 class="font-titulo h5 fw-bold text-main mb-1">UBICACIÓN DEL ESTABLECIMIENTO</h3>
-                <p class="text-muted-custom small mb-3">
-                    <i class="bi bi-geo-alt-fill text-acento me-1"></i>
+            <div class="glass-card rounded-3xl p-6 border border-slate-800 shadow-xl">
+                <h3 class="font-titulo text-lg font-bold text-white mb-1 uppercase tracking-tight">Ubicación del Establecimiento</h3>
+                <p class="text-slate-400 text-xs mb-4 flex items-center gap-1.5">
+                    <i class="bi bi-geo-alt-fill text-[#34d399]"></i>
                     {{ escuela_info.direccion|default:"Saavedra 750 (tira 1 B° 12 Sept.)" }} — Cipolletti
                 </p>
 
                 <!-- Contenedor Mapa Google -->
-                <div class="rounded-3 overflow-hidden border border-subtle">
+                <div class="rounded-2xl overflow-hidden border border-slate-800 shadow-lg">
                     <iframe 
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3102.53123456789!2d-67.9945!3d-38.9385!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x960a325000000000%3A0x0!2sSaavedra%20750%2C%20Cipolletti%2C%20R%C3%ADo%20Negro!5e0!3m2!1ses!2sar!4v1600000000000!5m2!1ses!2sar" 
                         width="100%" 

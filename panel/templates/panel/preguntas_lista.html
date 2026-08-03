@@ -1,47 +1,258 @@
 {% extends 'panel/base.html' %}
+{% load static %}
 
 {% block titulo %}Preguntas Frecuentes{% endblock %}
 
 {% block contenido %}
-    <!-- Encabezado de la vista -->
-    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-subtle flex-wrap gap-2">
+
+<div class="max-w-7xl mx-auto"
+     x-data="{ 
+        // Modales
+        deleteModal: false, 
+        createModal: false,
+        
+        // Estado Borrado
+        deleteUrl: '', 
+        deleteTitle: '',
+        rowToDelete: null,
+        
+        // Estado Crear
+        errorMessage: '',
+        isSubmitting: false,
+
+        // Borrar por AJAX
+        confirmDelete() {
+            let formData = new FormData();
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+            
+            fetch(this.deleteUrl, {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }).then(response => {
+                if (response.ok || response.redirected) {
+                    this.deleteModal = false;
+                    if (this.rowToDelete) {
+                        this.rowToDelete.remove();
+                    } else {
+                        window.location.reload();
+                    }
+                }
+            });
+        },
+
+        // Crear por AJAX (Mantiene la URL limpia)
+        submitCreate(event) {
+            this.isSubmitting = true;
+            this.errorMessage = '';
+            let form = event.target;
+            let formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(response => {
+                if (response.ok) {
+                    this.createModal = false;
+                    window.location.href = window.location.pathname;
+                } else {
+                    return response.json().then(data => {
+                        throw new Error(data.message || 'Error al validar los campos.');
+                    });
+                }
+            })
+            .catch(error => {
+                this.errorMessage = error.message;
+            })
+            .finally(() => {
+                this.isSubmitting = false;
+            });
+        }
+     }">
+    
+    <!-- ENCABEZADO DE LA VISTA -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-8 border-b border-slate-800/80">
         <div>
-            <h3 class="font-titulo text-main fw-bold mb-1 fs-4">
-                <i class="bi bi-patch-question-fill text-acento me-2"></i>Preguntas Frecuentes
-            </h3>
-            <p class="text-muted-custom small mb-0">
-                Administrá la información que leen las familias en el sitio web.
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 border border-emerald-500/30 text-[#34d399] mb-2">
+                <i class="bi bi-patch-question-fill"></i> GESTIÓN DE FAQ
+            </span>
+            <h1 class="font-titulo text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2.5">
+                Preguntas Frecuentes
+            </h1>
+            <p class="text-slate-400 text-xs sm:text-sm font-light mt-1">
+                Administrá la información y dudas que leen las familias en el sitio web.
             </p>
         </div>
-        <a href="{% url 'panel_preguntas_crear' %}" class="btn btn-plataforma">
-            <i class="bi bi-plus-lg me-1"></i> Agregar Pregunta
-        </a>
+
+        <button type="button" @click="createModal = true; errorMessage = '';" class="btn-plataforma-vip whitespace-nowrap self-start sm:self-center cursor-pointer">
+            <i class="bi bi-plus-lg"></i> AGREGAR PREGUNTA
+        </button>
     </div>
 
-    <!-- Lista de Preguntas en Tarjetas de Alto Contraste -->
+    <!-- LISTA DE PREGUNTAS EN TARJETAS GLASS -->
     {% if preguntas %}
-        <div class="d-flex flex-column gap-3">
+        <div class="flex flex-col gap-4">
             {% for item in preguntas %}
-                <div class="card p-3 border border-subtle bg-dark-custom rounded-3 d-flex flex-row flex-wrap justify-content-between align-items-center gap-3">
-                    <div class="flex-grow-1">
-                        <h5 class="text-main fw-bold fs-6 mb-1">{{ item.pregunta }}</h5>
-                        <p class="text-muted-custom small mb-0">{{ item.respuesta|truncatewords:25 }}</p>
+                <div class="glass-card rounded-2xl p-5 border border-slate-800 hover:border-slate-700 transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 group">
+                    <div class="flex-grow">
+                        <div class="flex items-center gap-2.5 mb-1.5">
+                            <span class="w-2 h-2 rounded-full bg-[#34d399]"></span>
+                            <h3 class="font-titulo text-white font-bold text-base group-hover:text-[#34d399] transition-colors">
+                                {{ item.pregunta }}
+                            </h3>
+                        </div>
+                        <p class="text-slate-400 text-xs sm:text-sm font-light leading-relaxed pl-4 border-l border-slate-800">
+                            {{ item.respuesta|truncatewords:25 }}
+                        </p>
                     </div>
-                    <div class="d-flex gap-2 flex-shrink-0 ms-auto">
-                        <a href="{% url 'panel_preguntas_editar' item.pk %}" class="btn btn-red-social btn-sm">
-                            <i class="bi bi-pencil-square me-1"></i> Editar
+
+                    <div class="flex items-center gap-2 flex-shrink-0 self-end sm:self-center">
+                        <a href="{% url 'panel_preguntas_editar' item.pk %}" 
+                           class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-[#34d399] hover:border-[#34d399]/40 text-xs font-semibold inline-flex items-center gap-1.5 transition-all">
+                            <i class="bi bi-pencil-fill text-xs"></i> Editar
                         </a>
-                        <a href="{% url 'panel_preguntas_borrar' item.pk %}" class="btn btn-outline-danger btn-sm rounded-3" title="Eliminar pregunta">
+                        
+                        <button type="button"
+                                @click="deleteUrl = '{% url 'panel_preguntas_borrar' item.pk %}'; deleteTitle = '{{ item.pregunta|escapejs }}'; rowToDelete = $el.closest('.glass-card'); deleteModal = true;"
+                                class="p-1.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 hover:bg-rose-500 hover:text-white text-xs transition-all shadow-sm"
+                                title="Eliminar pregunta">
                             <i class="bi bi-trash-fill"></i>
-                        </a>
+                        </button>
                     </div>
                 </div>
             {% endfor %}
         </div>
     {% else %}
-        <div class="text-center py-5 border border-dashed border-subtle rounded-3 text-muted-custom">
-            <i class="bi bi-inbox fs-1 d-block text-acento mb-2"></i>
-            <p class="mb-0 fw-semibold">No hay preguntas cargadas por el momento.</p>
+        <!-- ESTADO VACÍO -->
+        <div class="glass-card rounded-3xl p-12 text-center border border-slate-800">
+            <i class="bi bi-inbox text-4xl text-slate-600 block mb-3"></i>
+            <span class="text-sm font-medium block text-slate-400">No hay preguntas cargadas por el momento.</span>
+            <span class="text-xs font-light block mt-1">¡Tocá el botón de arriba para sumar la primera!</span>
         </div>
     {% endif %}
+
+    <!-- 1. MODAL DE ELIMINACIÓN AJAX -->
+    <template x-teleport="body">
+        <div x-show="deleteModal" 
+             x-cloak 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 backdrop-blur-none"
+             x-transition:enter-end="opacity-100 backdrop-blur-md"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 backdrop-blur-md"
+             x-transition:leave-end="opacity-0 backdrop-blur-none"
+             class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+            
+            <div @click.away="deleteModal = false" 
+                 x-transition:enter="transition ease-out duration-300 transform"
+                 x-transition:enter-start="opacity-0 scale-90"
+                 x-transition:enter-end="opacity-100 scale-100"
+                 x-transition:leave="transition ease-in duration-200 transform"
+                 x-transition:leave-start="opacity-100 scale-100"
+                 x-transition:leave-end="opacity-0 scale-90"
+                 class="glass-card max-w-md w-full rounded-3xl p-6 sm:p-8 border border-rose-500/30 shadow-[0_0_30px_rgba(225,29,72,0.15)] text-center relative overflow-hidden">
+                
+                <div class="mb-4 flex justify-center">
+                    <div class="w-14 h-14 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-2xl text-rose-400 shadow-[0_0_20px_rgba(225,29,72,0.25)] animate-pulse">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                    </div>
+                </div>
+
+                <h3 class="font-titulo text-lg font-bold text-white mb-2">
+                    ¿Estás seguro de eliminar este registro?
+                </h3>
+
+                <div class="p-3 mb-4 rounded-xl bg-slate-950/80 border border-slate-800 text-slate-200 font-medium text-xs italic shadow-inner line-clamp-2" x-text="deleteTitle"></div>
+
+                <p class="text-rose-300 text-xs font-light mb-6">
+                    Esta acción no se puede deshacer.
+                </p>
+
+                <div class="flex items-center justify-center gap-3">
+                    <button type="button" @click="deleteModal = false" class="px-5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 hover:text-white font-bold text-xs uppercase tracking-wider transition-all">
+                        Cancelar
+                    </button>
+                    <button type="button" @click="confirmDelete()" class="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(225,29,72,0.4)]">
+                        Sí, Eliminar
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </template>
+
+    <!-- 2. MODAL DE CREACIÓN AJAX -->
+    <template x-teleport="body">
+        <div x-show="createModal" 
+             x-cloak 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 backdrop-blur-none"
+             x-transition:enter-end="opacity-100 backdrop-blur-md"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 backdrop-blur-md"
+             x-transition:leave-end="opacity-0 backdrop-blur-none"
+             class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto">
+            
+            <div @click.away="createModal = false" 
+                 x-transition:enter="transition ease-out duration-300 transform"
+                 x-transition:enter-start="opacity-0 scale-90"
+                 x-transition:enter-end="opacity-100 scale-100"
+                 x-transition:leave="transition ease-in duration-200 transform"
+                 x-transition:leave-start="opacity-100 scale-100"
+                 x-transition:leave-end="opacity-0 scale-90"
+                 class="glass-card max-w-2xl w-full rounded-3xl p-6 sm:p-8 border border-emerald-500/30 shadow-[0_0_30px_rgba(16,185,129,0.15)] relative overflow-hidden my-8">
+                
+                <div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-800">
+                    <h3 class="font-titulo text-xl font-bold text-white flex items-center gap-2">
+                        <i class="bi bi-patch-question text-[#34d399]"></i> Agregar Pregunta Frecuente
+                    </h3>
+                    <button type="button" @click="createModal = false" class="text-slate-400 hover:text-white text-xl">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+
+                <div x-show="errorMessage" class="mb-4 p-3 rounded-xl border border-rose-500/40 bg-rose-500/10 text-rose-300 text-xs font-semibold flex items-center gap-2" x-text="errorMessage"></div>
+
+                <form action="{% url 'panel_preguntas_crear' %}" @submit.prevent="submitCreate($event)" method="POST" class="space-y-4 text-left">
+                    {% csrf_token %}
+                    
+                    <div>
+                        <label class="block text-slate-300 text-xs font-bold uppercase mb-1">Pregunta *</label>
+                        <input type="text" name="pregunta" required class="w-full bg-slate-950/80 border border-slate-800 text-white text-sm rounded-xl p-3 focus:border-[#34d399] outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-300 text-xs font-bold uppercase mb-1">Respuesta *</label>
+                        <textarea name="respuesta" rows="4" required class="w-full bg-slate-950/80 border border-slate-800 text-white text-sm rounded-xl p-3 focus:border-[#34d399] outline-none"></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-slate-300 text-xs font-bold uppercase mb-1">Orden de Aparición</label>
+                            <input type="number" name="orden" value="0" class="w-full bg-slate-950/80 border border-slate-800 text-white text-sm rounded-xl p-3 focus:border-[#34d399] outline-none">
+                        </div>
+                        <div class="flex items-center gap-3 pt-6">
+                            <input type="checkbox" name="activa" id="activa_faq" checked class="w-5 h-5 accent-[#34d399] rounded">
+                            <label for="activa_faq" class="text-slate-300 text-xs font-bold uppercase cursor-pointer select-none">¿Mostrar en la Web?</label>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-800 flex items-center justify-end gap-3">
+                        <button type="button" @click="createModal = false" class="px-5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 hover:text-white font-bold text-xs uppercase">
+                            Cancelar
+                        </button>
+                        <button type="submit" :disabled="isSubmitting" class="btn-plataforma-vip">
+                            <i class="bi bi-check-circle-fill"></i> 
+                            <span x-text="isSubmitting ? 'Guardando...' : 'Guardar Pregunta'"></span>
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </template>
+
+</div>
 {% endblock %}

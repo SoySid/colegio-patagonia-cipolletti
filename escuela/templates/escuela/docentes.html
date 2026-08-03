@@ -1,70 +1,145 @@
 {% extends 'escuela/base.html' %}
+{% load static %}
 
 {% block title %}Cuerpo Docente - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
 
 {% block content %}
-<div class="container py-4">
+
+<!-- ANIMACIONES & ESTILOS GLASS-CARD -->
+<style>
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-down { animation: fadeInDown 0.8s ease-out forwards; }
+    .animate-fade-up { animation: fadeInUp 0.8s ease-out forwards; }
     
-    <!-- ENCABEZADO PRINCIPAL DE LA VISTA -->
-    <div class="text-center mb-5">
-        <span class="badge bg-badge-custom border border-acento text-acento rounded-pill px-3 py-2 mb-3 d-inline-flex align-items-center gap-2">
+    .glass-card {
+        background: rgba(15, 23, 42, 0.75);
+        backdrop-filter: blur(14px);
+        border: 1px solid rgba(30, 41, 59, 0.8);
+    }
+    .glass-card:hover {
+        border-color: rgba(52, 211, 153, 0.5);
+        box-shadow: 0 0 30px -5px rgba(16, 185, 129, 0.25);
+    }
+</style>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
+     x-data="{ 
+        filtro: 'todos',
+        docentes: [
+            {% for docente in docentes %}
+            {
+                id: {{ docente.id|default:forloop.counter }},
+                nombre: '{{ docente.nombre|escapejs }}',
+                cargo: '{{ docente.cargo|escapejs }}',
+                nivelRaw: '{{ docente.nivel|default:""|escapejs }}',
+                nivelNombre: '{{ docente.get_nivel_display|default:docente.nivel|escapejs }}',
+                {% if docente.foto %}foto: '{{ docente.foto.url }}'{% else %}foto: null{% endif %}
+            }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ],
+        get docentesFiltrados() {
+            if (this.filtro === 'todos') return this.docentes;
+            return this.docentes.filter(d => d.nivelRaw.toLowerCase().includes(this.filtro) || d.nivelNombre.toLowerCase().includes(this.filtro));
+        }
+     }">
+    
+    <!-- ENCABEZADO PRINCIPAL -->
+    <div class="text-center mb-12 flex flex-col items-center">
+        <span class="animate-fade-down inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold bg-emerald-500/10 border border-emerald-500/40 text-[#34d399] mb-4 shadow-[0_0_15px_rgba(52,211,153,0.2)]">
+            <span class="w-2 h-2 rounded-full bg-[#34d399] animate-pulse"></span>
             <i class="bi bi-award-fill"></i> EXCELENCIA ACADÉMICA
         </span>
-        <h1 class="display-5 mb-2 font-titulo fw-bold text-main">
-            Nuestro Cuerpo Docente
+        
+        <h1 class="animate-fade-up text-3xl sm:text-5xl md:text-6xl font-titulo font-black text-white uppercase tracking-tight mb-4 drop-shadow-md">
+            Nuestro <span class="text-[#34d399] drop-shadow-[0_0_25px_rgba(52,211,153,0.3)]">Cuerpo Docente</span>
         </h1>
-        <p class="text-muted-custom fs-6 mb-0 fw-medium mx-auto" style="max-width: 600px;">
+        
+        <p class="animate-fade-up text-slate-400 text-sm sm:text-base max-w-2xl leading-relaxed font-light">
             Conocé a las autoridades y educadores comprometidos con la formación integral de nuestros alumnos.
         </p>
     </div>
 
     {% if docentes %}
-        <!-- GRILLA RESPONSIVA DE DOCENTES -->
-        <div class="row g-4 justify-content-center">
-            {% for docente in docentes %}
-                <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
-                    <article class="card h-100 p-4 text-center d-flex flex-column align-items-center justify-content-between">
-                        
-                        <div class="w-100 d-flex flex-column align-items-center">
-                            <!-- FOTO / AVATAR CON CONTENEDOR Y BORDER UNIFICADO -->
-                            <div class="mb-3 position-relative">
-                                {% if docente.foto %}
-                                    <img src="{{ docente.foto.url }}" alt="{{ docente.nombre }}" loading="lazy" class="rounded-circle border border-acento border-3" style="width: 120px; height: 120px; object-fit: cover;">
-                                {% else %}
-                                    <div class="rounded-circle bg-badge-custom border border-acento border-3 d-flex align-items-center justify-content-center text-muted-custom" style="width: 120px; height: 120px;">
-                                        <i class="bi bi-person-fill fs-1 opacity-50"></i>
-                                    </div>
-                                {% endif %}
-                            </div>
+        <!-- BARRA DE FILTROS POR NIVEL (PSTAÑAS RÁPIDAS) -->
+        <div class="flex flex-wrap items-center justify-center gap-2 mb-12 bg-slate-950/60 p-2 rounded-2xl border border-slate-800/80 max-w-fit mx-auto">
+            <button @click="filtro = 'todos'" 
+                    :class="filtro === 'todos' ? 'bg-[#34d399] text-slate-950 font-bold shadow-[0_0_15px_rgba(52,211,153,0.35)]' : 'text-slate-400 hover:text-white'" 
+                    class="px-5 py-2 rounded-xl text-xs uppercase tracking-wider transition-all duration-300">
+                Todos
+            </button>
+            <button @click="filtro = 'inicial'" 
+                    :class="filtro === 'inicial' ? 'bg-[#34d399] text-slate-950 font-bold shadow-[0_0_15px_rgba(52,211,153,0.35)]' : 'text-slate-400 hover:text-white'" 
+                    class="px-5 py-2 rounded-xl text-xs uppercase tracking-wider transition-all duration-300">
+                Inicial
+            </button>
+            <button @click="filtro = 'primari'" 
+                    :class="filtro === 'primari' ? 'bg-[#34d399] text-slate-950 font-bold shadow-[0_0_15px_rgba(52,211,153,0.35)]' : 'text-slate-400 hover:text-white'" 
+                    class="px-5 py-2 rounded-xl text-xs uppercase tracking-wider transition-all duration-300">
+                Primario
+            </button>
+            <button @click="filtro = 'medio'" 
+                    :class="filtro === 'medio' ? 'bg-[#34d399] text-slate-950 font-bold shadow-[0_0_15px_rgba(52,211,153,0.35)]' : 'text-slate-400 hover:text-white'" 
+                    class="px-5 py-2 rounded-xl text-xs uppercase tracking-wider transition-all duration-300">
+                Medio
+            </button>
+        </div>
 
-                            <!-- NOMBRE -->
-                            <h3 class="fw-bold fs-5 mb-2 font-titulo text-main" style="line-height: 1.3;">
-                                {{ docente.nombre }}
-                            </h3>
-
-                            <!-- BADGE DE NIVEL -->
-                            <span class="badge bg-badge-custom border border-subtle text-acento rounded-pill px-3 py-2 mb-2 d-inline-flex align-items-center gap-1">
-                                <i class="bi bi-mortarboard-fill"></i>{{ docente.get_nivel_display|default:docente.nivel }}
-                            </span>
+        <!-- GRILLA RESPONSIVA DE DOCENTES (BENTO-STYLE TAILWIND) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <template x-for="docente in docentesFiltrados" :key="docente.id">
+                <article class="glass-card rounded-2xl p-6 text-center flex flex-col items-center justify-between transition-all duration-300 transform hover:-translate-y-1.5 group">
+                    
+                    <div class="w-full flex flex-col items-center">
+                        <!-- AVATAR CON ANILLO NEÓN -->
+                        <div class="mb-5 relative">
+                            <template x-if="docente.foto">
+                                <img :src="docente.foto" 
+                                     :alt="docente.nombre" 
+                                     loading="lazy" 
+                                     class="w-28 h-28 rounded-full object-cover border-2 border-[#34d399] p-1 bg-slate-950 shadow-[0_0_20px_rgba(52,211,153,0.25)] group-hover:scale-105 transition-transform duration-300">
+                            </template>
+                            <template x-if="!docente.foto">
+                                <div class="w-28 h-28 rounded-full bg-slate-900 border-2 border-slate-700 flex items-center justify-center text-slate-500 shadow-inner group-hover:border-[#34d399] transition-colors">
+                                    <i class="bi bi-person-fill text-4xl opacity-60"></i>
+                                </div>
+                            </template>
                         </div>
 
-                        <!-- CARGO / FUNCIÓN -->
-                        <div class="pt-3 border-top border-subtle w-100 mt-3">
-                            <p class="text-muted-custom small mb-0 fw-semibold">
-                                <i class="bi bi-briefcase-fill me-1 text-acento"></i>{{ docente.cargo }}
-                            </p>
-                        </div>
+                        <!-- NOMBRE -->
+                        <h3 x-text="docente.nombre" 
+                            class="font-titulo font-bold text-lg text-white mb-2 leading-tight group-hover:text-[#34d399] transition-colors">
+                        </h3>
 
-                    </article>
-                </div>
-            {% endfor %}
+                        <!-- BADGE DE NIVEL -->
+                        <span x-text="docente.nivelNombre" 
+                              class="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[#34d399] text-[11px] font-bold tracking-wide uppercase mb-4 inline-flex items-center gap-1.5">
+                        </span>
+                    </div>
+
+                    <!-- CARGO / FUNCIÓN -->
+                    <div class="pt-4 border-t border-slate-800/80 w-full mt-2">
+                        <p class="text-slate-400 text-xs font-medium flex items-center justify-center gap-2">
+                            <i class="bi bi-briefcase-fill text-[#34d399]"></i>
+                            <span x-text="docente.cargo"></span>
+                        </p>
+                    </div>
+
+                </article>
+            </template>
         </div>
     {% else %}
         <!-- ESTADO VACÍO -->
-        <div class="card text-center mx-auto p-5" style="max-width: 500px;">
-            <i class="bi bi-people-fill text-muted-custom opacity-50 display-3 mb-3 d-block"></i>
-            <h4 class="fw-bold fs-5 text-main mb-1 font-titulo">Sin Registros Cargados</h4>
-            <p class="text-muted-custom small mb-0">No hay miembros del cuerpo docente o autoridades publicados por el momento.</p>
+        <div class="glass-card text-center mx-auto p-12 max-w-md rounded-2xl border border-slate-800">
+            <i class="bi bi-people-fill text-slate-600 text-5xl mb-4 block"></i>
+            <h4 class="font-titulo text-xl font-bold text-white mb-2">Sin Registros Cargados</h4>
+            <p class="text-slate-400 text-xs leading-relaxed">No hay miembros del cuerpo docente o autoridades publicados por el momento.</p>
         </div>
     {% endif %}
 

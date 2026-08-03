@@ -1,51 +1,91 @@
 {% extends 'panel/base.html' %}
+{% load static %}
 
-{% block titulo %}Requisitos{% endblock %}
+{% block titulo %}Requisitos de Inscripción{% endblock %}
 
 {% block contenido %}
-    <!-- Encabezado de la vista -->
-    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-subtle flex-wrap gap-2">
-        <h3 class="font-titulo text-main fw-bold mb-0 fs-4">
-            <i class="bi bi-card-checklist text-acento me-2"></i>Listado de Requisitos
-        </h3>
-        <a href="{% url 'panel_requisitos_crear' %}" class="btn btn-plataforma">
-            <i class="bi bi-plus-lg me-1"></i> CARGAR NUEVO REQUISITO
+
+<div class="max-w-7xl mx-auto">
+    
+    <!-- ENCABEZADO DE LA VISTA -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-8 border-b border-slate-800/80">
+        <div>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 border border-emerald-500/30 text-[#34d399] mb-2">
+                <i class="bi bi-card-checklist"></i> ADMISIÓN Y DOCUMENTACIÓN
+            </span>
+            <h1 class="font-titulo text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2.5">
+                Requisitos de Inscripción
+            </h1>
+            <p class="text-slate-400 text-xs sm:text-sm font-light mt-1">
+                Administrá los documentos solicitados para las vacantes por nivel educativo.
+            </p>
+        </div>
+
+        <a href="{% url 'panel_requisitos_crear' %}" class="btn-plataforma-vip whitespace-nowrap self-start sm:self-center">
+            <i class="bi bi-plus-lg"></i> CARGAR NUEVO REQUISITO
         </a>
     </div>
 
-    <!-- Tabla Adaptada al Tema Oscuro -->
-    <div class="table-responsive">
-        <table class="table table-dark table-hover align-middle mb-0">
-            <thead>
-                <tr>
-                    <th scope="col">Requisito</th>
-                    <th scope="col" class="text-end" style="width: 180px;">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for requisito in requisitos %}
-                    <tr>
-                        <td>
-                            <strong class="text-main d-block">{{ requisito }}</strong>
-                        </td>
-                        <td class="text-end text-nowrap">
-                            <a href="{% url 'panel_requisitos_editar' requisito.pk %}" class="btn btn-red-social btn-sm me-1">
-                                <i class="bi bi-pencil-fill"></i> Editar
-                            </a>
-                            <a href="{% url 'panel_requisitos_borrar' requisito.pk %}" class="btn btn-outline-danger btn-sm rounded-3" title="Eliminar requisito">
-                                <i class="bi bi-trash-fill"></i>
-                            </a>
-                        </td>
+    <!-- TABLA RESTRUCTURADA CON TAILWIND -->
+    <div class="glass-card rounded-3xl border border-slate-800 overflow-hidden shadow-2xl">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-950/80 border-b border-slate-800/80 text-slate-400 text-xs uppercase font-bold tracking-wider">
+                        <th scope="col" class="py-4 px-6">Requisito / Descripción</th>
+                        <th scope="col" class="py-4 px-6 text-right w-44">Acciones</th>
                     </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="2" class="text-center py-5 text-muted-custom">
-                            <i class="bi bi-clipboard-x fs-1 d-block text-acento mb-2"></i>
-                            No hay requisitos cargados por el momento. ¡Tocá el botón de arriba para sumar el primero!
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody class="divide-y divide-slate-800/60 text-xs sm:text-sm">
+                    {% for requisito in requisitos %}
+                        <tr class="hover:bg-slate-900/40 transition-colors group">
+                            
+                            <!-- REQUISITO Y NIVEL -->
+                            <td class="py-4 px-6">
+                                <div class="flex items-start gap-3">
+                                    <i class="bi bi-check-circle-fill text-[#34d399] text-base mt-0.5 flex-shrink-0"></i>
+                                    <div>
+                                        <strong class="text-white font-bold block text-sm group-hover:text-[#34d399] transition-colors leading-relaxed">
+                                            {{ requisito.descripcion|default:requisito }}
+                                        </strong>
+                                        {% if requisito.nivel %}
+                                            <span class="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-[#34d399] text-[10px] font-bold uppercase tracking-wider inline-block mt-1">
+                                                {{ requisito.get_nivel_display|default:requisito.nivel }}
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </td>
+
+                            <!-- ACCIONES -->
+                            <td class="py-4 px-6 text-right whitespace-nowrap">
+                                <div class="flex items-center justify-end gap-2">
+                                    <a href="{% url 'panel_requisitos_editar' requisito.pk %}" 
+                                       class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-[#34d399] hover:border-[#34d399]/40 text-xs font-semibold inline-flex items-center gap-1.5 transition-all">
+                                        <i class="bi bi-pencil-fill text-xs"></i> Editar
+                                    </a>
+                                    <a href="{% url 'panel_requisitos_borrar' requisito.pk %}" 
+                                       class="p-1.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 hover:bg-rose-500 hover:text-white text-xs transition-all shadow-sm"
+                                       title="Eliminar requisito">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <!-- ESTADO VACÍO -->
+                        <tr>
+                            <td colspan="2" class="py-12 px-6 text-center text-slate-500">
+                                <i class="bi bi-clipboard-x text-4xl text-slate-600 block mb-3"></i>
+                                <span class="text-sm font-medium block text-slate-400">No hay requisitos cargados por el momento.</span>
+                                <span class="text-xs font-light block mt-1">¡Tocá el botón de arriba para sumar el primero!</span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
+
+</div>
 {% endblock %}

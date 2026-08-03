@@ -1,96 +1,122 @@
 {% extends 'escuela/base.html' %}
+{% load static %}
 
 {% block title %}Inicio - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
 
 {% block content %}
 
-<!-- ==========================================================================
-     [SECCIÓN 1] HERO PRINCIPAL (NUEVO DESIGN: CENTRADO CON FONDO BLUR)
-     ========================================================================== -->
-<section class="hero-section-blur position-relative d-flex align-items-center justify-content-center text-center overflow-hidden py-5 z-1" style="min-height: 80vh;">
+<!-- ANIMACIONES & ESTILOS GLASS -->
+<style>
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-down { animation: fadeInDown 0.8s ease-out forwards; }
+    .animate-fade-up { animation: fadeInUp 0.8s ease-out forwards; }
     
-    <!-- Imagen de fondo con blur y capa oscura -->
-    {% if escuela_info.hero_imagen %}
-        <div class="hero-bg-blur" style="background-image: url('{{ escuela_info.hero_imagen.url }}');"></div>
-    {% else %}
-        <div class="hero-bg-blur" style="background-color: #0d0b14;"></div>
-    {% endif %}
-    <div class="hero-overlay"></div>
+    .glass-card {
+        background: rgba(15, 23, 42, 0.7);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(30, 41, 59, 0.8);
+    }
+    .glass-card:hover {
+        border-color: rgba(52, 211, 153, 0.5);
+        box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.25);
+    }
+</style>
+
+<!-- ==========================================================================
+     [SECCIÓN 1] HERO PRINCIPAL (CON NEÓN Y BOTONES IMPACTANTES)
+     ========================================================================== -->
+<section class="relative min-h-[85vh] flex items-center justify-center text-center overflow-hidden py-20 px-4">
+    
+    <!-- Imagen de Fondo con degradado profundo -->
+    <div class="absolute inset-0 z-0">
+        {% if escuela_info.hero_imagen %}
+            <img src="{{ escuela_info.hero_imagen.url }}" class="w-full h-full object-cover filter blur-[2px] scale-105 opacity-35" alt="Fondo Hero">
+        {% else %}
+            <div class="w-full h-full bg-[#090d16]"></div>
+        {% endif %}
+        <div class="absolute inset-0 bg-gradient-to-t from-[#090d16] via-[#090d16]/70 to-transparent"></div>
+    </div>
 
     <!-- Contenido Centrado -->
-    <div class="container position-relative z-2 py-5">
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-9 col-xl-8 d-flex flex-column align-items-center">
-                
-                <!-- Badge Centrado -->
-                <span class="badge mb-3 px-3 py-2 rounded-pill bg-badge-custom border border-acento text-acento">
-                    <i class="bi bi-award-fill me-1"></i>{{ escuela_info.hero_tag|default:"EDUCACIÓN INSTITUCIONAL" }}
-                </span>
+    <div class="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
+        
+        <!-- Badge Neón con Pulso -->
+        <span class="animate-fade-down inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold bg-emerald-500/10 border border-emerald-500/40 text-[#34d399] mb-6 shadow-[0_0_15px_rgba(52,211,153,0.2)]">
+            <span class="w-2 h-2 rounded-full bg-[#34d399] animate-pulse"></span>
+            <i class="bi bi-award-fill"></i> {{ escuela_info.hero_tag|default:"EDUCACIÓN INSTITUCIONAL" }}
+        </span>
 
-                <!-- Título Principal -->
-                <h1 class="display-3 font-titulo fw-bold mb-3 text-main text-uppercase">
-                    COLEGIO <span class="text-acento d-block">PATAGONIA</span>
-                </h1>
+        <!-- Título Principal -->
+        <h1 class="animate-fade-up text-4xl sm:text-6xl md:text-7xl font-titulo font-black mb-6 text-white uppercase tracking-tight leading-none drop-shadow-md">
+            COLEGIO <span class="text-[#34d399] block drop-shadow-[0_0_25px_rgba(52,211,153,0.3)]">PATAGONIA</span>
+        </h1>
 
-                <!-- Subtítulo / Bajada -->
-                <p class="lead mb-4 fs-4 text-muted-custom max-w-650">
-                    {{ escuela_info.hero_subtitulo|default:"Educación para ser, pensar y convivir" }}
-                </p>
+        <!-- Subtítulo / Bajada -->
+        <p class="animate-fade-up text-slate-300 text-base sm:text-xl md:text-2xl max-w-3xl mb-10 leading-relaxed font-light">
+            {{ escuela_info.hero_subtitulo|default:"Educación para ser, pensar y convivir" }}
+        </p>
 
-                <!-- Botones Principales Centrados -->
-                <div class="d-flex align-items-center justify-content-center gap-3 flex-wrap">
-                    <a href="{% if escuela_info.hero_boton_principal_url %}{{ escuela_info.hero_boton_principal_url }}{% else %}{% url 'escuela:requisitos' %}{% endif %}" class="btn btn-plataforma btn-lg px-4 fw-bold">
-                        {{ escuela_info.hero_boton_principal_text|default:"Proceso de Admisión" }} <i class="bi bi-arrow-right ms-1"></i>
-                    </a>
-                    
-                    <a href="{% if escuela_info.hero_boton_secundario_url %}{{ escuela_info.hero_boton_secundario_url }}{% else %}{% url 'escuela:contacto' %}{% endif %}" class="btn btn-red-social btn-lg px-4 d-flex align-items-center">
-                        {{ escuela_info.hero_boton_secundario_text|default:"Contactar" }}
-                    </a>
-                </div>
-
-            </div>
+        <!-- Botones Principales Centrados -->
+        <div class="animate-fade-up flex flex-wrap items-center justify-center gap-4">
+            <a href="{% if escuela_info.hero_boton_principal_url %}{{ escuela_info.hero_boton_principal_url }}{% else %}{% url 'escuela:requisitos' %}{% endif %}" 
+               class="btn-plataforma-vip">
+                {{ escuela_info.hero_boton_principal_text|default:"Proceso de Admisión" }} <i class="bi bi-arrow-right"></i>
+            </a>
+            
+            <a href="{% if escuela_info.hero_boton_secundario_url %}{{ escuela_info.hero_boton_secundario_url }}{% else %}{% url 'escuela:contacto' %}{% endif %}" 
+               class="px-6 py-3 bg-slate-900/80 hover:bg-slate-800 text-slate-200 hover:text-white font-bold text-xs uppercase tracking-wider rounded-xl border border-slate-700 hover:border-[#34d399] transition-all duration-300 backdrop-blur-md">
+                {{ escuela_info.hero_boton_secundario_text|default:"Contactar" }}
+            </a>
         </div>
+
     </div>
 </section>
 
 
 <!-- ==========================================================================
-     [SECCIÓN 2] PILARES INSTITUCIONALES (VALORES Y PROPUESTA)
+     [SECCIÓN 2] PILARES INSTITUCIONALES (PROPUESTA PEDAGÓGICA)
      ========================================================================== -->
-<section class="py-5">
-    <div class="container">
+<section class="py-20 bg-[#090d16]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div class="text-center mb-5">
-            <span class="badge mb-2 px-3 py-2 rounded-pill bg-badge-custom border border-acento text-acento">
+        <div class="text-center mb-14">
+            <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold bg-emerald-500/10 border border-emerald-500/30 text-[#34d399] mb-3">
                 NUESTRA PROPUESTA
             </span>
-            <h2 class="font-titulo fw-bold display-6 text-main">¿Por qué elegir Colegio Patagonia?</h2>
-            <p class="text-muted-custom">Brindamos una formación integral sustentada en la excelencia académica y valores humanos.</p>
+            <h2 class="font-titulo text-3xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">¿Por qué elegir Colegio Patagonia?</h2>
+            <p class="text-slate-400 text-sm md:text-base max-w-2xl mx-auto">Brindamos una formación integral sustentada en la excelencia académica y valores humanos.</p>
         </div>
 
-        <div class="row g-4">
-            <div class="col-12 col-md-4">
-                <div class="card h-100 p-4">
-                    <div class="fs-1 mb-3 text-acento"><i class="bi bi-lightbulb-fill"></i></div>
-                    <h3 class="font-titulo h5 fw-bold text-main">Pensamiento Crítico</h3>
-                    <p class="text-muted-custom small mb-0">Estimulamos la curiosidad intelectual, el razonamiento autónomo y la resolución creativa de problemas.</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="glass-card rounded-2xl p-8 transition-all duration-300 transform hover:-translate-y-1">
+                <div class="w-14 h-14 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-3xl text-[#34d399] mb-6 shadow-[0_0_15px_rgba(52,211,153,0.15)]">
+                    <i class="bi bi-lightbulb-fill"></i>
                 </div>
+                <h3 class="font-titulo text-xl font-bold text-white mb-3">Pensamiento Crítico</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">Estimulamos la curiosidad intelectual, el razonamiento autónomo y la resolución creativa de problemas.</p>
             </div>
 
-            <div class="col-12 col-md-4">
-                <div class="card h-100 p-4">
-                    <div class="fs-1 mb-3 text-acento"><i class="bi bi-heart-pulse-fill"></i></div>
-                    <h3 class="font-titulo h5 fw-bold text-main">Formación Humana</h3>
-                    <p class="text-muted-custom small mb-0">Promovemos la empatía, el respeto mutuo y la convivencia armónica a través de proyectos solidarios.</p>
+            <div class="glass-card rounded-2xl p-8 transition-all duration-300 transform hover:-translate-y-1">
+                <div class="w-14 h-14 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-3xl text-[#34d399] mb-6 shadow-[0_0_15px_rgba(52,211,153,0.15)]">
+                    <i class="bi bi-heart-pulse-fill"></i>
                 </div>
+                <h3 class="font-titulo text-xl font-bold text-white mb-3">Formación Humana</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">Promovemos la empatía, el respeto mutuo y la convivencia armónica a través de proyectos solidarios.</p>
             </div>
 
-            <div class="col-12 col-md-4">
-                <div class="card h-100 p-4">
-                    <div class="fs-1 mb-3 text-acento"><i class="bi bi-laptop-fill"></i></div>
-                    <h3 class="font-titulo h5 fw-bold text-main">Idiomas y Tecnología</h3>
-                    <p class="text-muted-custom small mb-0">Integración de inglés intensivo y recursos digitales interactivos para los desafíos globales.</p>
+            <div class="glass-card rounded-2xl p-8 transition-all duration-300 transform hover:-translate-y-1">
+                <div class="w-14 h-14 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-3xl text-[#34d399] mb-6 shadow-[0_0_15px_rgba(52,211,153,0.15)]">
+                    <i class="bi bi-laptop-fill"></i>
                 </div>
+                <h3 class="font-titulo text-xl font-bold text-white mb-3">Idiomas y Tecnología</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">Integración de inglés intensivo y recursos digitales interactivos para los desafíos globales.</p>
             </div>
         </div>
 
@@ -99,74 +125,65 @@
 
 
 <!-- ==========================================================================
-     [SECCIÓN 3] NIVELES EDUCATIVOS (TRAYECTORIA ACADÉMICA)
+     [SECCIÓN 3] NIVELES EDUCATIVOS
      ========================================================================== -->
-<section class="py-5">
-    <div class="container">
+<section class="py-20 bg-slate-950/60 border-y border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div class="text-center mb-5">
-            <span class="badge mb-2 px-3 py-2 rounded-pill bg-badge-custom border border-acento text-acento">
+        <div class="text-center mb-14">
+            <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold bg-emerald-500/10 border border-emerald-500/30 text-[#34d399] mb-3">
                 TRAYECTORIA EDUCATIVA
             </span>
-            <h2 class="font-titulo fw-bold display-6 text-main">Niveles Educativos</h2>
+            <h2 class="font-titulo text-3xl md:text-5xl font-extrabold text-white tracking-tight">Niveles Educativos</h2>
         </div>
 
-        <div class="row g-4 justify-content-center">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             
-            <!-- Nivel Inicial -->
-            <div class="col-12 col-md-4">
-                <div class="card h-100 p-4 d-flex flex-column justify-content-between">
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <i class="bi bi-palette-fill fs-2 text-acento"></i>
-                            <span class="badge bg-badge-custom border border-subtle text-muted-custom">Salas de 3, 4 y 5 años</span>
-                        </div>
-                        <h3 class="font-titulo h4 fw-bold mb-2 text-main">Nivel Inicial</h3>
-                        <p class="text-muted-custom small">Estimulación temprana, aprendizaje basado en el juego, socialización y expresión artística.</p>
+            <div class="glass-card rounded-2xl p-8 flex flex-col justify-between transition-all duration-300 transform hover:-translate-y-1">
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <i class="bi bi-palette-fill text-4xl text-[#34d399]"></i>
+                        <span class="px-3 py-1 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 text-xs font-semibold">Salas 3, 4 y 5 años</span>
                     </div>
-                    <div class="pt-3 border-top border-subtle">
-                        <a href="{% url 'escuela:requisitos' %}" class="fw-bold text-decoration-none text-acento">
-                            Ver requisitos <i class="bi bi-arrow-right"></i>
-                        </a>
-                    </div>
+                    <h3 class="font-titulo text-2xl font-bold mb-3 text-white">Nivel Inicial</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6">Estimulación temprana, aprendizaje basado en el juego, socialización y expresión artística.</p>
+                </div>
+                <div class="pt-4 border-t border-slate-800">
+                    <a href="{% url 'escuela:requisitos' %}" class="text-xs font-bold text-[#34d399] hover:text-white flex items-center gap-2 transition-colors group">
+                        Ver requisitos <i class="bi bi-arrow-right transition-transform group-hover:translate-x-1"></i>
+                    </a>
                 </div>
             </div>
 
-            <!-- Nivel Primario -->
-            <div class="col-12 col-md-4">
-                <div class="card h-100 p-4 d-flex flex-column justify-content-between">
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <i class="bi bi-book-fill fs-2 text-acento"></i>
-                            <span class="badge bg-badge-custom border border-subtle text-muted-custom">1º a 7º grado</span>
-                        </div>
-                        <h3 class="font-titulo h4 fw-bold mb-2 text-main">Nivel Primario</h3>
-                        <p class="text-muted-custom small">Pensamiento lógico-matemático, lectocomprensión intensiva, inglés y valores ciudadanos.</p>
+            <div class="glass-card rounded-2xl p-8 flex flex-col justify-between transition-all duration-300 transform hover:-translate-y-1">
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <i class="bi bi-book-fill text-4xl text-[#34d399]"></i>
+                        <span class="px-3 py-1 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 text-xs font-semibold">1º a 7º grado</span>
                     </div>
-                    <div class="pt-3 border-top border-subtle">
-                        <a href="{% url 'escuela:requisitos' %}" class="fw-bold text-decoration-none text-acento">
-                            Ver requisitos <i class="bi bi-arrow-right"></i>
-                        </a>
-                    </div>
+                    <h3 class="font-titulo text-2xl font-bold mb-3 text-white">Nivel Primario</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6">Pensamiento lógico-matemático, lectocomprensión intensiva, inglés y valores ciudadanos.</p>
+                </div>
+                <div class="pt-4 border-t border-slate-800">
+                    <a href="{% url 'escuela:requisitos' %}" class="text-xs font-bold text-[#34d399] hover:text-white flex items-center gap-2 transition-colors group">
+                        Ver requisitos <i class="bi bi-arrow-right transition-transform group-hover:translate-x-1"></i>
+                    </a>
                 </div>
             </div>
 
-            <!-- Nivel Medio -->
-            <div class="col-12 col-md-4">
-                <div class="card h-100 p-4 d-flex flex-column justify-content-between">
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <i class="bi bi-mortarboard-fill fs-2 text-acento"></i>
-                            <span class="badge bg-badge-custom border border-subtle text-muted-custom">1º y 2º año</span>
-                        </div>
-                        <h3 class="font-titulo h4 fw-bold mb-2 text-main">Nivel Medio</h3>
-                        <p class="text-muted-custom small">Formación integral con orientación metodológica, autonomía de estudio y proyectos pedagógicos.</p>
+            <div class="glass-card rounded-2xl p-8 flex flex-col justify-between transition-all duration-300 transform hover:-translate-y-1">
+                <div>
+                    <div class="flex items-center justify-between mb-6">
+                        <i class="bi bi-mortarboard-fill text-4xl text-[#34d399]"></i>
+                        <span class="px-3 py-1 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 text-xs font-semibold">1º y 2º año</span>
                     </div>
-                    <div class="pt-3 border-top border-subtle">
-                        <a href="{% url 'escuela:requisitos' %}" class="fw-bold text-decoration-none text-acento">
-                            Ver requisitos <i class="bi bi-arrow-right"></i>
-                        </a>
-                    </div>
+                    <h3 class="font-titulo text-2xl font-bold mb-3 text-white">Nivel Medio</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6">Formación integral con orientación metodológica, autonomía de estudio y proyectos pedagógicos.</p>
+                </div>
+                <div class="pt-4 border-t border-slate-800">
+                    <a href="{% url 'escuela:requisitos' %}" class="text-xs font-bold text-[#34d399] hover:text-white flex items-center gap-2 transition-colors group">
+                        Ver requisitos <i class="bi bi-arrow-right transition-transform group-hover:translate-x-1"></i>
+                    </a>
                 </div>
             </div>
 
@@ -176,250 +193,280 @@
 
 
 <!-- ==========================================================================
-     [SECCIÓN 4] NOTICIAS RECIENTES (CARRUSEL SLIDER)
+     [SECCIÓN 4] NOTICIAS RECIENTES
      ========================================================================== -->
-<section class="py-5">
-    <div class="container">
+<section class="py-20 bg-[#090d16]">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div class="mb-4 text-center text-md-start">
-            <span class="badge mb-2 px-3 py-2 rounded-pill bg-badge-custom border border-acento text-acento">
-                COMUNIDAD EN ACCIÓN
+        <div class="mb-8">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 border border-emerald-500/30 text-[#34d399] mb-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#34d399] animate-pulse"></span>
+                NOVEDADES INSTITUCIONALES
             </span>
-            <h2 class="font-titulo fw-bold display-6 mb-0 text-main">Noticias Recientes</h2>
+            <h2 class="font-titulo text-3xl md:text-5xl font-extrabold text-white tracking-tight">Noticias Recientes</h2>
         </div>
-        
+
         {% if noticias %}
-            <div class="d-flex gap-4 overflow-x-auto pb-3 news-container-slider">
-                {% for noticia in noticias %}
-                    <div class="flex-shrink-0" style="width: 350px; max-width: 85vw;">
-                        <div class="card h-100 p-0 overflow-hidden card-noticia-item">
-                            {% if noticia.imagen %}
-                                <img src="{{ noticia.imagen.url }}" class="card-img-top card-noticia-img" alt="{{ noticia.titulo }}" loading="lazy">
-                            {% endif %}
-                            <div class="card-body p-4 d-flex flex-column justify-content-between">
-                                <div>
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <span class="badge bg-badge-custom border border-acento text-acento">{{ noticia.categoria }}</span>
-                                        <span class="text-muted-custom small"><i class="bi bi-calendar3 me-1 text-acento"></i>{{ noticia.fecha_creacion|date:"d/m/Y" }}</span>
-                                    </div>
-                                    <h3 class="font-titulo h5 fw-bold mb-2 text-main">{{ noticia.titulo }}</h3>
-                                    <p class="text-muted-custom small line-clamp-3 mb-3">{{ noticia.descripcion|striptags }}</p>
-                                </div>
-                                <div class="pt-3 border-top border-subtle mt-auto">
-                                    <button type="button" 
-                                            class="btn btn-red-social text-acento w-100 btn-sm fw-bold"
-                                            onclick='abrirModalNoticia("{{ noticia.titulo|escapejs }}", "{{ noticia.categoria|escapejs }}", "{{ noticia.fecha_creacion|date:"d/m/Y" }}", "{% if noticia.imagen %}{{ noticia.imagen.url }}{% endif %}", "{{ noticia.descripcion|linebreaksbr|escapejs }}")'>
-                                        LEER NOTICIA COMPLETA <i class="bi bi-arrow-right ms-1"></i>
-                                    </button>
-                                </div>
-                            </div>
+        <div x-data="{ 
+                activeSlide: 0,
+                openModal: false,
+                timer: null,
+                noticias: [
+                    {% for noticia in noticias %}
+                    {
+                        id: {{ noticia.id }},
+                        titulo: '{{ noticia.titulo|escapejs }}',
+                        bajada: '{{ noticia.descripcion|striptags|truncatewords:25|escapejs }}',
+                        textoLargo: '{{ noticia.descripcion|escapejs }}',
+                        {% if noticia.imagen %}img: '{{ noticia.imagen.url }}',{% else %}img: '{% static "escuela/img/logo.png" %}',{% endif %}
+                        categoria: '{{ noticia.categoria|default:"Novedad"|escapejs }}',
+                        fecha: '{{ noticia.fecha_creacion|date:"d/m/Y" }}'
+                    }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ],
+                startTimer() {
+                    if (this.noticias.length > 1) {
+                        this.timer = setInterval(() => {
+                            this.activeSlide = (this.activeSlide + 1) % this.noticias.length;
+                        }, 4500);
+                    }
+                },
+                stopTimer() {
+                    clearInterval(this.timer);
+                },
+                init() {
+                    this.startTimer();
+                    this.$watch('openModal', value => {
+                        if (value) {
+                            this.stopTimer();
+                        } else {
+                            this.startTimer();
+                        }
+                    });
+                }
+             }" 
+             class="group relative bg-[#0f172a] rounded-3xl border border-slate-800 hover:border-emerald-500/50 hover:shadow-[0_0_30px_rgba(16,185,129,0.2)] transition-all duration-300 overflow-hidden min-h-[480px] flex flex-col justify-end shadow-2xl">
+            
+            <template x-for="(noticia, index) in noticias" :key="noticia.id">
+                <div x-show="activeSlide === index"
+                     x-transition:enter="transition ease-out duration-700"
+                     x-transition:enter-start="opacity-0 scale-105"
+                     x-transition:enter-end="opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-400 absolute inset-0"
+                     x-transition:leave-start="opacity-100"
+                     x-transition:leave-end="opacity-0"
+                     class="absolute inset-0 z-0 flex flex-col justify-end p-6 md:p-10">
+                    
+                    <img :src="noticia.img" class="absolute inset-0 w-full h-full object-cover" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/75 to-transparent"></div>
+
+                    <div class="relative z-10 max-w-2xl">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span x-text="noticia.categoria" class="px-3 py-1 rounded-md bg-emerald-500/20 backdrop-blur-md border border-emerald-500/40 text-[#34d399] text-xs font-bold uppercase tracking-wider"></span>
+                            <span x-text="noticia.fecha" class="text-slate-300 text-xs"></span>
+                        </div>
+
+                        <h3 x-text="noticia.titulo" class="text-2xl md:text-4xl font-extrabold text-white mb-3 leading-tight drop-shadow-md"></h3>
+                        <p x-text="noticia.bajada" class="text-slate-300 text-sm md:text-base line-clamp-2 mb-6 leading-relaxed"></p>
+
+                        <div>
+                            <button @click="openModal = true" class="btn-plataforma-vip">
+                                <span>LEER NOTICIA COMPLETA</span>
+                                <i class="bi bi-arrow-right"></i>
+                            </button>
                         </div>
                     </div>
-                {% endfor %}
+                </div>
+            </template>
+
+            <div x-show="noticias.length > 1" class="absolute bottom-6 right-6 z-20 flex items-center gap-2 bg-slate-950/70 backdrop-blur-md px-3 py-2 rounded-full border border-slate-800">
+                <template x-for="(noticia, index) in noticias" :key="index">
+                    <button @click="activeSlide = index; stopTimer(); startTimer();" 
+                            :class="activeSlide === index ? 'bg-[#34d399] w-8' : 'bg-slate-600 w-2 hover:bg-slate-400'" 
+                            class="h-2 rounded-full transition-all duration-300"></button>
+                </template>
             </div>
+
+            <!-- MODAL DE LECTURA COMPLETA -->
+            <template x-teleport="body">
+                <div x-show="openModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+                    <div @click.away="openModal = false" class="bg-[#0f172a] border border-slate-800 max-w-2xl w-full max-h-[85vh] rounded-2xl overflow-hidden shadow-2xl relative flex flex-col">
+                        
+                        <button @click="openModal = false" class="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-slate-900/80 border border-slate-700 text-slate-300 hover:text-white flex items-center justify-center">✕</button>
+                        
+                        <div class="bg-slate-950 max-h-72 w-full flex items-center justify-center flex-shrink-0 border-b border-slate-800 p-2 relative overflow-hidden">
+                            <img :src="noticias[activeSlide].img" class="max-h-68 w-auto h-auto object-contain rounded-lg" />
+                        </div>
+
+                        <div class="p-6 md:p-8 overflow-y-auto flex-1">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span x-text="noticias[activeSlide].categoria" class="px-2.5 py-1 rounded-md bg-emerald-500/20 text-[#34d399] text-xs font-bold uppercase tracking-wider"></span>
+                                <span x-text="noticias[activeSlide].fecha" class="text-slate-400 text-xs"></span>
+                            </div>
+                            <h3 x-text="noticias[activeSlide].titulo" class="text-2xl md:text-3xl font-bold text-white mb-4 leading-snug"></h3>
+                            <div x-html="noticias[activeSlide].textoLargo" class="text-slate-300 text-sm md:text-base leading-relaxed whitespace-pre-line pb-4"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </template>
+
+        </div>
         {% else %}
-            <div class="p-5 glass-panel text-center my-3">
-                <p class="text-muted-custom mb-0">No hay novedades publicadas por el momento.</p>
-            </div>
+        <div class="p-12 text-center bg-[#0f172a] rounded-3xl border border-slate-800 border-dashed">
+            <i class="bi bi-newspaper text-4xl text-slate-600 mb-3 block"></i>
+            <p class="text-slate-400 text-sm mb-0">No hay novedades publicadas por el momento.</p>
+        </div>
         {% endif %}
 
     </div>
 </section>
 
-<!-- MODAL LECTURA NOTICIA VIP -->
-<div class="modal fade" id="newsReadModalVIP" tabindex="-1" aria-hidden="true" style="background: rgba(0,0,0,0.7);">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content glass-panel border border-subtle p-0 overflow-hidden">
-            <div class="position-relative">
-                <img id="newsModalImg" src="" class="w-100 d-none" alt="Imagen noticia" style="max-height: 320px; object-fit: cover;">
-                <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3 p-2 bg-dark bg-opacity-75 rounded-circle" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-            </div>
-            <div class="p-4 p-md-5">
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <span id="newsModalBadge" class="badge bg-badge-custom border border-acento text-acento"></span>
-                    <span id="newsModalDate" class="text-muted-custom small"></span>
-                </div>
-                <h2 id="newsModalTitle" class="font-titulo fw-bold text-main mb-4 display-6"></h2>
-                <div id="newsModalBody" class="text-muted-custom fs-6" style="white-space: pre-line; line-height: 1.7;"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
 <!-- ==========================================================================
-     [SECCIÓN 5] GALERÍA DE FOTOS (CARRUSEL SLIDER PANORÁMICO)
+     [SECCIÓN 5] GALERÍA DE FOTOS (SIMÉTRICA A NOTICIAS)
      ========================================================================== -->
 {% if carrusel %}
-<section class="py-5">
-    <div class="container">
+<section class="py-20 bg-slate-950/60 border-t border-slate-800/80">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div class="mb-4 text-center text-md-start">
-            <span class="badge mb-2 px-3 py-2 rounded-pill bg-badge-custom border border-acento text-acento">
-                NUESTROS ESPACIOS Y EVENTOS
+        <!-- Header de la Galería Simétrico -->
+        <div class="mb-8">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 border border-emerald-500/30 text-[#34d399] mb-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#34d399] animate-pulse"></span>
+                INSTALACIONES Y ACTIVIDADES
             </span>
-            <h2 class="font-titulo fw-bold display-6 mb-0 text-main">Galería de la Escuela</h2>
+            <h2 class="font-titulo text-3xl md:text-5xl font-extrabold text-white tracking-tight">Galería de la Escuela</h2>
         </div>
 
-        <div class="d-flex gap-3 overflow-x-auto pb-2 scroll-smooth gallery-container">
-            {% for item in carrusel %}
-                {% if item.imagen %}
-                    <div class="flex-shrink-0 gallery-item-wrapper btn-open-lightbox" data-img-url="{{ item.imagen.url }}">
-                        <img src="{{ item.imagen.url }}" 
-                             class="rounded-3 gallery-img-item" 
-                             alt="Galería {{ escuela_info.nombre|default:'Colegio Patagonia' }}" 
-                             loading="lazy">
+        <!-- Visor Rotativo Directo (Mismas dimensiones y estilo que Noticias) -->
+        <div x-data="{ 
+                    openLightbox: false, 
+                    currentIndex: 0,
+                    timer: null,
+                    fotos: [
+                        {% for item in carrusel %}
+                            {% if item.imagen %}'{{ item.imagen.url }}'{% if not forloop.last %},{% endif %}{% endif %}
+                        {% endfor %}
+                    ],
+                    startTimer() {
+                        if (this.openLightbox || this.fotos.length <= 1) return;
+                        this.stopTimer();
+                        this.timer = setInterval(() => {
+                            this.next();
+                        }, 3000);
+                    },
+                    stopTimer() {
+                        if (this.timer) clearInterval(this.timer);
+                    },
+                    openModal() {
+                        this.stopTimer();
+                        this.openLightbox = true;
+                    },
+                    closeModal() {
+                        this.openLightbox = false;
+                        this.startTimer();
+                    },
+                    next() { 
+                        if (this.fotos.length === 0) return;
+                        this.currentIndex = (this.currentIndex + 1) % this.fotos.length; 
+                    },
+                    prev() { 
+                        if (this.fotos.length === 0) return;
+                        this.currentIndex = (this.currentIndex - 1 + this.fotos.length) % this.fotos.length; 
+                    },
+                    init() {
+                        this.startTimer();
+                    }
+                 }" 
+                 @mouseenter="stopTimer()" 
+                 @mouseleave="startTimer()"
+                 class="group relative bg-[#0f172a] rounded-3xl border border-slate-800 hover:border-emerald-500/50 hover:shadow-[0_0_30px_rgba(16,185,129,0.2)] transition-all duration-300 overflow-hidden h-[480px] shadow-2xl">
+            
+            <!-- Fotos con rotación fluida -->
+            <template x-for="(url, index) in fotos" :key="index">
+                <img x-show="currentIndex === index"
+                     x-transition:enter="transition ease-out duration-700"
+                     x-transition:enter-start="opacity-0 scale-105"
+                     x-transition:enter-end="opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-400 absolute inset-0"
+                     x-transition:leave-start="opacity-100"
+                     x-transition:leave-end="opacity-0"
+                     :src="url" 
+                     @click="openModal()"
+                     class="w-full h-full object-cover cursor-pointer" 
+                     loading="lazy" />
+            </template>
+
+            <!-- Botones Flechas Home (Visibles en hover) -->
+            <button x-show="fotos.length > 1"
+                    @click="prev()" 
+                    class="opacity-0 group-hover:opacity-100 transition-all duration-300 absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-2xl bg-slate-950/70 border border-slate-800 text-white hover:text-[#34d399] hover:border-[#34d399] hover:shadow-[0_0_15px_rgba(52,211,153,0.3)] flex items-center justify-center backdrop-blur-md focus:outline-none z-10">
+                <i class="bi bi-chevron-left text-lg"></i>
+            </button>
+
+            <button x-show="fotos.length > 1"
+                    @click="next()" 
+                    class="opacity-0 group-hover:opacity-100 transition-all duration-300 absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-2xl bg-slate-950/70 border border-slate-800 text-white hover:text-[#34d399] hover:border-[#34d399] hover:shadow-[0_0_15px_rgba(52,211,153,0.3)] flex items-center justify-center backdrop-blur-md focus:outline-none z-10">
+                <i class="bi bi-chevron-right text-lg"></i>
+            </button>
+
+            <!-- Indicadores Píldora -->
+            <div x-show="fotos.length > 1" class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2 bg-slate-950/80 px-4 py-2 rounded-full border border-slate-800/80 backdrop-blur-md shadow-lg">
+                <template x-for="(url, index) in fotos" :key="index">
+                    <button @click="currentIndex = index" 
+                            :class="currentIndex === index ? 'bg-[#34d399] w-7 shadow-[0_0_10px_rgba(52,211,153,0.5)]' : 'bg-slate-700 w-2 hover:bg-slate-500'" 
+                            class="h-2 rounded-full transition-all duration-300 focus:outline-none"></button>
+                </template>
+            </div>
+
+            <!-- LIGHTBOX EN PANTALLA COMPLETA -->
+            <template x-teleport="body">
+                <div x-show="openLightbox" 
+                     x-cloak 
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0 backdrop-blur-none"
+                     x-transition:enter-end="opacity-100 backdrop-blur-md"
+                     x-transition:leave="transition ease-in duration-200"
+                     x-transition:leave-start="opacity-100 backdrop-blur-md"
+                     x-transition:leave-end="opacity-0 backdrop-blur-none"
+                     @keydown.window.escape="closeModal()"
+                     @keydown.window.arrow-right="next()"
+                     @keydown.window.arrow-left="prev()"
+                     class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-md">
+                    
+                    <div @click.away="closeModal()" 
+                         x-transition:enter="transition ease-out duration-300 transform"
+                         x-transition:enter-start="opacity-0 scale-90"
+                         x-transition:enter-end="opacity-100 scale-100"
+                         x-transition:leave="transition ease-in duration-200 transform"
+                         x-transition:leave-start="opacity-100 scale-100"
+                         x-transition:leave-end="opacity-0 scale-90"
+                         class="relative max-w-5xl w-full flex items-center justify-center">
+                        
+                        <!-- Botón Cerrar -->
+                        <button @click="closeModal()" class="absolute -top-12 right-0 text-slate-400 hover:text-white text-3xl font-bold transition-colors focus:outline-none">✕</button>
+                        
+                        <!-- Imagen Única Directa -->
+                        <img :src="fotos[currentIndex]" 
+                             class="max-h-[85vh] w-auto object-contain rounded-2xl border border-slate-800 shadow-[0_0_50px_rgba(0,0,0,0.9)] select-none" />
+
+                        <!-- Flecha Izquierda Modal -->
+                        <button x-show="fotos.length > 1" @click="prev()" class="absolute left-3 sm:left-6 w-12 h-12 rounded-2xl bg-slate-900/80 border border-slate-700 text-white hover:text-[#34d399] hover:border-[#34d399] hover:scale-110 flex items-center justify-center transition-all backdrop-blur-md shadow-2xl focus:outline-none">
+                            <i class="bi bi-chevron-left text-xl"></i>
+                        </button>
+
+                        <!-- Flecha Derecha Modal -->
+                        <button x-show="fotos.length > 1" @click="next()" class="absolute right-3 sm:right-6 w-12 h-12 rounded-2xl bg-slate-900/80 border border-slate-700 text-white hover:text-[#34d399] hover:border-[#34d399] hover:scale-110 flex items-center justify-center transition-all backdrop-blur-md shadow-2xl focus:outline-none">
+                            <i class="bi bi-chevron-right text-xl"></i>
+                        </button>
                     </div>
-                {% endif %}
-            {% endfor %}
+                </div>
+            </template>
+
         </div>
 
     </div>
 </section>
-
-<!-- MODAL LIGHTBOX VIP -->
-<div class="modal fade" id="lightboxModalVIP" tabindex="-1" aria-hidden="true" style="background: rgba(0,0,0,0.8);">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content glass-panel border border-subtle p-0 overflow-hidden">
-            <div class="modal-header border-0 pb-0">
-                <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-            </div>
-            <div class="modal-body text-center p-3 p-md-4">
-                <img src="" id="lightboxImg" class="img-fluid rounded-3 glow-effect" alt="Foto ampliada VIP">
-            </div>
-        </div>
-    </div>
-</div>
 {% endif %}
 
-{% endblock %}
-
-
-<!-- ==========================================================================
-     BLOQUE EXTRA_JS
-     ========================================================================== -->
-{% block extra_js %}
-<script>
-    // 1. FUNCIÓN GLOBAL PARA ABRIR NOTICIAS
-    function abrirModalNoticia(titulo, categoria, fecha, imgUrl, contenido) {
-        const modalElem = document.getElementById('newsReadModalVIP');
-        const modalImg = document.getElementById('newsModalImg');
-
-        if (!modalElem) return;
-
-        if (imgUrl && imgUrl.trim() !== '') {
-            modalImg.src = imgUrl;
-            modalImg.classList.remove('d-none');
-        } else {
-            modalImg.classList.add('d-none');
-        }
-
-        document.getElementById('newsModalBadge').textContent = categoria;
-        document.getElementById('newsModalDate').textContent = fecha;
-        document.getElementById('newsModalTitle').textContent = titulo;
-        document.getElementById('newsModalBody').innerHTML = contenido;
-
-        if (window.bootstrap && window.bootstrap.Modal) {
-            const bsModal = bootstrap.Modal.getInstance(modalElem) || new bootstrap.Modal(modalElem);
-            bsModal.show();
-        } else {
-            document.body.classList.add('modal-open');
-            modalElem.classList.add('show');
-            modalElem.style.display = 'block';
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-
-        const restaurarScroll = () => {
-            document.body.classList.remove('modal-open');
-        };
-
-        document.getElementById('btnCloseNewsModal')?.addEventListener('click', restaurarScroll);
-        document.getElementById('btnCloseLightbox')?.addEventListener('click', restaurarScroll);
-
-        // 2. CONTROL LIGHTBOX PARA LA GALERÍA
-        const lightboxBtns = document.querySelectorAll('.btn-open-lightbox');
-        const lightboxModal = document.getElementById('lightboxModalVIP');
-
-        if (lightboxBtns.length && lightboxModal) {
-            lightboxBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.getElementById('lightboxImg').src = btn.getAttribute('data-img-url');
-
-                    if (window.bootstrap && window.bootstrap.Modal) {
-                        const bsLightbox = bootstrap.Modal.getInstance(lightboxModal) || new bootstrap.Modal(lightboxModal);
-                        bsLightbox.show();
-                    } else {
-                        document.body.classList.add('modal-open');
-                        lightboxModal.classList.add('show');
-                        lightboxModal.style.display = 'block';
-                    }
-                });
-            });
-        }
-
-        // 3. CARRUSEL CON AUTOPLAY + DRAG MANUAL
-        const setupCarruselAutoplay = (containerSelector) => {
-            const slider = document.querySelector(containerSelector);
-            if (!slider) return;
-
-            let isDown = false;
-            let startX;
-            let scrollLeft;
-            let autoplayTimer = null;
-
-            const startAutoplay = () => {
-                if (autoplayTimer) return;
-                autoplayTimer = setInterval(() => {
-                    const firstCard = slider.children[0];
-                    const itemWidth = firstCard ? firstCard.offsetWidth + 16 : 350;
-                    const maxScroll = slider.scrollWidth - slider.clientWidth;
-
-                    if (slider.scrollLeft >= maxScroll - 10) {
-                        slider.scrollTo({ left: 0, behavior: 'smooth' });
-                    } else {
-                        slider.scrollBy({ left: itemWidth, behavior: 'smooth' });
-                    }
-                }, 3200);
-            };
-
-            const stopAutoplay = () => {
-                clearInterval(autoplayTimer);
-                autoplayTimer = null;
-            };
-
-            startAutoplay();
-
-            slider.addEventListener('mouseenter', stopAutoplay);
-            slider.addEventListener('mouseleave', () => { if (!isDown) startAutoplay(); });
-
-            slider.addEventListener('mousedown', (e) => {
-                stopAutoplay();
-                isDown = true;
-                startX = e.pageX - slider.offsetLeft;
-                scrollLeft = slider.scrollLeft;
-            });
-
-            slider.addEventListener('mouseleave', () => { isDown = false; });
-            slider.addEventListener('mouseup', () => {
-                isDown = false;
-                startAutoplay();
-            });
-
-            slider.addEventListener('mousemove', (e) => {
-                if (!isDown) return;
-                const x = e.pageX - slider.offsetLeft;
-                const walk = (x - startX) * 2;
-                if (Math.abs(x - startX) > 5) {
-                    e.preventDefault();
-                    slider.scrollLeft = scrollLeft - walk;
-                }
-            });
-        };
-
-        setupCarruselAutoplay('.news-container-slider');
-        setupCarruselAutoplay('.gallery-container');
-    });
-</script>
 {% endblock %}

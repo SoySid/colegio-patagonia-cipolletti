@@ -1,31 +1,48 @@
 {% extends 'panel/base.html' %}
+{% load static %}
 
 {% block titulo %}Confirmar Eliminación{% endblock %}
 
 {% block contenido %}
-    <div class="confirm-card">
-        <div class="alert-icon-box">
-            <i class="bi bi-exclamation-triangle-fill"></i>
+<div class="max-w-xl mx-auto py-12">
+    
+    <!-- TARJETA DE CONFIRMACIÓN DE ELIMINACIÓN -->
+    <div class="glass-card rounded-3xl p-8 sm:p-10 border border-rose-500/30 shadow-[0_0_30px_rgba(225,29,72,0.15)] text-center relative overflow-hidden">
+        
+        <!-- Icono de Advertencia Neón Rojo -->
+        <div class="mb-6 flex justify-center">
+            <div class="w-16 h-16 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-3xl text-rose-400 shadow-[0_0_20px_rgba(225,29,72,0.25)] animate-pulse">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+            </div>
         </div>
 
-        <h3 class="confirm-title">¿Estás seguro de que querés eliminar este registro?</h3>
+        <!-- Título -->
+        <h3 class="font-titulo text-xl sm:text-2xl font-extrabold text-white tracking-tight mb-4">
+            ¿Estás seguro de que querés eliminar este registro?
+        </h3>
 
-        <div class="confirm-object">
+        <!-- Objeto a eliminar -->
+        <div class="p-4 mb-6 rounded-2xl bg-slate-950/80 border border-slate-800 text-slate-200 font-medium text-sm sm:text-base italic shadow-inner">
             "{{ object }}"
         </div>
 
-        <p class="confirm-warning">
-            <i class="bi bi-info-circle me-1"></i> Esta acción no se puede deshacer.
+        <!-- Advertencia -->
+        <p class="text-rose-300 text-xs sm:text-sm font-light mb-8 flex items-center justify-center gap-1.5">
+            <i class="bi bi-info-circle text-rose-400"></i> Esta acción no se puede deshacer.
         </p>
 
-        <form method="POST" class="confirm-actions">
+        <!-- Acciones del Formulario -->
+        <form method="POST" class="flex flex-col sm:flex-row items-center justify-center gap-3">
             {% csrf_token %}
-            <a href="javascript:history.back()" class="btn-confirm-cancel">
-                <i class="bi bi-x-lg"></i> Cancelar
+            <a href="javascript:history.back()" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 hover:text-white hover:border-slate-600 font-bold text-xs uppercase tracking-wider transition-all text-center">
+                <i class="bi bi-x-lg mr-1"></i> Cancelar
             </a>
-            <button type="submit" class="btn-confirm-delete">
+            <button type="submit" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(225,29,72,0.4)] flex items-center justify-center gap-2">
                 <i class="bi bi-trash-fill"></i> Sí, Eliminar
             </button>
         </form>
+
     </div>
+
+</div>
 {% endblock %}

@@ -1,123 +1,127 @@
 {% extends 'escuela/base.html' %}
+{% load static %}
 
 {% block title %}Plataforma Institucional - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
 
 {% block content %}
-<div class="container py-5 d-flex align-items-center justify-content-center" style="min-height: 75vh;">
-    <div class="row justify-content-center w-100">
-        <div class="col-12 col-md-8 col-lg-5">
+
+<!-- ANIMACIONES & ESTILOS GLASS-CARD -->
+<style>
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-down { animation: fadeInDown 0.8s ease-out forwards; }
+    .animate-fade-up { animation: fadeInUp 0.8s ease-out forwards; }
+    
+    .glass-card {
+        background: rgba(15, 23, 42, 0.75);
+        backdrop-filter: blur(14px);
+        border: 1px solid rgba(30, 41, 59, 0.8);
+    }
+</style>
+
+<div class="min-h-[75vh] flex items-center justify-center py-16 px-4">
+    <div class="w-full max-w-md">
+        
+        <!-- TARJETA PRINCIPAL LOGIN -->
+        <div class="glass-card rounded-3xl p-6 sm:p-10 border border-slate-800 shadow-2xl text-center relative overflow-hidden"
+             x-data="{ showPassword: false }">
             
-            <!-- TARJETA PRINCIPAL LOGIN -->
-            <div class="card p-4 p-md-5 border border-subtle shadow-lg text-center position-relative overflow-hidden bg-card-custom rounded-4">
+            <!-- Badge Estado Sistema -->
+            <div class="mb-6 flex justify-center">
+                <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold bg-emerald-500/10 border border-emerald-500/40 text-[#34d399] shadow-[0_0_15px_rgba(52,211,153,0.15)]">
+                    <span class="w-2 h-2 rounded-full bg-[#34d399] animate-ping"></span>
+                    SISTEMA EN LÍNEA
+                </span>
+            </div>
+
+            <!-- Escudo Neón -->
+            <div class="mb-4 flex justify-center">
+                <div class="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-3xl text-[#34d399] shadow-[0_0_20px_rgba(52,211,153,0.25)]">
+                    <i class="bi bi-shield-lock-fill"></i>
+                </div>
+            </div>
+
+            <!-- Título y Bajada -->
+            <h1 class="font-titulo text-3xl sm:text-4xl font-black text-white uppercase tracking-tight mb-2 drop-shadow-md">
+                PLATAFORMA
+            </h1>
+            <p class="text-slate-400 text-xs sm:text-sm mb-6 font-light">
+                Acceso exclusivo para el equipo directivo, docente y administrativo.
+            </p>
+
+            <!-- CAJITA INFORMATIVA: AULA VIRTUAL -->
+            <div class="p-4 mb-6 rounded-2xl text-left border border-slate-800 bg-slate-950/60 flex items-start gap-3.5">
+                <i class="bi bi-rocket-takeoff-fill text-[#34d399] text-xl flex-shrink-0 mt-0.5"></i>
+                <div>
+                    <strong class="text-white block text-xs font-bold uppercase tracking-wider mb-1">Próximamente</strong>
+                    <p class="text-slate-400 text-xs leading-relaxed font-light">
+                        Implementaremos el Aula Virtual para padres y tutores, facilitando el acceso al material de estudio y actividades.
+                    </p>
+                </div>
+            </div>
+
+            <!-- BLOQUE DE ERRORES -->
+            {% if form.errors %}
+                <div x-data="{ open: true }" x-show="open" class="mb-6 p-4 rounded-xl border border-rose-500/40 bg-rose-500/10 text-rose-300 text-xs font-semibold flex items-center justify-between text-left">
+                    <div class="flex items-center gap-2.5">
+                        <i class="bi bi-exclamation-triangle-fill text-rose-400 text-base flex-shrink-0"></i>
+                        <span>Usuario o contraseña incorrectos.</span>
+                    </div>
+                    <button @click="open = false" class="text-rose-400 hover:text-white p-1">✕</button>
+                </div>
+            {% endif %}
+
+            <!-- FORMULARIO DE INGRESO -->
+            <form method="POST" action="{% url 'escuela:portal' %}" class="text-left flex flex-col gap-5">
+                {% csrf_token %}
+
+                <!-- Campo Usuario -->
+                <div>
+                    <label for="username" class="block text-slate-200 text-xs font-semibold uppercase tracking-wider mb-2">Usuario Institucional *</label>
+                    <div class="relative">
+                        <i class="bi bi-person-fill absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-base"></i>
+                        <input type="text" id="username" name="username" class="w-full bg-slate-950/80 border border-slate-800 text-slate-100 text-xs sm:text-sm rounded-xl pl-11 pr-4 py-3.5 focus:outline-none focus:border-[#34d399] focus:ring-1 focus:ring-[#34d399] transition-all" placeholder="Ej: jperez" required autofocus autocomplete="username">
+                    </div>
+                </div>
+
+                <!-- Campo Contraseña con Toggle Ojito (Alpine.js) -->
+                <div>
+                    <label for="password" class="block text-slate-200 text-xs font-semibold uppercase tracking-wider mb-2">Contraseña *</label>
+                    <div class="relative">
+                        <i class="bi bi-key-fill absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-base"></i>
+                        <input :type="showPassword ? 'text' : 'password'" id="password" name="password" class="w-full bg-slate-950/80 border border-slate-800 text-slate-100 text-xs sm:text-sm rounded-xl pl-11 pr-11 py-3.5 focus:outline-none focus:border-[#34d399] focus:ring-1 focus:ring-[#34d399] transition-all" placeholder="••••••••" required autocomplete="current-password">
+                        <button type="button" @click="showPassword = !showPassword" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors focus:outline-none" aria-label="Mostrar u ocultar contraseña">
+                            <i class="bi text-base" :class="showPassword ? 'bi-eye-fill text-[#34d399]' : 'bi-eye-slash-fill'"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Botón de Envío -->
+                <button type="submit" class="btn-plataforma-vip w-full justify-center py-4 mt-2">
+                    INGRESAR A LA PLATAFORMA <i class="bi bi-box-arrow-in-right"></i>
+                </button>
+            </form>
+
+            <!-- Pie de Tarjeta / Información de Seguridad -->
+            <div class="pt-6 border-t border-slate-800/80 mt-6 flex flex-col gap-3 text-xs text-slate-400 font-medium">
+                <div class="flex justify-center gap-4 flex-wrap">
+                    <span class="flex items-center gap-1.5"><i class="bi bi-shield-check text-[#34d399]"></i> Datos Protegidos</span>
+                    <span class="flex items-center gap-1.5"><i class="bi bi-lock-fill text-[#34d399]"></i> Sesión Encriptada</span>
+                </div>
                 
-                <!-- Badge Estado Sistema -->
-                <div class="mb-4">
-                    <span class="badge bg-badge-custom border border-acento text-acento rounded-pill px-3 py-2 d-inline-flex align-items-center gap-2 small">
-                        <span class="spinner-grow spinner-grow-sm text-acento" role="status"></span> SISTEMA EN LÍNEA
-                    </span>
-                </div>
+                <a href="{% url 'escuela:contacto' %}" class="text-[#34d399] hover:underline text-xs flex items-center justify-center gap-1.5 transition-colors">
+                    <i class="bi bi-headset"></i> ¿Problemas para ingresar? Soporte Técnico
+                </a>
+            </div>
 
-                <!-- Ícono / Escudo Encabezado -->
-                <div class="mb-3">
-                    <div class="d-inline-flex p-3 rounded-circle bg-badge-custom border border-subtle text-acento fs-2">
-                        <i class="bi bi-shield-lock-fill"></i>
-                    </div>
-                </div>
+        </div> <!-- final card -->
 
-                <!-- Título y Bajada -->
-                <h1 class="font-titulo fw-bold display-6 text-main mb-2">
-                    PLATAFORMA
-                </h1>
-                <p class="text-muted-custom small mb-4">
-                    Acceso exclusivo para el equipo directivo, docente y administrativo.
-                </p>
-
-                <!-- CAJITA INFORMATIVA: AULA VIRTUAL -->
-                <div class="p-3 mb-4 rounded-3 text-start border border-subtle bg-badge-custom d-flex align-items-start gap-3">
-                    <i class="bi bi-rocket-takeoff-fill text-acento fs-4 flex-shrink-0 mt-1"></i>
-                    <div class="small">
-                        <strong class="text-main d-block mb-1">Próximamente</strong>
-                        <span class="text-muted-custom">
-                            Implementaremos el Aula Virtual para padres y tutores, facilitando el acceso al material de estudio y a las actividades de cada espacio curricular.
-                        </span>
-                    </div>
-                </div>
-
-                <!-- BLOQUE DE ERRORES -->
-                {% if form.errors %}
-                    <div class="alert alert-danger border-2 border-danger alert-dismissible fade show rounded-3 text-start mb-4" role="alert">
-                        <i class="bi bi-exclamation-triangle-fill me-2 align-middle"></i>
-                        <span class="small fw-bold align-middle">Usuario o contraseña incorrectos.</span>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                {% endif %}
-
-                <!-- FORMULARIO DE INGRESO -->
-                <form method="POST" action="{% url 'escuela:portal' %}" class="text-start d-flex flex-column gap-3">
-                    {% csrf_token %}
-
-                    <!-- Campo Usuario -->
-                    <div>
-                        <label for="username" class="form-label text-main fw-semibold small mb-1">Usuario Institucional *</label>
-                        <div class="position-relative">
-                            <i class="bi bi-person-fill contact-input-icon"></i>
-                            <input type="text" id="username" name="username" class="form-control contact-input-custom shadow-none" placeholder="Ej: jperez" required autofocus autocomplete="username">
-                        </div>
-                    </div>
-
-                    <!-- Campo Contraseña -->
-                    <div>
-                        <label for="password" class="form-label text-main fw-semibold small mb-1">Contraseña *</label>
-                        <div class="position-relative">
-                            <i class="bi bi-key-fill contact-input-icon"></i>
-                            <input type="password" id="password" name="password" class="form-control contact-input-custom shadow-none" placeholder="••••••••" required autocomplete="current-password">
-                            <button type="button" class="btn border-0 text-muted-custom position-absolute end-0 top-50 translate-middle-y me-2 p-1" id="togglePassword" aria-label="Mostrar u ocultar contraseña">
-                                <i class="bi bi-eye-slash-fill" id="toggleIcon"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Botón de Envío -->
-                    <button type="submit" class="btn btn-plataforma py-3 fw-bold mt-2 d-flex align-items-center justify-content-center gap-2">
-                        INGRESAR A LA PLATAFORMA <i class="bi bi-box-arrow-in-right fs-5"></i>
-                    </button>
-                </form>
-
-                <!-- Pie de Tarjeta / Información de Seguridad -->
-                <div class="pt-4 border-top border-subtle mt-4 d-flex flex-column gap-2 small text-muted-custom">
-                    <div class="d-flex justify-content-center gap-3 flex-wrap">
-                        <span><i class="bi bi-shield-check text-acento me-1"></i> Datos Protegidos</span>
-                        <span><i class="bi bi-lock-fill text-acento me-1"></i> Sesión Encriptada</span>
-                    </div>
-                    
-                    <a href="{% url 'escuela:contacto' %}" class="text-decoration-none text-acento small mt-2">
-                        <i class="bi bi-headset me-1"></i> ¿Problemas para ingresar? Contactar a Soporte Técnico
-                    </a>
-                </div>
-
-            </div> <!-- final card -->
-
-        </div>
     </div>
 </div>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const toggleBtn = document.getElementById('togglePassword');
-        const passwordInput = document.getElementById('password');
-        const toggleIcon = document.getElementById('toggleIcon');
-
-        if (toggleBtn && passwordInput && toggleIcon) {
-            toggleBtn.addEventListener('click', () => {
-                const isPassword = passwordInput.getAttribute('type') === 'password';
-                passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
-                
-                toggleIcon.classList.toggle('bi-eye-slash-fill', !isPassword);
-                toggleIcon.classList.toggle('bi-eye-fill', isPassword);
-            });
-        }
-    });
-</script>
 {% endblock %}

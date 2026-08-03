@@ -1,131 +1,151 @@
 {% extends 'escuela/base.html' %}
+{% load static %}
 
 {% block title %}Requisitos de Inscripción - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
 
 {% block content %}
-<div class="container py-4">
+
+<!-- ANIMACIONES Y GLASS-CARD TAILWIND -->
+<style>
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-down { animation: fadeInDown 0.8s ease-out forwards; }
+    .animate-fade-up { animation: fadeInUp 0.8s ease-out forwards; }
     
-    <!-- ENCABEZADO PRINCIPAL DE LA VISTA -->
-    <div class="text-center mb-5">
-        <span class="badge bg-badge-custom border border-acento text-acento rounded-pill px-3 py-2 mb-3 d-inline-flex align-items-center gap-2">
+    .glass-card {
+        background: rgba(15, 23, 42, 0.7);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(30, 41, 59, 0.8);
+    }
+    .glass-card:hover {
+        border-color: rgba(52, 211, 153, 0.5);
+        box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.25);
+    }
+</style>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    
+    <!-- ENCABEZADO PRINCIPAL -->
+    <div class="text-center mb-16 flex flex-col items-center">
+        <span class="animate-fade-down inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold bg-emerald-500/10 border border-emerald-500/40 text-[#34d399] mb-4 shadow-[0_0_15px_rgba(52,211,153,0.2)]">
+            <span class="w-2 h-2 rounded-full bg-[#34d399] animate-pulse"></span>
             <i class="bi bi-file-earmark-text-fill"></i> PROCESO DE ADMISIÓN {% now "Y" %}
         </span>
-        <h1 class="display-5 mb-2 font-titulo fw-bold text-main">
-            Requisitos de Inscripción
+        
+        <h1 class="animate-fade-up text-3xl sm:text-5xl md:text-6xl font-titulo font-black text-white uppercase tracking-tight mb-4 drop-shadow-md">
+            Requisitos de <span class="text-[#34d399] drop-shadow-[0_0_25px_rgba(52,211,153,0.3)]">Inscripción</span>
         </h1>
-        <p class="text-muted-custom fs-6 mb-0 fw-medium mx-auto" style="max-width: 600px;">
-            Documentación obligatoria requerida para la reserva de vacante y confección del legajo del alumno.
+        
+        <p class="animate-fade-up text-slate-400 text-sm sm:text-base max-w-2xl leading-relaxed font-light">
+            Documentación obligatoria requerida para la reserva de vacante y confección del legajo del estudiante.
         </p>
     </div>
 
-    <!-- TARJETAS POR NIVEL EDUCATIVO -->
-    <div class="row g-4 mb-5 justify-content-center">
+    <!-- TARJETAS POR NIVEL EDUCATIVO (GRID TAILWIND) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
         
         <!-- TARJETA: NIVEL INICIAL -->
-        <div class="col-12 col-md-4">
-            <article class="card h-100 p-0 overflow-hidden">
-                <div class="p-4 border-bottom border-subtle d-flex align-items-center gap-3">
-                    <div class="p-3 rounded-3 bg-badge-custom border border-subtle d-flex align-items-center justify-content-center">
-                        <i class="bi bi-balloon-fill fs-3 text-acento"></i>
-                    </div>
-                    <div>
-                        <h3 class="fw-bold fs-5 mb-0 font-titulo text-main">
-                            Nivel Inicial
-                        </h3>
-                        <small class="text-muted-custom">Salas de 3, 4 y 5 años</small>
-                    </div>
+        <article class="glass-card rounded-2xl p-0 overflow-hidden flex flex-col justify-between transition-all duration-300 transform hover:-translate-y-1">
+            <div class="p-6 border-b border-slate-800/80 flex items-center gap-4 bg-slate-900/50">
+                <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-2xl text-[#34d399] flex-shrink-0 shadow-[0_0_15px_rgba(52,211,153,0.15)]">
+                    <i class="bi bi-balloon-fill"></i>
                 </div>
+                <div>
+                    <h2 class="font-titulo text-xl font-bold text-white leading-tight">Nivel Inicial</h2>
+                    <span class="text-slate-400 text-xs">Salas de 3, 4 y 5 años</span>
+                </div>
+            </div>
 
-                <div class="p-4 d-flex flex-column gap-3">
-                    {% for req in req_inicial %}
-                        <div class="p-3 rounded-3 border border-subtle bg-badge-custom d-flex align-items-start gap-3">
-                            <i class="bi bi-check-circle-fill text-acento fs-6 mt-1 flex-shrink-0"></i>
-                            <span class="text-main small font-weight-medium">{{ req.descripcion }}</span>
-                        </div>
-                    {% empty %}
-                        <p class="text-muted-custom fst-italic text-center py-3 mb-0 small">No hay requisitos cargados para este nivel.</p>
-                    {% endfor %}
-                </div>
-            </article>
-        </div>
+            <div class="p-6 flex flex-col gap-3 flex-grow">
+                {% for req in req_inicial %}
+                    <div class="p-3.5 rounded-xl border border-slate-800/80 bg-slate-900/60 flex items-start gap-3 hover:border-slate-700 transition-colors">
+                        <i class="bi bi-check-circle-fill text-[#34d399] text-base mt-0.5 flex-shrink-0"></i>
+                        <span class="text-slate-200 text-xs leading-relaxed font-medium">{{ req.descripcion }}</span>
+                    </div>
+                {% empty %}
+                    <p class="text-slate-500 italic text-center py-6 text-xs">No hay requisitos cargados para este nivel.</p>
+                {% endfor %}
+            </div>
+        </article>
 
         <!-- TARJETA: NIVEL PRIMARIO -->
-        <div class="col-12 col-md-4">
-            <article class="card h-100 p-0 overflow-hidden">
-                <div class="p-4 border-bottom border-subtle d-flex align-items-center gap-3">
-                    <div class="p-3 rounded-3 bg-badge-custom border border-subtle d-flex align-items-center justify-content-center">
-                        <i class="bi bi-backpack-fill fs-3 text-acento"></i>
-                    </div>
-                    <div>
-                        <h3 class="fw-bold fs-5 mb-0 font-titulo text-main">
-                            Nivel Primario
-                        </h3>
-                        <small class="text-muted-custom">1º a 7º grado</small>
-                    </div>
+        <article class="glass-card rounded-2xl p-0 overflow-hidden flex flex-col justify-between transition-all duration-300 transform hover:-translate-y-1">
+            <div class="p-6 border-b border-slate-800/80 flex items-center gap-4 bg-slate-900/50">
+                <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-2xl text-[#34d399] flex-shrink-0 shadow-[0_0_15px_rgba(52,211,153,0.15)]">
+                    <i class="bi bi-backpack-fill"></i>
                 </div>
+                <div>
+                    <h2 class="font-titulo text-xl font-bold text-white leading-tight">Nivel Primario</h2>
+                    <span class="text-slate-400 text-xs">1º a 7º grado</span>
+                </div>
+            </div>
 
-                <div class="p-4 d-flex flex-column gap-3">
-                    {% for req in req_primario %}
-                        <div class="p-3 rounded-3 border border-subtle bg-badge-custom d-flex align-items-start gap-3">
-                            <i class="bi bi-check-circle-fill text-acento fs-6 mt-1 flex-shrink-0"></i>
-                            <span class="text-main small font-weight-medium">{{ req.descripcion }}</span>
-                        </div>
-                    {% empty %}
-                        <p class="text-muted-custom fst-italic text-center py-3 mb-0 small">No hay requisitos cargados para este nivel.</p>
-                    {% endfor %}
-                </div>
-            </article>
-        </div>
+            <div class="p-6 flex flex-col gap-3 flex-grow">
+                {% for req in req_primario %}
+                    <div class="p-3.5 rounded-xl border border-slate-800/80 bg-slate-900/60 flex items-start gap-3 hover:border-slate-700 transition-colors">
+                        <i class="bi bi-check-circle-fill text-[#34d399] text-base mt-0.5 flex-shrink-0"></i>
+                        <span class="text-slate-200 text-xs leading-relaxed font-medium">{{ req.descripcion }}</span>
+                    </div>
+                {% empty %}
+                    <p class="text-slate-500 italic text-center py-6 text-xs">No hay requisitos cargados para este nivel.</p>
+                {% endfor %}
+            </div>
+        </article>
 
         <!-- TARJETA: NIVEL MEDIO -->
-        <div class="col-12 col-md-4">
-            <article class="card h-100 p-0 overflow-hidden">
-                <div class="p-4 border-bottom border-subtle d-flex align-items-center gap-3">
-                    <div class="p-3 rounded-3 bg-badge-custom border border-subtle d-flex align-items-center justify-content-center">
-                        <i class="bi bi-mortarboard-fill fs-3 text-acento"></i>
-                    </div>
-                    <div>
-                        <h3 class="fw-bold fs-5 mb-0 font-titulo text-main">
-                            Nivel Medio
-                        </h3>
-                        <small class="text-muted-custom">1º y 2º año</small>
-                    </div>
+        <article class="glass-card rounded-2xl p-0 overflow-hidden flex flex-col justify-between transition-all duration-300 transform hover:-translate-y-1">
+            <div class="p-6 border-b border-slate-800/80 flex items-center gap-4 bg-slate-900/50">
+                <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-2xl text-[#34d399] flex-shrink-0 shadow-[0_0_15px_rgba(52,211,153,0.15)]">
+                    <i class="bi bi-mortarboard-fill"></i>
                 </div>
+                <div>
+                    <h2 class="font-titulo text-xl font-bold text-white leading-tight">Nivel Medio</h2>
+                    <span class="text-slate-400 text-xs">1º y 2º año</span>
+                </div>
+            </div>
 
-                <div class="p-4 d-flex flex-column gap-3">
-                    {% for req in req_medio %}
-                        <div class="p-3 rounded-3 border border-subtle bg-badge-custom d-flex align-items-start gap-3">
-                            <i class="bi bi-check-circle-fill text-acento fs-6 mt-1 flex-shrink-0"></i>
-                            <span class="text-main small font-weight-medium">{{ req.descripcion }}</span>
+            <div class="p-6 flex flex-col gap-3 flex-grow">
+                {% for req in req_medio %}
+                    <div class="p-3.5 rounded-xl border border-slate-800/80 bg-slate-900/60 flex items-start gap-3 hover:border-slate-700 transition-colors">
+                        <i class="bi bi-check-circle-fill text-[#34d399] text-base mt-0.5 flex-shrink-0"></i>
+                        <span class="text-slate-200 text-xs leading-relaxed font-medium">{{ req.descripcion }}</span>
+                    </div>
+                {% empty %}
+                    {% for req in req_secundario %}
+                        <div class="p-3.5 rounded-xl border border-slate-800/80 bg-slate-900/60 flex items-start gap-3 hover:border-slate-700 transition-colors">
+                            <i class="bi bi-check-circle-fill text-[#34d399] text-base mt-0.5 flex-shrink-0"></i>
+                            <span class="text-slate-200 text-xs leading-relaxed font-medium">{{ req.descripcion }}</span>
                         </div>
                     {% empty %}
-                        {% for req in req_secundario %}
-                            <div class="p-3 rounded-3 border border-subtle bg-badge-custom d-flex align-items-start gap-3">
-                                <i class="bi bi-check-circle-fill text-acento fs-6 mt-1 flex-shrink-0"></i>
-                                <span class="text-main small font-weight-medium">{{ req.descripcion }}</span>
-                            </div>
-                        {% empty %}
-                            <p class="text-muted-custom fst-italic text-center py-3 mb-0 small">No hay requisitos cargados para este nivel.</p>
-                        {% endfor %}
+                        <p class="text-slate-500 italic text-center py-6 text-xs">No hay requisitos cargados para este nivel.</p>
                     {% endfor %}
-                </div>
-            </article>
-        </div>
+                {% endfor %}
+            </div>
+        </article>
 
     </div>
 
-    <!-- BANNER LLAMADO A LA ACCIÓN (CTA) -->
-    <div class="card p-4 p-md-5 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-4 border border-subtle">
-        <div>
-            <h3 class="fw-bold fs-4 mb-2 font-titulo text-main">
+    <!-- BANNER DE CONTACTO / CALL TO ACTION (CTA) -->
+    <div class="bg-gradient-to-r from-slate-900 via-slate-900/95 to-slate-950 border border-emerald-500/30 rounded-2xl p-6 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-6 shadow-[0_10px_30px_rgba(0,0,0,0.5)] relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-[#34d399]/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="relative z-10 max-w-2xl">
+            <h2 class="font-titulo text-xl sm:text-2xl font-bold text-white mb-2 tracking-tight">
                 ¿Querés iniciar la inscripción o tenés alguna duda?
-            </h3>
-            <p class="text-muted-custom mb-0 fs-6">
+            </h2>
+            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
                 Comunicate con Secretaría para recibir asistencia personalizada o iniciar el trámite de vacante.
             </p>
         </div>
-        <a href="{% url 'escuela:contacto' %}" class="btn btn-plataforma px-4 py-3 text-nowrap fw-bold d-inline-flex align-items-center gap-2 flex-shrink-0" style="font-size: 0.95rem;">
-            IR A CONTACTO <i class="bi bi-arrow-right-short fs-5"></i>
+
+        <a href="{% url 'escuela:contacto' %}" class="btn-plataforma-vip whitespace-nowrap relative z-10 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+            IR A CONTACTO <i class="bi bi-arrow-right"></i>
         </a>
     </div>
 

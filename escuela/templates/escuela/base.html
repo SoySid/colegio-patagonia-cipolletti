@@ -1,14 +1,12 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <!-- Título Dinámico -->
     <title>{% block title %}{{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}</title>
     
-    <!-- Meta Tags para SEO y Redes Sociales -->
     <meta name="description" content="{{ escuela_info.descripcion|default:'Sitio web oficial de la institución educativa.' }}">
     <meta property="og:title" content="{{ escuela_info.nombre|default:'Colegio Patagonia' }}">
     <meta property="og:type" content="website">
@@ -16,99 +14,200 @@
         <meta property="og:image" content="{{ escuela_info.logo.url }}">
     {% endif %}
 
-    <!-- Favicon -->
     {% if escuela_info.favicon %}
-        <link rel="shortcut icon" href="{{ escuela_info.favicon.url }}" type="image/x-icon">
+        <link rel="icon" href="{{ escuela_info.favicon.url }}" type="image/x-icon">
+    {% elif escuela_info.logo %}
+        <link rel="icon" href="{{ escuela_info.logo.url }}" type="image/png">
+    {% else %}
+        <link rel="icon" href="{% static 'escuela/img/logo.png' %}" type="image/png">
     {% endif %}
 
-    <!-- Fuentes Google (Cinzel + Inter) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Bootstrap 5 & Íconos -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- TAILWIND CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-    <!-- CSS Institucional Único -->
-    <link rel="stylesheet" href="{% static 'escuela/css/estilos.css' %}">
-    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        background: '#090d16',
+                        card: '#0f172a',
+                        borderSubtle: '#1e293b',
+                        brandNeon: '#34d399',
+                        brandEmerald: '#10b981',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        titulo: ['Cinzel', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        [x-cloak] { display: none !important; }
+        
+        body {
+            background-color: #090d16 !important;
+            color: #f8fafc !important;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .glass-header {
+            background: rgba(15, 23, 42, 0.85) !important;
+            backdrop-filter: blur(16px) !important;
+            border-bottom: 1px solid rgba(52, 211, 153, 0.2) !important;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-item-link {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.5rem 0.85rem;
+            border-radius: 0.75rem;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        .nav-item-link:hover {
+            color: #34d399 !important;
+            background: rgba(52, 211, 153, 0.08);
+            text-shadow: 0 0 10px rgba(52, 211, 153, 0.4);
+        }
+        .nav-item-link.active-link {
+            color: #34d399 !important;
+            background: rgba(52, 211, 153, 0.12);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            font-weight: 700;
+        }
+
+        .btn-plataforma-vip {
+            background-color: #10b981 !important;
+            color: #020617 !important;
+            font-weight: 800 !important;
+            font-size: 0.75rem !important;
+            letter-spacing: 0.05em;
+            padding: 0.6rem 1.25rem !important;
+            border-radius: 0.75rem !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.35) !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-plataforma-vip:hover {
+            background-color: #34d399 !important;
+            box-shadow: 0 0 25px rgba(52, 211, 153, 0.6) !important;
+            transform: translateY(-1px);
+        }
+    </style>
+
     {% block extra_css %}{% endblock %}
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="bg-background text-slate-100 font-sans antialiased min-h-screen flex flex-col justify-between overflow-x-hidden">
 
-    <!-- NAVBAR INSTITUCIONAL (Fixed mediante la clase header-navbar) -->
-    <header class="navbar navbar-expand-lg header-navbar py-2">
-        <div class="container">
-            
-            <a href="{% url 'escuela:home' %}" class="navbar-brand d-flex align-items-center gap-3">
-                {% if escuela_info.logo %}
-                    <img src="{{ escuela_info.logo.url }}" alt="Logo {{ escuela_info.nombre|default:'Colegio Patagonia' }}" class="brand-logo rounded p-1">
-                {% else %}
-                    <div class="bg-badge-custom p-2 rounded-3 border border-subtle text-acento">
-                        <i class="bi bi-building fs-3"></i>
-                    </div>
-                {% endif %}
-                <div>
-                    <span class="fw-bold font-titulo fs-5 d-block text-main leading-tight">
-                        {{ escuela_info.nombre|default:"Colegio Patagonia" }}
-                    </span>
-                    {% if escuela_info.frase %}
-                        <small class="d-block text-acento small fw-semibold">{{ escuela_info.frase }}</small>
+    <!-- NAVBAR HEADER -->
+    <header x-data="{ openMenu: false }" class="glass-header sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <a href="{% url 'escuela:home' %}" class="flex items-center gap-3.5 group">
+                    {% if escuela_info.logo %}
+                        <img src="{{ escuela_info.logo.url }}" alt="Logo {{ escuela_info.nombre|default:'Colegio Patagonia' }}" class="h-11 w-auto object-contain rounded-xl p-1 bg-slate-950 border border-slate-800 group-hover:border-emerald-500/50 transition-colors shadow-md">
+                    {% else %}
+                        <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800 text-[#34d399] group-hover:border-emerald-500/50 group-hover:shadow-[0_0_15px_rgba(52,211,153,0.3)] transition-all">
+                            <i class="bi bi-building text-2xl"></i>
+                        </div>
                     {% endif %}
-                </div>
-            </a>
+                    <div>
+                        <span class="font-titulo font-extrabold text-base md:text-lg text-white leading-tight block group-hover:text-[#34d399] transition-colors tracking-wide">
+                            {{ escuela_info.nombre|default:"COLEGIO PATAGONIA" }}
+                        </span>
+                        {% if escuela_info.frase %}
+                            <small class="block text-[#34d399] text-[11px] font-semibold tracking-wider opacity-90">{{ escuela_info.frase }}</small>
+                        {% endif %}
+                    </div>
+                </a>
 
-            <button class="navbar-toggler border-0 text-main shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="bi bi-list fs-1 text-acento"></i>
-            </button>
+                <button @click="openMenu = !openMenu" class="lg:hidden p-2.5 rounded-xl border border-slate-800 text-[#34d399] hover:bg-slate-900 focus:outline-none">
+                    <i class="bi" :class="openMenu ? 'bi-x-lg' : 'bi-list'" class="text-2xl"></i>
+                </button>
 
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav align-items-lg-center gap-1 mt-3 mt-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link px-3 {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'escuela:home' %}">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link px-3 {% if request.resolver_match.url_name == 'requisitos' %}active{% endif %}" href="{% url 'escuela:requisitos' %}">Inscripción</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link px-3 {% if request.resolver_match.url_name == 'docentes' %}active{% endif %}" href="{% url 'escuela:docentes' %}">Autoridades</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link px-3 {% if request.resolver_match.url_name == 'faq' %}active{% endif %}" href="{% url 'escuela:faq' %}">Consultas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link px-3 {% if request.resolver_match.url_name == 'contacto' %}active{% endif %}" href="{% url 'escuela:contacto' %}">Contacto</a>
-                    </li>
+                <nav class="hidden lg:flex items-center gap-1.5">
+                    <a class="nav-item-link {% if request.resolver_match.url_name == 'home' %}active-link{% endif %}" href="{% url 'escuela:home' %}">
+                        Inicio
+                    </a>
+                    <a class="nav-item-link {% if request.resolver_match.url_name == 'requisitos' %}active-link{% endif %}" href="{% url 'escuela:requisitos' %}">
+                        Inscripción
+                    </a>
+                    <a class="nav-item-link {% if request.resolver_match.url_name == 'docentes' %}active-link{% endif %}" href="{% url 'escuela:docentes' %}">
+                        Autoridades
+                    </a>
+                    <a class="nav-item-link {% if request.resolver_match.url_name == 'faq' %}active-link{% endif %}" href="{% url 'escuela:faq' %}">
+                        Consultas
+                    </a>
+                    <a class="nav-item-link {% if request.resolver_match.url_name == 'contacto' %}active-link{% endif %}" href="{% url 'escuela:contacto' %}">
+                        Contacto
+                    </a>
                     
-                    <!-- BOTÓN PLATAFORMA / AULA VIRTUAL -->
-                    <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+                    <div class="h-6 w-[1px] bg-slate-800 mx-2"></div>
+
+                    <div>
                         {% if user.is_authenticated %}
-                            <a href="{% url 'panel_inicio' %}" class="btn btn-plataforma">
-                                <i class="bi bi-speedometer2 me-1"></i> Mi Plataforma
+                            <a href="{% url 'panel_inicio' %}" class="btn-plataforma-vip">
+                                <i class="bi bi-speedometer2 text-sm"></i> MI PLATAFORMA
                             </a>
                         {% else %}
-                            <a href="{% url 'escuela:portal' %}" class="btn btn-plataforma">
-                                <i class="bi bi-shield-lock-fill me-1"></i> Plataforma
+                            <a href="{% url 'escuela:portal' %}" class="btn-plataforma-vip">
+                                <i class="bi bi-shield-lock-fill text-sm"></i> PLATAFORMA
                             </a>
                         {% endif %}
-                    </li>
-                </ul>
+                    </div>
+                </nav>
+
+            </div>
+
+            <div x-show="openMenu" x-cloak class="lg:hidden py-4 border-t border-slate-800/80 flex flex-col gap-2">
+                <a class="nav-item-link {% if request.resolver_match.url_name == 'home' %}active-link{% endif %}" href="{% url 'escuela:home' %}">Inicio</a>
+                <a class="nav-item-link {% if request.resolver_match.url_name == 'requisitos' %}active-link{% endif %}" href="{% url 'escuela:requisitos' %}">Inscripción</a>
+                <a class="nav-item-link {% if request.resolver_match.url_name == 'docentes' %}active-link{% endif %}" href="{% url 'escuela:docentes' %}">Autoridades</a>
+                <a class="nav-item-link {% if request.resolver_match.url_name == 'faq' %}active-link{% endif %}" href="{% url 'escuela:faq' %}">Consultas</a>
+                <a class="nav-item-link {% if request.resolver_match.url_name == 'contacto' %}active-link{% endif %}" href="{% url 'escuela:contacto' %}">Contacto</a>
+                
+                <div class="pt-3 mt-1 border-t border-slate-800">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'panel_inicio' %}" class="btn-plataforma-vip w-full justify-center">
+                            <i class="bi bi-speedometer2"></i> MI PLATAFORMA
+                        </a>
+                    {% else %}
+                        <a href="{% url 'escuela:portal' %}" class="btn-plataforma-vip w-full justify-center">
+                            <i class="bi bi-shield-lock-fill"></i> PLATAFORMA
+                        </a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- CONTENIDO PRINCIPAL ANIMADO -->
-    <main class="flex-grow-1 animate-fade-in">
+    <main class="flex-grow">
         {% if messages %}
-            <div class="container pt-3 mb-4">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
                 {% for message in messages %}
-                    <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show glass-panel border-0 shadow-lg" role="alert">
-                        <div class="d-flex align-items-center gap-2">
-                            <i class="bi bi-info-circle-fill text-acento fs-5"></i>
-                            <div>{{ message }}</div>
+                    <div x-data="{ show: true }" x-show="show" class="bg-slate-900 border border-emerald-500/40 text-slate-100 p-4 rounded-xl shadow-[0_0_15px_rgba(16,185,129,0.2)] flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <i class="bi bi-info-circle-fill text-[#34d399] text-xl"></i>
+                            <div class="text-sm font-medium">{{ message }}</div>
                         </div>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <button @click="show = false" class="text-slate-400 hover:text-white p-1">✕</button>
                     </div>
                 {% endfor %}
             </div>
@@ -118,91 +217,99 @@
         {% endblock %}
     </main>
 
-    <!-- FOOTER INSTITUCIONAL -->
-    <footer class="footer-section pt-5 mt-auto">
-        <div class="container">
-            <div class="row g-4 align-items-start pb-4">
+    <!-- FOOTER INSTITUCIONAL CON BORDE DE DIVISIÓN MARCADO -->
+    <footer class="mt-20 border-t-2 border-emerald-500/40 bg-slate-950 pt-12 pb-8 relative shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+        
+        <!-- Línea Neón Resplandeciente de División Superior -->
+        <div class="absolute -top-[2px] left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#34d399] to-transparent shadow-[0_0_15px_#34d399]"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 pb-12 border-b border-slate-800/80">
                 
-                <!-- Columna 1: Nombre & Horario -->
-                <div class="col-12 col-md-4">
-                    <h4 class="font-titulo text-main fs-5 fw-bold mb-3 border-start border-3 border-acento ps-2">
-                        {{ escuela_info.nombre|default:"Colegio Patagonia" }}
-                    </h4>
+                <div>
+                    <div class="flex items-center gap-3 mb-3">
+                        {% if escuela_info.logo %}
+                            <img src="{{ escuela_info.logo.url }}" class="h-8 w-auto object-contain" alt="Logo">
+                        {% endif %}
+                        <span class="font-titulo text-white text-base font-bold tracking-wide">
+                            {{ escuela_info.nombre|default:"COLEGIO PATAGONIA" }}
+                        </span>
+                    </div>
                     {% if escuela_info.frase %}
-                        <p class="fst-italic text-acento small mb-3">"{{ escuela_info.frase }}"</p>
+                        <p class="text-slate-400 text-xs italic mb-4 leading-relaxed">
+                            "{{ escuela_info.frase }}"
+                        </p>
                     {% endif %}
                     {% if escuela_info.horario %}
-                        <div class="d-flex align-items-center gap-2 small mt-3">
-                            <i class="bi bi-clock-history text-acento fs-5"></i>
-                            <div>
-                                <strong class="d-block text-main">Horario de Atención:</strong>
-                                <span class="text-muted-custom">{{ escuela_info.horario }}</span>
-                            </div>
-                        </div>
+                        <p class="text-[11px] text-slate-400 flex items-center gap-1.5 bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-800 w-fit">
+                            <i class="bi bi-clock text-[#34d399]"></i> {{ escuela_info.horario }}
+                        </p>
                     {% endif %}
                 </div>
 
-                <!-- Columna 2: Niveles Educativos -->
-                <div class="col-12 col-md-4">
-                    <h4 class="font-titulo text-main fs-5 fw-bold mb-3 border-start border-3 border-acento ps-2">
-                        Niveles Educativos
-                    </h4>
-                    <ul class="list-unstyled d-flex flex-column gap-2 small text-muted-custom">
-                        <li><i class="bi bi-check-circle-fill text-acento me-2"></i> Nivel Inicial (salas de 3, 4 y 5 años)</li>
-                        <li><i class="bi bi-check-circle-fill text-acento me-2"></i> Nivel Primario (1º a 7º grado)</li>
-                        <li><i class="bi bi-check-circle-fill text-acento me-2"></i> Nivel Medio (1º y 2º año)</li>
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4 border-s-2 border-[#10b981] ps-2.5">Navegación</h4>
+                    <ul class="space-y-2.5 text-xs text-slate-400">
+                        <li><a href="{% url 'escuela:home' %}" class="hover:text-[#34d399] transition-colors">Inicio</a></li>
+                        <li><a href="{% url 'escuela:requisitos' %}" class="hover:text-[#34d399] transition-colors">Proceso de Inscripción</a></li>
+                        <li><a href="{% url 'escuela:docentes' %}" class="hover:text-[#34d399] transition-colors">Autoridades y Equipo</a></li>
+                        <li><a href="{% url 'escuela:faq' %}" class="hover:text-[#34d399] transition-colors">Consultas Frecuentes</a></li>
+                        <li><a href="{% url 'escuela:contacto' %}" class="hover:text-[#34d399] transition-colors">Contacto Institucional</a></li>
                     </ul>
                 </div>
 
-                <!-- Columna 3: Contacto & Redes -->
-                <div class="col-12 col-md-4">
-                    <h4 class="font-titulo text-main fs-5 fw-bold mb-3 border-start border-3 border-acento ps-2">
-                        Contacto Directo
-                    </h4>
-                    <div class="d-flex flex-column gap-2 small mb-3 text-muted-custom">
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4 border-s-2 border-[#10b981] ps-2.5">Niveles Educativos</h4>
+                    <ul class="space-y-2.5 text-xs text-slate-400">
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#34d399]"></span> Nivel Inicial (3, 4 y 5 años)</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#34d399]"></span> Nivel Primario (1º a 7º grado)</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#34d399]"></span> Nivel Medio (1º y 2º año)</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4 border-s-2 border-[#10b981] ps-2.5">Contacto</h4>
+                    <div class="space-y-2.5 text-xs text-slate-400 mb-4">
                         {% if escuela_info.direccion %}
-                            <p class="mb-0"><i class="bi bi-geo-alt-fill text-acento me-2"></i>{{ escuela_info.direccion }}</p>
+                            <p class="flex items-center gap-2"><i class="bi bi-geo-alt text-[#34d399]"></i> {{ escuela_info.direccion }}</p>
                         {% endif %}
                         {% if escuela_info.telefono %}
-                            <p class="mb-0"><i class="bi bi-telephone-fill text-acento me-2"></i>Tel: {{ escuela_info.telefono }}</p>
+                            <p class="flex items-center gap-2"><i class="bi bi-telephone text-[#34d399]"></i> {{ escuela_info.telefono }}</p>
                         {% endif %}
                         {% if escuela_info.email %}
-                            <p class="mb-0"><i class="bi bi-envelope-fill text-acento me-2"></i>{{ escuela_info.email }}</p>
+                            <p class="flex items-center gap-2 truncate"><i class="bi bi-envelope text-[#34d399]"></i> {{ escuela_info.email }}</p>
                         {% endif %}
                     </div>
 
-                    <div class="d-flex flex-wrap gap-2 pt-1">
-                        {% if escuela_info.whatsapp %}
-                            <a href="https://wa.me/{{ escuela_info.whatsapp }}" target="_blank" rel="noopener noreferrer" class="btn btn-red-social">
-                                <i class="bi bi-whatsapp text-acento me-1"></i> WhatsApp
+                    <div class="flex items-center gap-2">
+                        {% if escuela_info.facebook_url %}
+                            <a href="{{ escuela_info.facebook_url }}" target="_blank" rel="noopener noreferrer" 
+                               class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-[#34d399] hover:border-[#34d399]/50 text-xs font-semibold inline-flex items-center gap-1.5 transition-all">
+                                <i class="bi bi-facebook text-[#34d399]"></i> Facebook
                             </a>
                         {% endif %}
                         {% if escuela_info.instagram_url %}
-                            <a href="{{ escuela_info.instagram_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-red-social">
-                                <i class="bi bi-instagram text-acento me-1"></i> Instagram
-                            </a>
-                        {% endif %}
-                        {% if escuela_info.facebook_url %}
-                            <a href="{{ escuela_info.facebook_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-red-social">
-                                <i class="bi bi-facebook text-acento me-1"></i> Facebook
+                            <a href="{{ escuela_info.instagram_url }}" target="_blank" rel="noopener noreferrer" 
+                               class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-[#34d399] hover:border-[#34d399]/50 text-xs font-semibold inline-flex items-center gap-1.5 transition-all">
+                                <i class="bi bi-instagram text-[#34d399]"></i> Instagram
                             </a>
                         {% endif %}
                     </div>
                 </div>
 
             </div>
-        </div>
 
-        <!-- Copyright -->
-        <div class="footer-copyright text-center py-3">
-            <div class="container">
-                <small class="text-muted-custom">&copy; {% now "Y" %} {{ escuela_info.nombre|default:"Colegio Patagonia" }}. Todos los derechos reservados.</small>
+            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400 font-medium">
+                <p>&copy; {% now "Y" %} {{ escuela_info.nombre|default:"Colegio Patagonia" }}. Todos los derechos reservados.</p>
+                <div class="flex items-center gap-6">
+                    <a href="{% url 'escuela:faq' %}" class="hover:text-[#34d399] transition-colors">Términos</a>
+                    <a href="{% url 'escuela:contacto' %}" class="hover:text-[#34d399] transition-colors">Privacidad</a>
+                </div>
             </div>
+
         </div>
     </footer>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,90 +11,182 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- BOOTSTRAP 5 & ICONS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- TAILWIND CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-    <!-- CSS INSTITUCIONAL -->
-    <link rel="stylesheet" href="{% static 'escuela/css/estilos.css' %}">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        background: '#090d16',
+                        card: '#0f172a',
+                        borderSubtle: '#1e293b',
+                        brandNeon: '#34d399',
+                        brandEmerald: '#10b981',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        titulo: ['Cinzel', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
 
-    <!-- CSS EXCLUSIVO DEL PANEL DE GESTIÓN -->
-    <link rel="stylesheet" href="{% static 'escuela/css/panel.css' %}">
+    <style>
+        [x-cloak] { display: none !important; }
+        
+        body {
+            background-color: #090d16 !important;
+            color: #f8fafc !important;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .glass-header {
+            background: rgba(15, 23, 42, 0.85) !important;
+            backdrop-filter: blur(16px) !important;
+            border-bottom: 1px solid rgba(52, 211, 153, 0.2) !important;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(30, 41, 59, 0.8);
+        }
+
+        .btn-panel-nav {
+            background-color: rgba(30, 41, 59, 0.8);
+            color: #cbd5e1;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.5rem 0.85rem;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(51, 65, 85, 0.8);
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .btn-panel-nav:hover {
+            color: #34d399;
+            border-color: rgba(52, 211, 153, 0.4);
+            background: rgba(52, 211, 153, 0.08);
+        }
+
+        .btn-panel-nav-danger {
+            background-color: rgba(225, 29, 72, 0.1);
+            color: #fda4af;
+            border-color: rgba(225, 29, 72, 0.3);
+        }
+        .btn-panel-nav-danger:hover {
+            background-color: rgba(225, 29, 72, 0.25);
+            color: #ffffff;
+            border-color: rgba(225, 29, 72, 0.6);
+            box-shadow: 0 0 15px rgba(225, 29, 72, 0.3);
+        }
+
+        .btn-plataforma-vip {
+            background-color: #10b981 !important;
+            color: #020617 !important;
+            font-weight: 800 !important;
+            font-size: 0.75rem !important;
+            letter-spacing: 0.05em;
+            padding: 0.6rem 1.25rem !important;
+            border-radius: 0.75rem !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.35) !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-plataforma-vip:hover {
+            background-color: #34d399 !important;
+            box-shadow: 0 0 25px rgba(52, 211, 153, 0.6) !important;
+            transform: translateY(-1px);
+        }
+    </style>
 
     {% block extra_css %}{% endblock %}
 </head>
-<body class="body-panel d-flex flex-column min-vh-100">
+<body class="bg-background text-slate-100 font-sans antialiased min-h-screen flex flex-col justify-between overflow-x-hidden">
 
-    <!-- HEADER INSTITUCIONAL ELEGANTE -->
-    <header class="header-navbar header-panel-glass sticky-top py-3 border-bottom border-subtle">
-        <div class="container d-flex justify-content-between align-items-center flex-wrap gap-3">
-            
-            <!-- Marca / Logo Izquierda -->
-            <a href="{% url 'panel_inicio' %}" class="d-flex align-items-center gap-3 text-decoration-none group-brand">
-                <div class="p-2 rounded-3 border border-subtle text-acento bg-dark-custom shadow-sm d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;">
-                    <i class="bi bi-shield-lock-fill fs-4 text-warning"></i>
-                </div>
-                <div>
-                    <span class="fw-bold font-titulo fs-5 text-main lh-1 d-block mb-1">
-                        Panel de Gestión
-                    </span>
-                    <span class="badge bg-badge-custom text-acento border border-subtle font-monospace" style="font-size: 0.7rem; letter-spacing: 0.08em;">
-                        ADMINISTRACIÓN INTERNA
-                    </span>
-                </div>
-            </a>
-
-            <!-- Navegación Derecha Unificada -->
-            <div class="d-flex align-items-center gap-2">
-                {% if request.resolver_match.url_name == 'panel_inicio' %}
-                    <a href="{% url 'escuela:home' %}" class="btn-panel-nav">
-                        <i class="bi bi-box-arrow-up-right text-primary"></i>
-                        <span>Sitio Web</span>
-                    </a>
-                {% else %}
-                    <a href="javascript:history.back()" class="btn-panel-nav">
-                        <i class="bi bi-arrow-left"></i>
-                        <span>Atrás</span>
-                    </a>
-                    <a href="{% url 'panel_inicio' %}" class="btn-panel-nav">
-                        <i class="bi bi-grid-fill"></i>
-                        <span>Menú Principal</span>
-                    </a>
-                    <a href="{% url 'escuela:home' %}" class="btn-panel-nav btn-panel-nav-icon" title="Ir al Sitio Web">
-                        <i class="bi bi-house"></i>
-                    </a>
-                {% endif %}
+    <!-- HEADER INSTITUCIONAL ELEGANTE DEL PANEL -->
+    <header class="glass-header sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
                 
-                <div class="vr mx-1 bg-secondary opacity-25" style="height: 20px;"></div>
+                <!-- Marca / Logo Izquierda -->
+                <a href="{% url 'panel_inicio' %}" class="flex items-center gap-3.5 group">
+                    <div class="w-11 h-11 rounded-xl bg-slate-950 border border-slate-800 text-[#34d399] group-hover:border-emerald-500/50 group-hover:shadow-[0_0_15px_rgba(52,211,153,0.3)] flex items-center justify-center transition-all shadow-md">
+                        <i class="bi bi-shield-lock-fill text-xl text-amber-400"></i>
+                    </div>
+                    <div>
+                        <span class="font-titulo font-extrabold text-base md:text-lg text-white leading-tight block group-hover:text-[#34d399] transition-colors tracking-wide">
+                            Panel de Gestión
+                        </span>
+                        <span class="inline-block px-2 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/30 text-[#34d399] text-[10px] font-mono tracking-wider">
+                            ADMINISTRACIÓN INTERNA
+                        </span>
+                    </div>
+                </a>
 
-                <!-- Botón Cerrar Sesión -->
-                <form action="{% url 'panel_logout' %}" method="post" class="d-inline-flex m-0">
-                    {% csrf_token %}
-                    <button type="submit" class="btn-panel-nav btn-panel-nav-danger" title="Cerrar Sesión">
-                        <i class="bi bi-box-arrow-right"></i>
-                        <span>Salir</span>
-                    </button>
-                </form>
+                <!-- Navegación Derecha Unificada -->
+                <div class="flex items-center gap-2">
+                    {% if request.resolver_match.url_name == 'panel_inicio' %}
+                        <a href="{% url 'escuela:home' %}" class="btn-panel-nav">
+                            <i class="bi bi-box-arrow-up-right text-emerald-400"></i>
+                            <span class="hidden sm:inline">Sitio Web</span>
+                        </a>
+                    {% else %}
+                        <a href="javascript:history.back()" class="btn-panel-nav">
+                            <i class="bi bi-arrow-left"></i>
+                            <span class="hidden sm:inline">Atrás</span>
+                        </a>
+                        <a href="{% url 'panel_inicio' %}" class="btn-panel-nav">
+                            <i class="bi bi-grid-fill"></i>
+                            <span class="hidden sm:inline">Menú Principal</span>
+                        </a>
+                        <a href="{% url 'escuela:home' %}" class="btn-panel-nav" title="Ir al Sitio Web">
+                            <i class="bi bi-house"></i>
+                        </a>
+                    {% endif %}
+                    
+                    <div class="h-5 w-[1px] bg-slate-800 mx-1"></div>
+
+                    <!-- Botón Cerrar Sesión -->
+                    <form action="{% url 'panel_logout' %}" method="post" class="inline-flex m-0">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-panel-nav btn-panel-nav-danger" title="Cerrar Sesión">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span class="hidden sm:inline">Salir</span>
+                        </button>
+                    </form>
+                </div>
+
             </div>
-
         </div>
     </header>
 
     <!-- CONTENEDOR PRINCIPAL -->
-    <main class="flex-grow-1 container py-4">
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {% block contenedor_panel %}
-            <div class="{% if request.resolver_match.url_name != 'panel_inicio' %}panel-card-container{% endif %}">
+            <div class="{% if request.resolver_match.url_name != 'panel_inicio' %}glass-card rounded-3xl p-6 sm:p-10 border border-slate-800 shadow-2xl{% endif %}">
                 {% block contenido %}{% endblock %}
             </div>
         {% endblock %}
     </main>
 
     <!-- FOOTER INSTITUCIONAL -->
-    <footer class="footer-copyright py-3 border-top border-subtle mt-auto bg-dark-custom">
-        <div class="container d-flex justify-content-between align-items-center flex-wrap gap-2 text-muted-custom small">
-            <div>
-                <i class="bi bi-building me-1 text-acento"></i>
-                <strong class="text-main">{{ escuela_info.nombre|default:"Colegio Patagonia" }}</strong> — Sistema Interno
+    <footer class="mt-12 border-t border-slate-800/80 bg-slate-950 py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400 font-medium">
+            <div class="flex items-center gap-2">
+                <i class="bi bi-building text-[#34d399]"></i>
+                <strong class="text-white">{{ escuela_info.nombre|default:"Colegio Patagonia" }}</strong> — Sistema Interno
             </div>
             <div>
                 &copy; {% now "Y" %} Todos los derechos reservados.
@@ -102,8 +194,6 @@
         </div>
     </footer>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

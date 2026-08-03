@@ -1,78 +1,188 @@
 {% extends 'panel/base.html' %}
+{% load static %}
 
 {% block titulo %}Menú Principal{% endblock %}
 
 {% block contenido %}
-    <div class="dashboard-wrapper">
-        <!-- BOX BIENVENIDA -->
-        <div class="bienvenida-box">
-            <p class="bienvenida-texto">
-                Hola, <span class="bienvenida-usuario">{{ request.user.first_name|default:request.user.username }}</span>. Tu panel de control:
-            </p>
-            <span class="user-badge-vip">
-                <i class="bi bi-shield-check me-1 text-warning"></i> Admin
+
+<!-- ANIMACIONES & GLASS-CARD -->
+<style>
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-down { animation: fadeInDown 0.8s ease-out forwards; }
+    .animate-fade-up { animation: fadeInUp 0.8s ease-out forwards; }
+    
+    .glass-card-bento {
+        background: rgba(15, 23, 42, 0.75);
+        backdrop-filter: blur(14px);
+        border: 1px solid rgba(30, 41, 59, 0.8);
+    }
+    .glass-card-bento:hover {
+        border-color: rgba(52, 211, 153, 0.5);
+        box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.25);
+    }
+</style>
+
+<div class="max-w-7xl mx-auto">
+    
+    <!-- BOX BIENVENIDA -->
+    <div class="mb-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 sm:p-8 rounded-3xl bg-slate-900/60 border border-slate-800 backdrop-blur-xl shadow-2xl">
+        <div>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 border border-emerald-500/30 text-[#34d399] mb-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#34d399] animate-pulse"></span>
+                PANEL DE CONTROL INTERNO
             </span>
+            <h1 class="font-titulo text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
+                Hola, <span class="text-[#34d399]">{{ request.user.first_name|default:request.user.username }}</span> 👋
+            </h1>
+            <p class="text-slate-400 text-xs sm:text-sm font-light mt-1">
+                Gestioná las noticias, requisitos, mensajes y datos institucionales del colegio desde un solo lugar.
+            </p>
         </div>
 
-        <!-- GRILLA SIMÉTRICA DE MÓDULOS -->
-        <div class="dashboard-grid">
-            
-            <!-- 1. NOTICIAS -->
-            <a href="{% url 'panel_noticias_lista' %}" class="panel-card-item">
-                <div class="icono-wrapper"><i class="bi bi-newspaper"></i></div>
-                <span class="card-texto">Gestión de<br>Noticias</span>
-                <i class="bi bi-arrow-right-short arrow-corner"></i>
-            </a>
-
-            <!-- 2. REQUISITOS -->
-            <a href="{% url 'panel_requisitos_lista' %}" class="panel-card-item">
-                <div class="icono-wrapper"><i class="bi bi-card-checklist"></i></div>
-                <span class="card-texto">Requisitos</span>
-                <i class="bi bi-arrow-right-short arrow-corner"></i>
-            </a>
-
-            <!-- 3. CONSULTAS -->
-            <a href="{% url 'panel_consultas_lista' %}" class="panel-card-item">
-                <div class="icono-wrapper"><i class="bi bi-envelope-paper"></i></div>
-                <span class="card-texto">Consultas<br>Recibidas</span>
-                <i class="bi bi-arrow-right-short arrow-corner"></i>
-            </a>
-
-            <!-- 4. POSTULACIONES -->
-            <a href="{% url 'panel_postulaciones_lista' %}" class="panel-card-item">
-                <div class="icono-wrapper"><i class="bi bi-file-earmark-person"></i></div>
-                <span class="card-texto">Postulaciones</span>
-                <i class="bi bi-arrow-right-short arrow-corner"></i>
-            </a>
-
-            <!-- 5. DATOS ESCUELA -->
-            <a href="{% url 'panel_datos_escuela' %}" class="panel-card-item">
-                <div class="icono-wrapper"><i class="bi bi-building-gear"></i></div>
-                <span class="card-texto">Datos<br>Institución</span>
-                <i class="bi bi-arrow-right-short arrow-corner"></i>
-            </a>
-
-            <!-- 6. PREGUNTAS -->
-            <a href="{% url 'panel_preguntas_lista' %}" class="panel-card-item">
-                <div class="icono-wrapper"><i class="bi bi-patch-question"></i></div>
-                <span class="card-texto">Preguntas<br>Frecuentes</span>
-                <i class="bi bi-arrow-right-short arrow-corner"></i>
-            </a>
-
-            <!-- 7. CARRUSEL -->
-            <a href="{% url 'panel_carrusel_lista' %}" class="panel-card-item">
-                <div class="icono-wrapper"><i class="bi bi-images"></i></div>
-                <span class="card-texto">Carrusel<br>de Portada</span>
-                <i class="bi bi-arrow-right-short arrow-corner"></i>
-            </a>
-
-            <!-- 8. DOCENTES -->
-            <a href="{% url 'panel_docentes_lista' %}" class="panel-card-item">
-                <div class="icono-wrapper"><i class="bi bi-person-video3"></i></div>
-                <span class="card-texto">Equipo<br>Docente</span>
-                <i class="bi bi-arrow-right-short arrow-corner"></i>
-            </a>
-
+        <div class="px-4 py-2 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-[0_0_15px_rgba(245,158,11,0.15)] flex-shrink-0">
+            <i class="bi bi-shield-check text-base"></i> Administrador
         </div>
     </div>
+
+    <!-- GRILLA BENTO DE 8 MÓDULOS DEL PANEL -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- 1. NOTICIAS -->
+        <a href="{% url 'panel_noticias_lista' %}" class="glass-card-bento rounded-3xl p-6 flex flex-col justify-between h-48 transition-all duration-300 transform hover:-translate-y-1.5 group relative overflow-hidden">
+            <div class="flex items-center justify-between">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-[#34d399] flex items-center justify-center text-2xl group-hover:scale-110 group-hover:bg-[#34d399] group-hover:text-slate-950 transition-all duration-300 shadow-[0_0_15px_rgba(52,211,153,0.15)]">
+                    <i class="bi bi-newspaper"></i>
+                </div>
+                <i class="bi bi-arrow-up-right text-slate-600 group-hover:text-[#34d399] text-xl transition-colors"></i>
+            </div>
+            <div>
+                <h3 class="font-titulo text-lg font-bold text-white group-hover:text-[#34d399] transition-colors leading-tight mb-1">
+                    Noticias
+                </h3>
+                <p class="text-slate-400 text-xs font-light">Publicaciones y novedades del colegio.</p>
+            </div>
+        </a>
+
+        <!-- 2. REQUISITOS -->
+        <a href="{% url 'panel_requisitos_lista' %}" class="glass-card-bento rounded-3xl p-6 flex flex-col justify-between h-48 transition-all duration-300 transform hover:-translate-y-1.5 group relative overflow-hidden">
+            <div class="flex items-center justify-between">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-[#34d399] flex items-center justify-center text-2xl group-hover:scale-110 group-hover:bg-[#34d399] group-hover:text-slate-950 transition-all duration-300 shadow-[0_0_15px_rgba(52,211,153,0.15)]">
+                    <i class="bi bi-card-checklist"></i>
+                </div>
+                <i class="bi bi-arrow-up-right text-slate-600 group-hover:text-[#34d399] text-xl transition-colors"></i>
+            </div>
+            <div>
+                <h3 class="font-titulo text-lg font-bold text-white group-hover:text-[#34d399] transition-colors leading-tight mb-1">
+                    Requisitos
+                </h3>
+                <p class="text-slate-400 text-xs font-light">Documentación de admisión por nivel.</p>
+            </div>
+        </a>
+
+        <!-- 3. CONSULTAS -->
+        <a href="{% url 'panel_consultas_lista' %}" class="glass-card-bento rounded-3xl p-6 flex flex-col justify-between h-48 transition-all duration-300 transform hover:-translate-y-1.5 group relative overflow-hidden">
+            <div class="flex items-center justify-between">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-[#34d399] flex items-center justify-center text-2xl group-hover:scale-110 group-hover:bg-[#34d399] group-hover:text-slate-950 transition-all duration-300 shadow-[0_0_15px_rgba(52,211,153,0.15)]">
+                    <i class="bi bi-envelope-paper"></i>
+                </div>
+                <i class="bi bi-arrow-up-right text-slate-600 group-hover:text-[#34d399] text-xl transition-colors"></i>
+            </div>
+            <div>
+                <h3 class="font-titulo text-lg font-bold text-white group-hover:text-[#34d399] transition-colors leading-tight mb-1">
+                    Consultas Recibidas
+                </h3>
+                <p class="text-slate-400 text-xs font-light">Mensajes enviados por familias.</p>
+            </div>
+        </a>
+
+        <!-- 4. POSTULACIONES -->
+        <a href="{% url 'panel_postulaciones_lista' %}" class="glass-card-bento rounded-3xl p-6 flex flex-col justify-between h-48 transition-all duration-300 transform hover:-translate-y-1.5 group relative overflow-hidden">
+            <div class="flex items-center justify-between">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-[#34d399] flex items-center justify-center text-2xl group-hover:scale-110 group-hover:bg-[#34d399] group-hover:text-slate-950 transition-all duration-300 shadow-[0_0_15px_rgba(52,211,153,0.15)]">
+                    <i class="bi bi-file-earmark-person"></i>
+                </div>
+                <i class="bi bi-arrow-up-right text-slate-600 group-hover:text-[#34d399] text-xl transition-colors"></i>
+            </div>
+            <div>
+                <h3 class="font-titulo text-lg font-bold text-white group-hover:text-[#34d399] transition-colors leading-tight mb-1">
+                    Postulaciones
+                </h3>
+                <p class="text-slate-400 text-xs font-light">CVs recibidos para docentes.</p>
+            </div>
+        </a>
+
+        <!-- 5. DATOS INSTITUCIÓN -->
+        <a href="{% url 'panel_datos_escuela' %}" class="glass-card-bento rounded-3xl p-6 flex flex-col justify-between h-48 transition-all duration-300 transform hover:-translate-y-1.5 group relative overflow-hidden">
+            <div class="flex items-center justify-between">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-[#34d399] flex items-center justify-center text-2xl group-hover:scale-110 group-hover:bg-[#34d399] group-hover:text-slate-950 transition-all duration-300 shadow-[0_0_15px_rgba(52,211,153,0.15)]">
+                    <i class="bi bi-building-gear"></i>
+                </div>
+                <i class="bi bi-arrow-up-right text-slate-600 group-hover:text-[#34d399] text-xl transition-colors"></i>
+            </div>
+            <div>
+                <h3 class="font-titulo text-lg font-bold text-white group-hover:text-[#34d399] transition-colors leading-tight mb-1">
+                    Datos Institución
+                </h3>
+                <p class="text-slate-400 text-xs font-light">Teléfonos, horarios y redes.</p>
+            </div>
+        </a>
+
+        <!-- 6. PREGUNTAS FRECUENTES -->
+        <a href="{% url 'panel_preguntas_lista' %}" class="glass-card-bento rounded-3xl p-6 flex flex-col justify-between h-48 transition-all duration-300 transform hover:-translate-y-1.5 group relative overflow-hidden">
+            <div class="flex items-center justify-between">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-[#34d399] flex items-center justify-center text-2xl group-hover:scale-110 group-hover:bg-[#34d399] group-hover:text-slate-950 transition-all duration-300 shadow-[0_0_15px_rgba(52,211,153,0.15)]">
+                    <i class="bi bi-patch-question"></i>
+                </div>
+                <i class="bi bi-arrow-up-right text-slate-600 group-hover:text-[#34d399] text-xl transition-colors"></i>
+            </div>
+            <div>
+                <h3 class="font-titulo text-lg font-bold text-white group-hover:text-[#34d399] transition-colors leading-tight mb-1">
+                    Preguntas Frecuentes
+                </h3>
+                <p class="text-slate-400 text-xs font-light">Administrador de la sección FAQ.</p>
+            </div>
+        </a>
+
+        <!-- 7. CARRUSEL DE PORTADA -->
+        <a href="{% url 'panel_carrusel_lista' %}" class="glass-card-bento rounded-3xl p-6 flex flex-col justify-between h-48 transition-all duration-300 transform hover:-translate-y-1.5 group relative overflow-hidden">
+            <div class="flex items-center justify-between">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-[#34d399] flex items-center justify-center text-2xl group-hover:scale-110 group-hover:bg-[#34d399] group-hover:text-slate-950 transition-all duration-300 shadow-[0_0_15px_rgba(52,211,153,0.15)]">
+                    <i class="bi bi-images"></i>
+                </div>
+                <i class="bi bi-arrow-up-right text-slate-600 group-hover:text-[#34d399] text-xl transition-colors"></i>
+            </div>
+            <div>
+                <h3 class="font-titulo text-lg font-bold text-white group-hover:text-[#34d399] transition-colors leading-tight mb-1">
+                    Carrusel de Fotos
+                </h3>
+                <p class="text-slate-400 text-xs font-light">Galería de imágenes principales.</p>
+            </div>
+        </a>
+
+        <!-- 8. EQUIPO DOCENTE -->
+        <a href="{% url 'panel_docentes_lista' %}" class="glass-card-bento rounded-3xl p-6 flex flex-col justify-between h-48 transition-all duration-300 transform hover:-translate-y-1.5 group relative overflow-hidden">
+            <div class="flex items-center justify-between">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-[#34d399] flex items-center justify-center text-2xl group-hover:scale-110 group-hover:bg-[#34d399] group-hover:text-slate-950 transition-all duration-300 shadow-[0_0_15px_rgba(52,211,153,0.15)]">
+                    <i class="bi bi-person-video3"></i>
+                </div>
+                <i class="bi bi-arrow-up-right text-slate-600 group-hover:text-[#34d399] text-xl transition-colors"></i>
+            </div>
+            <div>
+                <h3 class="font-titulo text-lg font-bold text-white group-hover:text-[#34d399] transition-colors leading-tight mb-1">
+                    Equipo Docente
+                </h3>
+                <p class="text-slate-400 text-xs font-light">Autoridades y profesores.</p>
+            </div>
+        </a>
+
+    </div>
+
+</div>
 {% endblock %}

@@ -1,62 +1,97 @@
 {% extends 'panel/base.html' %}
+{% load static %}
 
 {% block titulo %}Carrusel de Portada{% endblock %}
 
 {% block contenido %}
-    <!-- Encabezado de la vista -->
-    <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-subtle">
-        <h3 class="font-titulo text-main fw-bold mb-0 fs-4">
-            <i class="bi bi-images text-acento me-2"></i>Carrusel de Portada
-        </h3>
-        <a href="{% url 'panel_carrusel_crear' %}" class="btn btn-plataforma">
-            <i class="bi bi-plus-lg me-1"></i> AGREGAR IMAGEN
+
+<div class="max-w-7xl mx-auto">
+    
+    <!-- ENCABEZADO DE LA VISTA -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-8 border-b border-slate-800/80">
+        <div>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 border border-emerald-500/30 text-[#34d399] mb-2">
+                <i class="bi bi-images"></i> GALERÍA Y PORTADA
+            </span>
+            <h1 class="font-titulo text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2.5">
+                Carrusel de Portada
+            </h1>
+            <p class="text-slate-400 text-xs sm:text-sm font-light mt-1">
+                Administrá las imágenes principales que se muestran en el sitio web.
+            </p>
+        </div>
+
+        <a href="{% url 'panel_carrusel_crear' %}" class="btn-plataforma-vip whitespace-nowrap self-start sm:self-center">
+            <i class="bi bi-plus-lg"></i> AGREGAR IMAGEN
         </a>
     </div>
 
-    <!-- Tabla Adaptada al Tema Oscuro -->
-    <div class="table-responsive">
-        <table class="table table-dark table-hover align-middle mb-0">
-            <thead>
-                <tr>
-                    <th scope="col" style="width: 120px;">Imagen</th>
-                    <th scope="col">Título / Descripción</th>
-                    <th scope="col" class="text-end" style="width: 180px;">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in carrusel %}
-                    <tr>
-                        <td>
-                            {% if item.imagen %}
-                                <img src="{{ item.imagen.url }}" alt="Carrusel" class="img-carrusel-thumb">
-                            {% else %}
-                                <span class="badge bg-badge-custom text-muted-custom">Sin imagen</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <strong class="text-main d-block">{{ item.titulo|default:"Sin título" }}</strong>
-                            {% if item.subtitulo %}
-                                <small class="text-muted-custom">{{ item.subtitulo }}</small>
-                            {% endif %}
-                        </td>
-                        <td class="text-end">
-                            <a href="{% url 'panel_carrusel_editar' item.pk %}" class="btn btn-red-social btn-sm me-1">
-                                <i class="bi bi-pencil-fill"></i> Editar
-                            </a>
-                            <a href="{% url 'panel_carrusel_borrar' item.pk %}" class="btn btn-outline-danger btn-sm rounded-3">
-                                <i class="bi bi-trash-fill"></i>
-                            </a>
-                        </td>
+    <!-- TABLA RESTRUCTURADA CON TAILWIND -->
+    <div class="glass-card rounded-3xl border border-slate-800 overflow-hidden shadow-2xl">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-950/80 border-b border-slate-800/80 text-slate-400 text-xs uppercase font-bold tracking-wider">
+                        <th scope="col" class="py-4 px-6 w-32">Imagen</th>
+                        <th scope="col" class="py-4 px-6">Título / Descripción</th>
+                        <th scope="col" class="py-4 px-6 text-right w-44">Acciones</th>
                     </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="3" class="text-center py-5 text-muted-custom">
-                            <i class="bi bi-images fs-1 d-block text-acento mb-2"></i>
-                            No hay imágenes cargadas para el carrusel todavía. ¡Tocá el botón de arriba para subir la primera!
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody class="divide-y divide-slate-800/60 text-xs sm:text-sm">
+                    {% for item in carrusel %}
+                        <tr class="hover:bg-slate-900/40 transition-colors group">
+                            <!-- MINIATURA -->
+                            <td class="py-4 px-6">
+                                {% if item.imagen %}
+                                    <div class="w-16 h-12 rounded-xl overflow-hidden border border-slate-800 group-hover:border-[#34d399]/50 transition-colors shadow-md bg-slate-950">
+                                        <img src="{{ item.imagen.url }}" alt="Carrusel" class="w-full h-full object-cover">
+                                    </div>
+                                {% else %}
+                                    <span class="px-2.5 py-1 rounded-md bg-slate-900 border border-slate-800 text-slate-500 text-[11px] font-medium">Sin imagen</span>
+                                {% endif %}
+                            </td>
+
+                            <!-- INFORMACIÓN -->
+                            <td class="py-4 px-6">
+                                <strong class="text-white font-bold block text-sm group-hover:text-[#34d399] transition-colors">
+                                    {{ item.titulo|default:"Sin título" }}
+                                </strong>
+                                {% if item.subtitulo %}
+                                    <span class="text-slate-400 text-xs block font-light mt-0.5">
+                                        {{ item.subtitulo }}
+                                    </span>
+                                {% endif %}
+                            </td>
+
+                            <!-- BOTONES DE ACCIÓN -->
+                            <td class="py-4 px-6 text-right whitespace-nowrap">
+                                <div class="flex items-center justify-end gap-2">
+                                    <a href="{% url 'panel_carrusel_editar' item.pk %}" 
+                                       class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-[#34d399] hover:border-[#34d399]/40 text-xs font-semibold inline-flex items-center gap-1.5 transition-all">
+                                        <i class="bi bi-pencil-fill text-xs"></i> Editar
+                                    </a>
+                                    <a href="{% url 'panel_carrusel_borrar' item.pk %}" 
+                                       class="p-1.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 hover:bg-rose-500 hover:text-white text-xs transition-all shadow-sm"
+                                       title="Eliminar imagen">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <!-- ESTADO VACÍO -->
+                        <tr>
+                            <td colspan="3" class="py-12 px-6 text-center text-slate-500">
+                                <i class="bi bi-images text-4xl text-slate-600 block mb-3"></i>
+                                <span class="text-sm font-medium block text-slate-400">No hay imágenes cargadas para el carrusel todavía.</span>
+                                <span class="text-xs font-light block mt-1">¡Tocá el botón de arriba para subir la primera!</span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
+
+</div>
 {% endblock %}

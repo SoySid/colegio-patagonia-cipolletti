@@ -1,116 +1,155 @@
 {% extends 'escuela/base.html' %}
+{% load static %}
 
 {% block title %}Consultas Frecuentes - {{ escuela_info.nombre|default:"Colegio Patagonia" }}{% endblock %}
 
 {% block content %}
-<section class="py-5">
-    <div class="container py-3">
+
+<!-- ANIMACIONES & ESTILOS GLASS -->
+<style>
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-down { animation: fadeInDown 0.8s ease-out forwards; }
+    .animate-fade-up { animation: fadeInUp 0.8s ease-out forwards; }
+    
+    .glass-card {
+        background: rgba(15, 23, 42, 0.75);
+        backdrop-filter: blur(14px);
+        border: 1px solid rgba(30, 41, 59, 0.8);
+    }
+</style>
+
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16"
+     x-data="{ 
+        openId: null,
+        searchQuery: '',
+        faqs: [
+            {% for item in faqs %}
+            {
+                id: {{ item.id|default:forloop.counter }},
+                pregunta: '{{ item.pregunta|escapejs }}',
+                respuesta: '{{ item.respuesta|escapejs }}'
+            }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ],
+        cleanText(str) {
+            return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+        },
+        get filteredFaqs() {
+            if (!this.searchQuery.trim()) return this.faqs;
+            const q = this.cleanText(this.searchQuery);
+            return this.faqs.filter(f => this.cleanText(f.pregunta).includes(q) || this.cleanText(f.respuesta).includes(q));
+        },
+        toggle(id) {
+            this.openId = this.openId === id ? null : id;
+        }
+     }">
+    
+    <!-- ENCABEZADO PRINCIPAL -->
+    <div class="text-center mb-12 flex flex-col items-center">
+        <span class="animate-fade-down inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold bg-emerald-500/10 border border-emerald-500/40 text-[#34d399] mb-4 shadow-[0_0_15px_rgba(52,211,153,0.2)]">
+            <span class="w-2 h-2 rounded-full bg-[#34d399] animate-pulse"></span>
+            <i class="bi bi-question-circle-fill"></i> INFORMACIÓN CLARA Y CERCANA
+        </span>
         
-        <!-- Encabezado -->
-        <div class="text-center mb-5">
-            <span class="badge mb-2 px-3 py-2 rounded-pill bg-badge-custom border border-acento text-acento">
-                <i class="bi bi-question-circle-fill me-1"></i> INFORMACIÓN CLARA Y CERCANA
-            </span>
-            <h1 class="font-titulo fw-bold display-4 text-main mb-3">CONSULTAS FRECUENTES</h1>
-            <p class="text-muted-custom fs-5">Encontrá respuestas rápidas sobre inscripción, trámites, horarios y otras dudas institucionales.</p>
-        </div>
+        <h1 class="animate-fade-up text-3xl sm:text-5xl font-titulo font-black text-white uppercase tracking-tight mb-4 drop-shadow-md">
+            Consultas <span class="text-[#34d399] drop-shadow-[0_0_25px_rgba(52,211,153,0.3)]">Frecuentes</span>
+        </h1>
+        
+        <p class="animate-fade-up text-slate-400 text-sm sm:text-base max-w-xl leading-relaxed font-light">
+            Encontrá respuestas rápidas sobre inscripción, trámites, horarios y otras dudas institucionales.
+        </p>
+    </div>
 
-        <!-- Buscador con Ícono Integrado -->
-        <div class="row justify-content-center mb-5">
-            <div class="col-12 col-md-8 col-lg-7">
-                <div class="faq-search-wrapper">
-                    <i class="bi bi-search faq-search-icon"></i>
-                    <input type="text" id="faqSearchInput" class="form-control faq-search-input" placeholder="Escribí una palabra clave (ej: inscripción, horarios, pagos)...">
-                </div>
-            </div>
+    <!-- BUSCADOR CON ÍCONO INTEGRADO TAILWIND -->
+    <div class="mb-10 max-w-2xl mx-auto">
+        <div class="relative">
+            <i class="bi bi-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-base"></i>
+            <input type="text" 
+                   x-model="searchQuery" 
+                   placeholder="Escribí una palabra clave (ej: inscripción, horarios, pagos)..." 
+                   class="w-full bg-slate-900/80 border border-slate-800 text-slate-100 placeholder-slate-500 text-xs sm:text-sm rounded-2xl pl-11 pr-4 py-4 focus:outline-none focus:border-[#34d399] focus:ring-1 focus:ring-[#34d399] shadow-lg transition-all">
         </div>
+    </div>
 
-        <!-- Lista de Preguntas Acordeón -->
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-9">
-                <div class="accordion d-flex flex-column gap-3" id="faqAccordion">
+    <!-- LISTA DE PREGUNTAS (ACORDEÓN ALPINE.JS) -->
+    {% if faqs %}
+        <div class="flex flex-col gap-4 mb-16">
+            <template x-for="item in filteredFaqs" :key="item.id">
+                <div class="glass-card rounded-2xl overflow-hidden border border-slate-800 transition-all duration-300">
                     
-                    {% for item in faqs %}
-                        <div class="faq-item-card accordion-item border-0">
-                            <h2 class="accordion-header" id="heading{{ item.id }}">
-                                <button class="accordion-button collapsed font-titulo" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ item.id }}" aria-expanded="false" aria-controls="collapse{{ item.id }}">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="bg-badge-custom rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
-                                            <i class="bi bi-question-lg text-acento fs-5"></i>
-                                        </div>
-                                        <span>{{ item.pregunta }}</span>
-                                    </div>
-                                </button>
-                            </h2>
-                            <div id="collapse{{ item.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ item.id }}" data-bs-parent="#faqAccordion">
-                                <div class="accordion-body text-muted-custom">
-                                    {{ item.respuesta|linebreaks }}
-                                </div>
+                    <!-- Botón Desplegable -->
+                    <button @click="toggle(item.id)" 
+                            class="w-full p-5 text-left flex items-center justify-between gap-4 focus:outline-none group">
+                        
+                        <div class="flex items-center gap-3.5">
+                            <div :class="openId === item.id ? 'bg-[#34d399] text-slate-950 shadow-[0_0_15px_rgba(52,211,153,0.4)]' : 'bg-slate-900 border border-slate-800 text-[#34d399]'"
+                                 class="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 flex-shrink-0">
+                                <i class="bi bi-question-lg text-lg font-bold"></i>
                             </div>
+                            <span x-text="item.pregunta" 
+                                  :class="openId === item.id ? 'text-[#34d399]' : 'text-white group-hover:text-slate-200'"
+                                  class="font-titulo font-bold text-sm sm:text-base transition-colors leading-snug">
+                            </span>
                         </div>
-                    {% empty %}
-                        <div class="p-5 glass-panel text-center">
-                            <p class="text-muted-custom mb-0">No se encontraron preguntas frecuentes publicadas por el momento.</p>
-                        </div>
-                    {% endfor %}
 
-                    <!-- Mensaje Dinámico cuando la Búsqueda no da Coincidencias -->
-                    <div id="noResultsMessage" class="p-5 glass-panel text-center d-none">
-                        <i class="bi bi-search fs-1 text-acento d-block mb-3"></i>
-                        <h5 class="text-main fw-bold mb-1">No se encontraron resultados</h5>
-                        <p class="text-muted-custom small mb-0">Probá buscando con otra palabra o revisá si está bien escrita.</p>
+                        <!-- Flecha Animada -->
+                        <div :class="openId === item.id ? 'rotate-180 text-[#34d399]' : 'text-slate-500'" 
+                             class="transition-transform duration-300 flex-shrink-0">
+                            <i class="bi bi-chevron-down text-base"></i>
+                        </div>
+                    </button>
+
+                    <!-- Cuerpo de la Respuesta -->
+                    <div x-show="openId === item.id" 
+                         x-collapse 
+                         x-cloak 
+                         class="px-6 pb-6 pt-1 text-slate-300 text-xs sm:text-sm leading-relaxed border-t border-slate-800/50 whitespace-pre-line font-light">
+                        <span x-text="item.respuesta"></span>
                     </div>
 
                 </div>
+            </template>
+
+            <!-- SIN RESULTADOS DE BÚSQUEDA -->
+            <div x-show="filteredFaqs.length === 0" class="glass-card rounded-2xl p-10 text-center border border-slate-800">
+                <i class="bi bi-search text-slate-600 text-4xl mb-3 block"></i>
+                <h3 class="font-titulo text-lg font-bold text-white mb-1">No se encontraron resultados</h3>
+                <p class="text-slate-400 text-xs">Probá buscando con otra palabra o revisá si está bien escrita.</p>
             </div>
         </div>
+    {% else %}
+        <!-- ESTADO VACÍO GENERAL -->
+        <div class="glass-card text-center p-12 rounded-2xl border border-slate-800 mb-16">
+            <i class="bi bi-question-circle text-slate-600 text-5xl mb-4 block"></i>
+            <h3 class="font-titulo text-xl font-bold text-white mb-2">Sin Preguntas Cargadas</h3>
+            <p class="text-slate-400 text-xs">No hay consultas frecuentes publicadas por el momento.</p>
+        </div>
+    {% endif %}
 
+    <!-- BANNER DE CONTACTO / LLAMADO A LA ACCIÓN (CTA) -->
+    <div class="bg-gradient-to-r from-slate-900 via-slate-900/95 to-slate-950 border border-emerald-500/30 rounded-2xl p-6 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-6 shadow-[0_10px_30px_rgba(0,0,0,0.5)] relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-[#34d399]/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="relative z-10 max-w-xl">
+            <h3 class="font-titulo text-xl sm:text-2xl font-bold text-white mb-2 tracking-tight">
+                ¿No encontraste la respuesta que buscabas?
+            </h3>
+            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                Ponete en contacto directamente con Secretaría o administración para recibir atención personalizada.
+            </p>
+        </div>
+
+        <a href="{% url 'escuela:contacto' %}" class="btn-plataforma-vip whitespace-nowrap relative z-10 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+            CONTACTAR SECRETARÍA <i class="bi bi-arrow-right"></i>
+        </a>
     </div>
-</section>
-{% endblock %}
 
-{% block extra_js %}
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const searchInput = document.getElementById('faqSearchInput');
-        const faqItems = document.querySelectorAll('.faq-item-card');
-        const noResultsMessage = document.getElementById('noResultsMessage');
-
-        // Normaliza texto: Pasa a minúsculas y elimina acentos/tildes (NFD)
-        const cleanText = (str) => {
-            return str
-                .toLowerCase()
-                .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "")
-                .trim();
-        };
-
-        if (searchInput && faqItems.length > 0) {
-            searchInput.addEventListener('input', (e) => {
-                const query = cleanText(e.target.value);
-                let matchesCount = 0;
-
-                faqItems.forEach(item => {
-                    const itemText = cleanText(item.textContent);
-                    
-                    if (itemText.includes(query)) {
-                        item.classList.remove('d-none');
-                        matchesCount++;
-                    } else {
-                        item.classList.add('d-none');
-                    }
-                });
-
-                // Muestra u oculta el cartel de "Sin resultados"
-                if (noResultsMessage) {
-                    if (matchesCount === 0) {
-                        noResultsMessage.classList.remove('d-none');
-                    } else {
-                        noResultsMessage.classList.add('d-none');
-                    }
-                }
-            });
-        }
-    });
-</script>
+</div>
 {% endblock %}
